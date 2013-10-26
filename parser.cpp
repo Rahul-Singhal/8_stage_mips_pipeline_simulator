@@ -353,3 +353,23 @@ void Parser::makeInstruction(){
 
 
 }
+
+/*
+	how to handle instructions: pseudo code
+
+    make a queue of instructions yet to be completed.
+    Add first instruction to the queue.
+
+    while program does not finish:
+    traverse all instructions in the queue, from the front.
+
+    Make another queue, for the next cycle.
+
+    for each instr in the first queue, call execute function on the instruction object.
+    if stage of instruction after execution is >0 then push to new queue.
+
+    adding to queue: check if stage 0 is free, if yes, add new instruction to queue
+    
+    now set all the stages to free, and continue the traversal with second queue.
+
+*/
