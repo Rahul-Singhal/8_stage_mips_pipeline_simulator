@@ -7,62 +7,127 @@ Add::Add(int rdIndex, int rsIndex, int rtIndex){
 	this->address = address;
 }
 
+
 // depending on the return value of this bool, the program manager will put the appropriate stage of this instruction
-// in the next queue of instructions.
+// in the next queue of instructions. if return value is false  =>  instruction is still in the old stage.
+// return value = ture => instruction may or may not have completed the stage, example in multiply. 
 bool Add::execute(){
 	// setting the status of register which is to be written as 1 for 1<=stageNumber<5 (if any, assuming no forwarding)
 	switch(stageNumber){
-		case 1:
+		case 1: 
 		{
-			if(stages[0].isFree()){
-				registers[rdIndex].stallRegister();
+			// IF 1 Stage
+			if(stages[stageNumber].isFree()){
+				//registers[rdIndex].stallRegister();
+				stages[stageNumber-1].setInstruction(-1);
+				stageNumber++;
+				stages[stageNumber].setInstruction(address);
 				return true;
 			}
+			stages[stageNumber-1].setInstruction(address);
 			return false;
 		}
 		case 2:
 		{
-			registers[rdIndex].stallRegister();
+			// IF 2 Stage
+			if(stages[stageNumber].isFree()){
+				//registers[rdIndex].stallRegister();
+
+				stageNumber++;
+				stages[stageNumber].setInstruction(address);
+				return true;
+			}
+			stages[stageNumber-1].setInstruction(address);
+			return false;
+		}
+		case 3:
+		{
+			// ID Stage
 			// Assuming no forwarding and that the registers to be read must be free as of now.
-			if(stages[1].isFree()){
+			if(stages[stageNumber].isFree()){
+				registers[rdIndex].stallRegister(); // TODO: should this be outside or inside the if statement??
+
 				pair <int, int> p = registers[rsIndex].read();
-				if(p.first==0){
+				pair <int, int> q = registers[rtIndex].read();
+				if(p.first==0 && q.first==0) {
 					a = p.second;
-					p = registers[rtIndex].read();
-					if(p.first == 0){
-						b = p.second;
-						return true;
-					}
-					else
-						return false;
+					b = q.second;
+					stageNumber++;
+					stages[stageNumber].setInstruction(address);
+
+					return true;
 				}
 				else
 					return false;
 			}
-			else
+			else{
+				stages[stageNumber-1].setInstruction(address);
 				return false;
-		}
-		case 3:
-		{
-			registers[rdIndex].stallRegister();
-			if(stages[2].isFree()){
-				sum = a+b;
-				return true;
 			}
-			return false;
 		}
 		case 4:
 		{
-			registers[rdIndex].stallRegister();
-			if(stages[3].isFree())
+			// EX Stage
+			//registers[rdIndex].stallRegister();
+			if(stages[stageNumber].isFree()){
+				sum = a+b;
+				registers[rdIndex].setForwardedValue(sum);
+				stageNumber++;
+				stages[stageNumber].setInstruction(address);
 				return true;
+			}
+			stages[stageNumber-1].setInstruction(address);
 			return false;
 		}
 		case 5:
 		{
-			if(stages[4].isFree()){
-				registers[rtIndex].writeBack(sum);
+			// MEM 1 Stage
+			//registers[rdIndex].stallRegister();
+			if(stages[stageNumber].isFree()){
+				stageNumber++;
+				stages[stageNumber].setInstruction(address);
+
+				return true;
 			}
+			stages[stageNumber-1].setInstruction(address);
+			return false;
+		}
+		case 6:
+		{
+			// MEM 2 Stage
+			if(stages[stageNumber].isFree()){
+				stageNumber++;
+				stages[stageNumber].setInstruction(address);
+
+				return true;
+			}
+			stages[stageNumber-1].setInstruction(address);
+			return false;
+		}
+		case 7:
+		{
+			// MEM 3 Stage
+			if(stages[stageNumber].isFree()){
+				stageNumber++;
+				stages[stageNumber].setInstruction(address);
+
+				return true;
+			}
+			stages[stageNumber-1].setInstruction(address);
+			return false;
+		}
+		case 8:
+		{
+			// WB Stage
+			if(stages[stageNumber].isFree()){
+				registers[rtIndex].writeBack(sum);
+				stageNumber=-1;
+				// Instruction completed, so stage number is now invalid.
+
+				return true;
+			}
+			stages[stageNumber-1].setInstruction(address);
+			return false;
 		}
 	}
 }

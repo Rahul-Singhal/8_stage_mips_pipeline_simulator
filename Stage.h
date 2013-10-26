@@ -15,7 +15,8 @@ public:
 	bool isFree();
 
 	// Constructors
-
+	void setInstruction(int instructionAddress);
+	
 	Stage(int number);
 
 	Stage(int number, int address);

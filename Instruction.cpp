@@ -2,8 +2,8 @@
 
 //	Defining the initial set of Stages
 Instruction::stages.assign(8, Stage(0));
-for(int i = 0 ; i < 8 ; i++ )
-	Instruction::stages[i] = i+1;
+for(int i = 0 ; i <= 8 ; i++ )
+	Instruction::stages[i].id = i;
 
 
 // Defining the initial set of Registers
