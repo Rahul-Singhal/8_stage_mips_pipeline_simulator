@@ -1,12 +1,16 @@
 #ifndef REG_H
 #define REG_H
 
+#include <utility>
+#include <iostream>
+
 //Status index
 /*
 	0: 	ready to be read ( no forwarding, value stored in register )
 	1:	waiting to be written
 	2:	forwarded value available
 */
+using namespace std;
 
 class Register{
 public:

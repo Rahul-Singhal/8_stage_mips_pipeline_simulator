@@ -1,6 +1,8 @@
 #ifndef STAGE_H
 #define STAGE_H
 
+using namespace std;
+
 class Stage{
 
 public:

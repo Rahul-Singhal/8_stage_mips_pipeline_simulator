@@ -6,6 +6,7 @@ using namespace std;
 
 int main(){
 	Parser myParser("gcd.asm");
-	cout<<endl;
-	myParser.printLabels();
+	/*cout<<endl;
+	myParser.printLabels();*/
+	return 0;
 }

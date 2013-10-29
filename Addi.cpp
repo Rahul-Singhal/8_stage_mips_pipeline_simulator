@@ -1,7 +1,7 @@
 #include "Addi.h"
 
 Addi::Addi(int rtIndex, int rsIndex, int immediate){
-	this->rdIndex = rdIndex;
+	this->rtIndex = rtIndex;
 	this->rsIndex = rsIndex;
 	this->immediate = immediate;
 }
@@ -70,7 +70,7 @@ bool Addi::execute(){
 			//registers[rdIndex].stallRegister();
 			if(stages[stageNumber].isFree()){
 				sum = a+b;
-				registers[rdIndex].setForwardedValue(sum);
+				registers[rtIndex].setForwardedValue(sum);
 				stageNumber++;
 				stages[stageNumber].setInstruction(address);
 				return true;
