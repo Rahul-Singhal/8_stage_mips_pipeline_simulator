@@ -14,18 +14,18 @@ public:
 	//Stage Number (eight stage)
 	int number;
 
-	// Address of the instruction being executed. -1 if no instruction
+	// Id of the instruction being executed. -1 if no instruction
 	list <Instruction> instructionQ;
 
 	// whether stage if free or not
 	bool isFree();
 
 	// Constructors
-	void setInstruction(int instructionAddress);
+	void setInstruction(int instructionId);
 	
 	Stage(int number);
 
-	Stage(int number, int address);
+	Stage(int number, int Id);
 
 	void setFree();
 };

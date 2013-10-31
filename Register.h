@@ -15,26 +15,28 @@ using namespace std;
 class Register{
 public:
 	int id;
-	
+
 	// Constructor, sets the initial value of register with id = id as value.
 	Register(int id, int value);
 
 	//  Should be called at every stage of the instruction which needs to writes to that particular instruction
-	void stallRegister();
+	void stallRegister(int instructionId);
 
 	//	this function is called when the value of a particular register is forwarded from the EX/MEM latch to 
 	// 	ID/EX latch
 	void setForwardedValue(int value);
 
 	// 	called to write back at the WB stage, returns true if value could be written, else false
-	bool writeBack(int value);
+	bool write(int value, int instructionId, int instructionStage);
 
 	//	returns a pair <status, value>
-	pair <int, int> read();
+	//pair <bool, int> read();
 
-private:
-	int value;
-	int status;
+	int value; // stores the value in register
+	bool valid; // true if the value written is valid
+	int instructionId; // if value is not valid, it stores which instruction has stalled the register, 
+										 //else stores which instruction wrote into the register last
+	int instructionStage; // which instruction stage wrote into the register, if not WB (stage 8) then we can get insights about forwarding
 
 };
 

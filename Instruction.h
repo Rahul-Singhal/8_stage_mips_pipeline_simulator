@@ -18,8 +18,11 @@ public:
 	int stageToExecute;
   int presentStage;
   bool stalled;
+  int stallingInstructionId;
   int stallingRegister;
-
+  bool forwarded;
+  int forwardedFromInstructionId;
+  int forwardedFromInstructionStage;
   string display;
 	int address;
   int id;
