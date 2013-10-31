@@ -19,3 +19,7 @@ bool Stage::isFree(){
 void Stage::setInstruction(int instructionAddress){
 	this->instructionAddress = instructionAddress;
 }
+
+void Stage::setFree(){
+  instructionAddress = -1;
+}

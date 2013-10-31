@@ -22,6 +22,8 @@ public:
 	Stage(int number);
 
 	Stage(int number, int address);
+
+	void setFree();
 };
 
 #endif
