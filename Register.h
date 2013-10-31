@@ -22,10 +22,6 @@ public:
 	//  Should be called at every stage of the instruction which needs to writes to that particular instruction
 	void stallRegister(int instructionId);
 
-	//	this function is called when the value of a particular register is forwarded from the EX/MEM latch to 
-	// 	ID/EX latch
-	void setForwardedValue(int value);
-
 	// 	called to write back at the WB stage, returns true if value could be written, else false
 	bool write(int value, int instructionId, int instructionStage);
 

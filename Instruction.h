@@ -3,6 +3,7 @@
 
 
 #include "Register.h"
+#include "System.h"
 #include "Stage.h"
 #include <vector>
 #include <cstring>
@@ -12,8 +13,8 @@ using namespace std;
 class Instruction: public System{
 public:
 	Instruction();
-	static vector <Register> registers;
-	static vector <Stage> stages;
+  void init();
+  bool execute();
 	// eigth stage
 	int stageToExecute;
   int presentStage;

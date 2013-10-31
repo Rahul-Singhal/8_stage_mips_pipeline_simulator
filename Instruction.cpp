@@ -6,7 +6,7 @@ Instruction::Instruction(){
 }
 
 
-Instruction::init(){
+void Instruction::init(){
   stageToExecute = 1;
   presentStage = 0;
   stalled = false;
@@ -14,3 +14,6 @@ Instruction::init(){
 }
 
 
+bool Instruction::execute(){
+
+}

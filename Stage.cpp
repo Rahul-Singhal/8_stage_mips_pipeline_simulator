@@ -2,24 +2,24 @@
 
 Stage::Stage(int number){
 	this->number= number;
-	this->instructionAddress = -1;
+	this->instructionId = -1;
 }
 
-Stage::Stage(int number , int address){
+Stage::Stage(int number , int Id){
 	this->number = number;
-	this->instructionAddress = address;
+	this->instructionId = Id;
 }
 
 bool Stage::isFree(){
-	if(instructionAddress==-1)
+	if(instructionId==-1)
 		return true;
 	return false;
 }
 
-void Stage::setInstruction(int instructionAddress){
-	this->instructionAddress = instructionAddress;
+void Stage::setInstruction(int instructionId){
+	this->instructionId = instructionId;
 }
 
 void Stage::setFree(){
-  instructionAddress = -1;
+  instructionId = -1;
 }

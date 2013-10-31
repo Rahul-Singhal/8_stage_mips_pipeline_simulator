@@ -39,7 +39,7 @@ bool Add::execute(){
 			else{
 				stages[presentStage].setInstruction(id);
 				stalled = true;
-				stallingInstructionId = stages[stageToExecute].instructionAddress;
+				stallingInstructionId = stages[stageToExecute].instructionId;
 				display = "Waiting for IF1 to be free!";
 				return false;
 			}
@@ -59,7 +59,7 @@ bool Add::execute(){
 			else {
 				stages[presentStage].setInstruction(id);
 				stalled = true;
-				stallingInstructionId = stages[stageToExecute].instructionAddress;
+				stallingInstructionId = stages[stageToExecute].instructionId;
 				display = "Waiting for IF2 to be free!";
 				return false;
 			}
@@ -76,24 +76,24 @@ bool Add::execute(){
 							// forwarded value
 						stages[presentStage].setInstruction(id);
 						stalled = true;
-						stallRegister = rsIndex;
-						stallInstruction = registers[rsindex].instructionId;
+						stallingRegister = rsIndex;
+						stallingInstructionId = registers[rsIndex].instructionId;
 						return false;
 					}
 					else if (!registers[rtIndex].valid){
-							// when rtindex is not available without forwarding
+							// when rtIndex is not available without forwarding
 						stages[presentStage].setInstruction(id);
 						stalled = true;
-						stallRegister = rtIndex;
-						stallInstruction = registers[rtindex].instructionId;
+						stallingRegister = rtIndex;
+						stallingInstructionId = registers[rtIndex].instructionId;
 						return false;
 					}
 
 					else if (  registers[rsIndex].instructionStage==8 && registers[rtIndex].instructionStage==8) {
 							// this is the most normal case, when all values are simply avaiable not forwarded.
 						registers[rdIndex].stallRegister(id); 
-						a = rsIndex.value;
-						b = rtIndex.value;
+						a = registers[rsIndex].value;
+						b = registers[rtIndex].value;
 						stages[presentStage].setFree();
 						presentStage = stageToExecute;
 						stages[presentStage].setInstruction(id);
@@ -105,10 +105,10 @@ bool Add::execute(){
 					else if (registers[rsIndex].instructionStage!=8){
 						registers[rdIndex].stallRegister(id); 
 						forwarded = true;
-						forwardedFromInstructionId = registers[rsindex].instructionId;
-						forwardedFromInstructionStage = registers[rsindex].instructionStage;
-						a = rsIndex.value;
-						b = rtIndex.value;
+						forwardedFromInstructionId = registers[rsIndex].instructionId;
+						forwardedFromInstructionStage = registers[rsIndex].instructionStage;
+						a = registers[rsIndex].value;
+						b = registers[rtIndex].value;
 						stages[presentStage].setFree();
 						presentStage = stageToExecute;
 						stages[presentStage].setInstruction(id);
@@ -119,10 +119,10 @@ bool Add::execute(){
 					else if (registers[rsIndex].instructionStage!=8){
 						registers[rdIndex].stallRegister(id); 
 						forwarded = true;
-						forwardedFromInstructionId = registers[rsindex].instructionId;
-						forwardedFromInstructionStage = registers[rsindex].instructionStage;
-						a = rsIndex.value;
-						b = rtIndex.value;
+						forwardedFromInstructionId = registers[rsIndex].instructionId;
+						forwardedFromInstructionStage = registers[rsIndex].instructionStage;
+						a = registers[rsIndex].value;
+						b = registers[rtIndex].value;
 						stages[presentStage].setFree();
 						presentStage = stageToExecute;
 						stages[presentStage].setInstruction(id);
@@ -140,21 +140,21 @@ bool Add::execute(){
 							// forwarded value
 						stages[presentStage].setInstruction(id);
 						stalled = true;
-						stallRegister = rsIndex;
-						stallInstruction = registers[rsindex].instructionId;
+						stallingRegister = rsIndex;
+						stallingInstructionId = registers[rsIndex].instructionId;
 					}
 					else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=8){
-							// when rtindex is not available without forwarding
+							// when rtIndex is not available without forwarding
 						stages[presentStage].setInstruction(id);
 						stalled = true;
-						stallRegister = rtIndex;
-						stallInstruction = registers[rtindex].instructionId;
+						stallingRegister = rtIndex;
+						stallingInstructionId = registers[rtIndex].instructionId;
 					}
 					else {
 							// this is the most normal case, when all values are simply avaiable not forwarded.
 						registers[rdIndex].stallRegister(id); 
-						a = rsIndex.value;
-						b = rtIndex.value;
+						a = registers[rsIndex].value;
+						b = registers[rtIndex].value;
 						stages[presentStage].setFree();
 						presentStage = stageToExecute;
 						stages[presentStage].setInstruction(id);
@@ -166,16 +166,17 @@ bool Add::execute(){
 			}
 			else {
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = stages[stageToExecute].instructionAddress;
+				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
 				return false;
 			}
-			case 4:
-			{
+		}
+		case 4:
+		{
 			// EX Stage
-				registers[rdIndex].stallRegister(id);
-				if(stages[stageToExecute].isFree()){
-					sum = a+b;
+			registers[rdIndex].stallRegister(id);
+			if(stages[stageToExecute].isFree()){
+				sum = a+b;
 					registers[rdIndex].write(sum,id,presentStage); // TODO : Will it ever return false?
 					stages[presentStage].setFree();
 					presentStage = stageToExecute;
@@ -185,7 +186,7 @@ bool Add::execute(){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionAddress;
+					stallingInstructionId = stages[stageToExecute].instructionId;
 					stalled = true;
 					return false;
 				}
@@ -204,7 +205,7 @@ bool Add::execute(){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionAddress;
+					stallingInstructionId = stages[stageToExecute].instructionId;
 					stalled = true;
 					return false;
 				}
@@ -222,7 +223,7 @@ bool Add::execute(){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionAddress;
+					stallingInstructionId = stages[stageToExecute].instructionId;
 					stalled = true;
 					return false;
 				}
@@ -239,7 +240,7 @@ bool Add::execute(){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionAddress;
+					stallingInstructionId = stages[stageToExecute].instructionId;
 					stalled = true;
 					return false;
 				}
@@ -259,14 +260,14 @@ bool Add::execute(){
 					else {
 						stalled = true;
 						stages[presentStage].setInstruction(id);
-						stallRegister = rdIndex;
+						stallingRegister = rdIndex;
 						stallingInstructionId = registers[rdIndex].instructionId;
 						return false;
 					}
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionAddress;
+					stallingInstructionId = stages[stageToExecute].instructionId;
 					stalled = true;
 					return false;
 				}

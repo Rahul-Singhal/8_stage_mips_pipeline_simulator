@@ -15,7 +15,7 @@ public:
 	int number;
 
 	// Id of the instruction being executed. -1 if no instruction
-	list <Instruction> instructionQ;
+	int instructionId;
 
 	// whether stage if free or not
 	bool isFree();

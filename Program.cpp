@@ -1,10 +1,9 @@
 #include "Program.h"
 
-Program::Program(string filename){
-	/*parser = new Parser(filename);
-	code = vector<Register>();
+Program::Program(string filename) : parser(filename){
+	code.assign(0,Instruction());
 	parser.parse(code);
-	sepInstructions.assign(9, vector<Register>())*/
+	sepInstructions.assign(9, vector<Instruction*>());
 }
 
 void Program::execute(){
@@ -22,13 +21,13 @@ void Program::execute(){
 	code[programCounter].stageToExecute = 1;
 	currInstructions.push_back(code[programCounter]);
 	while(!currInstructions.empty()){
-		list<Register>::iterator it;
+		list<Instruction>::iterator it;
 		for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
-			sepInstructions[it->stageToExecute].push_back(it)
+			sepInstructions[it->stageToExecute].push_back(&(*it));
 		}
 		// the whole logic of running one clock cycle comes here
 		for(int i = 8 ; i >= 1 ; i--){
-			for(int j = 0 ; j < sepInstructions[i].size ; j++){
+			for(int j = 0 ; j < sepInstructions[i].size() ; j++){
 				sepInstructions[i][j]->execute();
 			}
 		}
@@ -38,7 +37,7 @@ void Program::execute(){
 			if(it->stageToExecute==-1)
 				currInstructions.erase(it++);
 			else
-				i++;
+				it++;
 		}		
 
 		if(stages[1].isFree()){

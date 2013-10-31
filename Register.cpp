@@ -3,7 +3,7 @@
 Register::Register(int id, int value){
 	this->id = id;
 	this->value = value;
-	this->status = 0;  // ready to be read
+	this->valid = true;  // ready to be read
 }
 
 void Register::stallRegister(int instructionId){
@@ -13,10 +13,6 @@ void Register::stallRegister(int instructionId){
 	}
 }
 
-void Register::setForwardedValue(int value){
-	this->value = value;
-	status = 2;
-}
 
 bool Register::write(int value, int instructionId, int instructionStage){
 	if (valid) {

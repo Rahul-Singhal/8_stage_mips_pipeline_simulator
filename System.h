@@ -16,8 +16,8 @@ class System{
 public:
 	static vector <Register> registers;
 	static vector <Stage> stages;
-	int programCounter; // holds the index of the instruction which will be inserted 
-	bool forwarding;
+	static int programCounter; // holds the index of the instruction which will be inserted 
+	static bool forwardingEnabled;
 };
 
 #endif
