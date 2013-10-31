@@ -8,15 +8,14 @@
 #include "Stage.h"
 #include "Parser.h"
 #include <list>
+#include <vector>
 
 using namespace std;
 
-extern vector <Register> registers; /* Declaration of register file common to all files */
 
-extern vector <Stage> stages; /* Declaration of stages common to all files */
-
-class Program{
+class Program: public System{
 	Parser parser;
+	vector <Instruction> code;
 	list <Instruction> currInstructions;
 	Program(string filename);
 	void execute();

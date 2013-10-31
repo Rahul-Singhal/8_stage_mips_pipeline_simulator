@@ -1,5 +1,11 @@
 #include "Program.h"
 
-Parser::Parser(string filename){
+Program::Program(string filename){
+	parser = Parser(filename);
+	code = new vector();
+	parser.parse(code);
+}
+
+void Program::execute(){
 	
 }

@@ -1,7 +1,11 @@
 #ifndef STAGE_H
 #define STAGE_H
 
+#include <list>
+
 using namespace std;
+
+class Instruction;
 
 class Stage{
 
@@ -11,7 +15,7 @@ public:
 	int number;
 
 	// Address of the instruction being executed. -1 if no instruction
-	int instructionAddress;
+	list <Instruction> instructionQ;
 
 	// whether stage if free or not
 	bool isFree();

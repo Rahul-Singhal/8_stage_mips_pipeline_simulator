@@ -17,7 +17,7 @@ bool Addi::execute(){
 		case 1: 
 		{
 			// IF 1 Stage
-			if(stages[stageNumber].isFree()){
+			if(stages[1].isFree()){
 				//registers[rdIndex].stallRegister();
 				stages[stageNumber-1].setInstruction(-1); // set that stage 0 is free, so that program controller can fetch new instruction.
 				stageNumber++;
