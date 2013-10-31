@@ -11,6 +11,10 @@ Add::Add(int rdIndex, int rsIndex, int rtIndex){
 // depending on the return value of this bool, the program manager will put the appropriate stage of this instruction
 // in the next queue of instructions. if return value is false  =>  instruction is still in the old stage.
 // return value = ture => instruction may or may not have completed the stage, example in multiply. 
+
+// If an instruction does not execute because the stage is not free or because registers are being written, then we 
+// set the stage where it already is to busy. So that no other further instruction try to access the stage.
+
 bool Add::execute(){
 	// setting the status of register which is to be written as 1 for 1<=stageNumber<5 (if any, assuming no forwarding)
 	switch(stageNumber){
@@ -45,11 +49,11 @@ bool Add::execute(){
 			// ID Stage
 			// Assuming no forwarding and that the registers to be read must be free as of now.
 			if(stages[stageNumber].isFree()){
-				registers[rdIndex].stallRegister(); // TODO: should this be outside or inside the if statement??
 
 				pair <int, int> p = registers[rsIndex].read();
 				pair <int, int> q = registers[rtIndex].read();
 				if(p.first==0 && q.first==0) {
+					registers[rdIndex].stallRegister(); // TODO: should this be outside or inside the if statement??
 					a = p.second;
 					b = q.second;
 					stageNumber++;
@@ -57,8 +61,11 @@ bool Add::execute(){
 
 					return true;
 				}
-				else
+				else{
+					stages[stageNumber-1].setInstruction(address);
+
 					return false;
+				}
 			}
 			else{
 				stages[stageNumber-1].setInstruction(address);

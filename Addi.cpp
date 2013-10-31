@@ -45,9 +45,9 @@ bool Addi::execute(){
 			// ID Stage
 			// Assuming no forwarding and that the registers to be read must be free as of now.
 			if(stages[stageNumber].isFree()){
-				registers[rtIndex].stallRegister(); // TODO: should this be outside or inside the if statement??
 				pair <int, int> p = registers[rsIndex].read();
 				if(p.first==0) {
+					registers[rtIndex].stallRegister(); // TODO: should this be outside or inside the if statement??
 					a = p.second;
 					b = this->immediate;
 					stageNumber++;
@@ -55,8 +55,10 @@ bool Addi::execute(){
 
 					return true;
 				}
-				else
+				else{
+					stages[stageNumber-1].setInstruction(address);
 					return false;
+				}
 			}
 			else{
 				stages[stageNumber-1].setInstruction(address);
