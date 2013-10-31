@@ -1,11 +1,12 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include<string>
-#include<vector>
-#include<fstream>
-#include<iostream>
-#include<map>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include "Instruction.h"
 using namespace std;
 
 
@@ -30,6 +31,9 @@ public:
 	void printLabels();
 	void parseLine(string str);
 	void makeInstruction();
+	// parse is assumed to take an empty vector of Instructions and fill it with the correct
+	// Intructions of the correct type (sub classes) in the correct order
+	void parse(vector <Instruction> & code);
 };
 
 #endif

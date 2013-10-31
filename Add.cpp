@@ -4,7 +4,7 @@ Add::Add(int rdIndex, int rsIndex, int rtIndex){
 	this->rdIndex = rdIndex;
 	this->rsIndex = rsIndex;
 	this->rtIndex = rtIndex;
-	this->address = address;
+	this->id = id;
 }
 
 
@@ -25,14 +25,14 @@ bool Add::execute(){
 				//registers[rdIndex].stallRegister();
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
-				stages[presentStage].setInstruction(address);
+				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
 				display = "IF1";
 				return true;
 			}
 			else{
-				stages.presentStage.setInstruction(address);
+				stages.presentStage.setInstruction(id);
 				stalled = true;
 				display = "Waiting for IF1 to be free!";
 				return false;
@@ -44,14 +44,14 @@ bool Add::execute(){
 			if(stages[stageToExecute].isFree()){
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
-				stages[presentStage].setInstruction(address);
+				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
 				display = "IF2";
 				return true;
 			}
 			else {
-				stages.presentStage.setInstruction(address);
+				stages.presentStage.setInstruction(id);
 				stalled = true;
 				display = "Waiting for IF2 to be free!";
 				return false;
@@ -70,18 +70,18 @@ bool Add::execute(){
 					a = p.second;
 					b = q.second;
 					stageToExecute++;
-					stages[stageToExecute].setInstruction(address);
+					stages[stageToExecute].setInstruction(id);
 
 					return true;
 				}
 				else{
-					stages[stageToExecute-1].setInstruction(address);
+					stages[stageToExecute-1].setInstruction(id);
 
 					return false;
 				}
 			}
 			else{
-				stages[stageToExecute-1].setInstruction(address);
+				stages[stageToExecute-1].setInstruction(id);
 				return false;
 			}
 		}
@@ -93,10 +93,10 @@ bool Add::execute(){
 				sum = a+b;
 				registers[rdIndex].setForwardedValue(sum);
 				stageToExecute++;
-				stages[stageToExecute].setInstruction(address);
+				stages[stageToExecute].setInstruction(id);
 				return true;
 			}
-			stages[stageToExecute-1].setInstruction(address);
+			stages[stageToExecute-1].setInstruction(id);
 			return false;
 		}
 		case 5:
@@ -105,11 +105,11 @@ bool Add::execute(){
 			//registers[rdIndex].stallRegister();
 			if(stages[stageToExecute].isFree()){
 				stageToExecute++;
-				stages[stageToExecute].setInstruction(address);
+				stages[stageToExecute].setInstruction(id);
 
 				return true;
 			}
-			stages[stageToExecute-1].setInstruction(address);
+			stages[stageToExecute-1].setInstruction(id);
 			return false;
 		}
 		case 6:
@@ -117,11 +117,11 @@ bool Add::execute(){
 			// MEM 2 Stage
 			if(stages[stageToExecute].isFree()){
 				stageToExecute++;
-				stages[stageToExecute].setInstruction(address);
+				stages[stageToExecute].setInstruction(id);
 
 				return true;
 			}
-			stages[stageToExecute-1].setInstruction(address);
+			stages[stageToExecute-1].setInstruction(id);
 			return false;
 		}
 		case 7:
@@ -129,11 +129,11 @@ bool Add::execute(){
 			// MEM 3 Stage
 			if(stages[stageToExecute].isFree()){
 				stageToExecute++;
-				stages[stageToExecute].setInstruction(address);
+				stages[stageToExecute].setInstruction(id);
 
 				return true;
 			}
-			stages[stageToExecute-1].setInstruction(address);
+			stages[stageToExecute-1].setInstruction(id);
 			return false;
 		}
 		case 8:
@@ -146,7 +146,7 @@ bool Add::execute(){
 
 				return true;
 			}
-			stages[stageToExecute-1].setInstruction(address);
+			stages[stageToExecute-1].setInstruction(id);
 			return false;
 		}
 	}

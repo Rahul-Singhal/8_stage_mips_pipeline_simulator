@@ -19,9 +19,10 @@ public:
   int presentStage;
   bool stalled;
   int stallingRegister;
-  
+
   string display;
 	int address;
+  int id;
 };
 
 #endif

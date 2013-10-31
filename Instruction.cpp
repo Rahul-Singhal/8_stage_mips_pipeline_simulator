@@ -5,6 +5,7 @@ Instruction::Instruction(){
 
 }
 
+
 Instruction::init(){
   stageToExecute = 1;
   presentStage = 0;
