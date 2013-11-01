@@ -13,7 +13,6 @@ void Instruction::init(){
   display = "";
 }
 
-
 bool Instruction::execute(){
-
+	// cout<<"FUCKED"<<endl;
 }

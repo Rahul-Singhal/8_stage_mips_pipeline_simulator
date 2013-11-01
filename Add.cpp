@@ -15,8 +15,8 @@ Add::Add(int rdIndex, int rsIndex, int rtIndex){
 // If an instruction does not execute because the stage is not free or because registers are being written, then we 
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
-bool Add::execute(){
-
+bool Add::execute1(){
+	// cout<<"MAIN CALL HUWA"<<endl;
 	// Default Values:
 	forwarded = false;
 	stalled = false;
@@ -34,6 +34,7 @@ bool Add::execute(){
 				stageToExecute++;
 				stalled = false;
 				display = "IF1";
+				cout << "if1 -->" ;
 				return true;
 			}
 			else{
@@ -41,6 +42,7 @@ bool Add::execute(){
 				stalled = true;
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				display = "Waiting for IF1 to be free!";
+				cout << "if1 - wait -->" ;
 				return false;
 			}
 		}
@@ -54,6 +56,7 @@ bool Add::execute(){
 				stageToExecute++;
 				stalled = false;
 				display = "IF2";
+				cout << "if2 -->" ;
 				return true;
 			}
 			else {
@@ -61,6 +64,7 @@ bool Add::execute(){
 				stalled = true;
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				display = "Waiting for IF2 to be free!";
+				cout << "if2 - wait -->" ;
 				return false;
 			}
 		}
@@ -142,6 +146,8 @@ bool Add::execute(){
 						stalled = true;
 						stallingRegister = rsIndex;
 						stallingInstructionId = registers[rsIndex].instructionId;
+						cout << "ID stalls due to rs -->";
+						return false;
 					}
 					else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=8){
 							// when rtIndex is not available without forwarding
@@ -149,6 +155,8 @@ bool Add::execute(){
 						stalled = true;
 						stallingRegister = rtIndex;
 						stallingInstructionId = registers[rtIndex].instructionId;
+						cout << "ID stalls due to rt -->"; 
+						return false;
 					}
 					else {
 							// this is the most normal case, when all values are simply avaiable not forwarded.
@@ -160,6 +168,7 @@ bool Add::execute(){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
+						cout << "no stall ID -->" ;
 						return true;
 					}
 				}	
@@ -168,6 +177,7 @@ bool Add::execute(){
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
+				cout << "stall ID -->" ;
 				return false;
 			}
 		}
@@ -177,7 +187,7 @@ bool Add::execute(){
 			registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
 				sum = a+b;
-					registers[rdIndex].write(sum,id,presentStage); // TODO : Will it ever return false?
+					registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?
 					stages[presentStage].setFree();
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);
@@ -249,7 +259,7 @@ bool Add::execute(){
 			{
 			// WB Stage
 				if(stages[stageToExecute].isFree()){
-					if (registers[rdIndex].write(sum,id,presentStage)){
+					if (registers[rdIndex].write(sum,id,stageToExecute)){
 						stages[presentStage].setFree();
 						presentStage = stageToExecute;
 						stages[presentStage].setInstruction(id);

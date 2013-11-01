@@ -14,7 +14,7 @@ class Instruction: public System{
 public:
 	Instruction();
   void init();
-  bool execute();
+  virtual bool execute();
 	// eigth stage
 	int stageToExecute;
   int presentStage;

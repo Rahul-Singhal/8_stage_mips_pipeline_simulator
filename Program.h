@@ -8,6 +8,7 @@
 #include "Stage.h"
 #include "Parser.h"
 #include "System.h"
+#include "Add.h"
 #include <list>
 #include <vector>
 
@@ -15,17 +16,17 @@ using namespace std;
 
 
 class Program: public System{
-
-	Parser parser;
-	vector <Instruction> code;
-	list <Instruction> currInstructions;
+public:
+	// Parser parser;
+	vector <Add> code;
+	list <Add> currInstructions;
 	Program(string filename);
 	void execute();
 
 private:
 	void runOneClockCycle(); // enough said
 	int instrId;
-	vector <vector <Instruction*> > sepInstructions;
+	vector <vector <Add*> > sepInstructions;
 };
 
 #endif

@@ -33,7 +33,7 @@ public:
 	void makeInstruction();
 	// parse is assumed to take an empty vector of Instructions and fill it with the correct
 	// Intructions of the correct type (sub classes) in the correct order
-	void parse(vector <Instruction> & code);
+	// void parse(vector <Instruction> & code);
 };
 
 #endif

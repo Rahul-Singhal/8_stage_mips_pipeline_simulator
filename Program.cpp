@@ -1,17 +1,26 @@
 #include "Program.h"
-
-Program::Program(string filename) : parser(filename){
-	code.assign(0,Instruction());
-	parser.parse(code);
-	sepInstructions.assign(9, vector<Instruction*>());
+ // : parser(filename)
+Program::Program(string filename){
+	code.assign(0,Add(1,1,1));
+	// parser.parse(code);
+	Add a(12, 10, 12);
+	code.push_back(a);
+	code.push_back(a);
+	code.push_back(a);
+	code.push_back(a);
+	sepInstructions.assign(9, vector<Add*>());
 }
 
 void Program::execute(){
 
 	for(int i = 0 ; i < 9 ; i++)
 		stages[i].number = i;
-	for(int i = 0 ; i < 32 ; i++)
+	for(int i = 0 ; i < 32 ; i++){
 		registers[i].id = i;
+		registers[i].value = 0;
+		registers[i].valid = true;
+		registers[i].instructionStage = 8;
+	}
 
 
 	programCounter = 0;
@@ -21,14 +30,17 @@ void Program::execute(){
 	code[programCounter].stageToExecute = 1;
 	currInstructions.push_back(code[programCounter]);
 	while(!currInstructions.empty()){
-		list<Instruction>::iterator it;
+		// cout<<currInstructions.front().id<<":"<<currInstructions.front().presentStage<<":"<<currInstructions.front().stageToExecute<<endl;
+		list<Add>::iterator it;
 		for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
 			sepInstructions[it->stageToExecute].push_back(&(*it));
 		}
 		// the whole logic of running one clock cycle comes here
 		for(int i = 8 ; i >= 1 ; i--){
 			for(int j = 0 ; j < sepInstructions[i].size() ; j++){
-				sepInstructions[i][j]->execute();
+				cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
+				sepInstructions[i][j]->execute1();
+				cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
 			}
 		}
 		
@@ -40,20 +52,22 @@ void Program::execute(){
 				it++;
 		}		
 
-		if(stages[1].isFree()){
+		if(stages[0].isFree()){
 			programCounter++;
-			if(programCounter <= code.size()){
+			if(programCounter < code.size()){
 				instrId++;		
 				code[programCounter].id = instrId;
 				code[programCounter].presentStage = 0;
 				code[programCounter].stageToExecute = 1;
 				currInstructions.push_back(code[programCounter]);
 			}
-			else
-				return;
 		}
 // Setting the stages free
 		for(int i = 0 ; i < stages.size() ; i++)
 			stages[i].setFree();
+		for(int i = 1 ; i <= 8 ; i++ )
+			sepInstructions[i].clear();
+
+		cout<<"cycle"<<endl;
 	}
 }
