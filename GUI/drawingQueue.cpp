@@ -59,8 +59,8 @@ void DrawingQueue::drawHeader(){
  
 
 DrawingQueue::DrawingQueue(){
-	instHeight = 40;
-	instWidth = 120;
+	instHeight = 20;
+	instWidth = 50;
 	maxIdDrawn = 2;
 	displayVector.clear();
 
@@ -169,10 +169,10 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
     //text color
     glColor3f(1,1,1);
     if(!inst.getStalled() && !inst.getForwarded()) {
-    	render_bitmap_string(0,0,0, GLUT_BITMAP_HELVETICA_12, stageStringMap[prStage].c_str());
+    	render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, stageStringMap[prStage].c_str());
     }
     if(inst.getStalled()){
-    	render_bitmap_string(0,0,0, GLUT_BITMAP_HELVETICA_12, "STALL");
+    	render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, "STALL");
     	int lastQueueStartId = displayVector[i-1][0].getId();
     	if(displayVector[i-1][inst.getId() - lastQueueStartId].getStalled()){
     		//no need to draw any more arrows
