@@ -60,7 +60,12 @@ void Program::execute(){
 						of unstalling in the individual classes where the dest reg is known
 						*/
 						stages[3].setFree();
-						code[prevPc+1].unstall();
+						for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
+							if(it->id == sepInstructions[i][j]->id){
+								it++;
+								it->unstall();
+							}
+						}
 					}
 				}
 				cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
