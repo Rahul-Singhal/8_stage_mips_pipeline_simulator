@@ -45,6 +45,7 @@ void Program::execute(){
 				if(nextPc != prevPc){
 					cout<<"Branch taken and destination other than next instruction!"<<endl;
 					cout<<"Flush needed!"<<endl;
+					/*setting stages free*/
 					stages[0].setFree();
 					stages[1].setFree();
 					stages[2].setFree();
@@ -63,9 +64,13 @@ void Program::execute(){
 						for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
 							if(it->id == sepInstructions[i][j]->id){
 								it++;
-								it->unstall();
+								it->unstall(); /*unstalling the register*/
+								break;
 							}
 						}
+						/*removing elements after the branch instructions from the queue*/
+						while(it != currInstructions.end())
+							currInstructions.erase(it++);
 					}
 				}
 				cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
