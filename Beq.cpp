@@ -1,15 +1,14 @@
-#include "Add.h"
+#include "Beq.h"
 
-Add::Add(int rdIndex, int rsIndex, int rtIndex, int id){
-	this->rdIndex = rdIndex;
+Beq::Beq(int rsIndex, int rtIndex, int destPc){
 	this->rsIndex = rsIndex;
 	this->rtIndex = rtIndex;
+	this->destPc = destPc;
 	this->id = id;
 }
 
-void Add::unstall(){
-	if(!registers[rdIndex].valid && registers[rdIndex].instructionId==id)
-		registers[rdIndex].unstall();
+void Beq::unstall(){
+ 	return;
 }
 
 // depending on the return value of this bool, the program manager will put the appropriate stage of this instruction
@@ -19,20 +18,26 @@ void Add::unstall(){
 // If an instruction does not execute because the stage is not free or because registers are being written, then we 
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
-bool Add::execute1(int pc){
-	// cout<<"MAIN CALL HUWA"<<endl;
-	// Default Values:
+/*
+	the following execute will modify the program counter which is passed as parameter
+	in case the branch is taken. This change in branch will be detected in the program
+	and the the subsequent pipeline instructions will be flushed 
+
+	The functionality of calculating the branch predicate in ID itself is also provided
+	This is governed by a global bool variable "fastBranching"
+*/
+
+bool Beq::execute(int pc){
 	forwarded = false;
 	stalled = false;
 
-	// setting the status of register which is to be written as 1 for 1<=stageToExecute<5 (if any, assuming no forwarding)
 	switch(stageToExecute){
 		case 1: 
 		{
 			// IF 1 Stage
 			if(stages[stageToExecute].isFree()){
 				//registers[rdIndex].stallRegister(id)();
-				stages[presentStage].setFree();
+				stages[presentStage].setFree(); /*Set stage 0 free so that next instruction come*/
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
@@ -76,6 +81,8 @@ bool Add::execute1(int pc){
 		{
 			// ID Stage
 			// Assuming no forwarding and that the registers to be read must be free as of now.
+
+
 			if(stages[stageToExecute].isFree()){
 				if (forwardingEnabled) {
 
@@ -103,7 +110,8 @@ bool Add::execute1(int pc){
 
 					else if (  registers[rsIndex].instructionStage==8 && registers[rtIndex].instructionStage==8) {
 							// this is the most normal case, when all values are simply avaiable not forwarded.
-						registers[rdIndex].stallRegister(id); 
+						/*Branch Instruction, no stalling of rdIndex as there is none*/
+						// registers[rdIndex].stallRegister(id); 
 						a = registers[rsIndex].value;
 						b = registers[rtIndex].value;
 						stages[presentStage].setFree();
@@ -111,13 +119,18 @@ bool Add::execute1(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
+						if(fastBranching){
+							if(a==b)
+								pc = destPc-1;
+						}
 						cout << "id completed -->";
 
 						return true;
 					}
 						// ASSUMING ONLY ONE FORWARDED VALUE
 					else if (registers[rsIndex].instructionStage!=8){
-						registers[rdIndex].stallRegister(id); 
+						/*Branch Instruction, no stalling of rdIndex as there is none*/
+						// registers[rdIndex].stallRegister(id);
 						forwarded = true;
 						forwardedFromInstructionId = registers[rsIndex].instructionId;
 						forwardedFromInstructionStage = registers[rsIndex].instructionStage;
@@ -128,12 +141,17 @@ bool Add::execute1(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
+						if(fastBranching){
+							if(a==b)
+								pc = destPc-1;
+						}
 						cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
 						return true;
 					}
 					else if (registers[rtIndex].instructionStage!=8){
-						registers[rdIndex].stallRegister(id); 
+						/*Branch Instruction, no stalling of rdIndex as there is none*/
+						// registers[rdIndex].stallRegister(id);
 						forwarded = true;
 						forwardedFromInstructionId = registers[rtIndex].instructionId;
 						forwardedFromInstructionStage = registers[rtIndex].instructionStage;
@@ -144,6 +162,10 @@ bool Add::execute1(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
+						if(fastBranching){
+							if(a==b)
+								pc = destPc-1;
+						}
 						cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
 						return true;
@@ -174,7 +196,8 @@ bool Add::execute1(int pc){
 					}
 					else {
 							// this is the most normal case, when all values are simply avaiable not forwarded.
-						registers[rdIndex].stallRegister(id); 
+						/*Branch Instruction, no stalling of rdIndex as there is none*/
+						// registers[rdIndex].stallRegister(id);
 						a = registers[rsIndex].value;
 						b = registers[rtIndex].value;
 						stages[presentStage].setFree();
@@ -182,6 +205,10 @@ bool Add::execute1(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
+						if(fastBranching){
+							if(a==b)
+								pc = destPc-1;
+						}
 						cout << "no stall ID -->" ;
 						return true;
 					}
@@ -198,10 +225,15 @@ bool Add::execute1(int pc){
 		case 4:
 		{
 			// EX Stage
-			registers[rdIndex].stallRegister(id);
+			/*Branch Instruction, no stalling of rdIndex as there is none*/
+						// registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
-				sum = a+b;
-				registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?
+				if(!fastBranching){
+					if(a==b)
+						pc = destPc-1;
+				}
+				/*No rdIndex to write*/
+				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
@@ -282,35 +314,23 @@ bool Add::execute1(int pc){
 		}
 		case 8:
 		{
-			// WB Stage
+			// WB Stage Simple ! Nothing to write back
 			if(stages[stageToExecute].isFree()){
-				if (registers[rdIndex].write(sum,id,stageToExecute)){
-					stages[presentStage].setFree();
-					presentStage = stageToExecute;
-					stages[presentStage].setInstruction(id);
-					stageToExecute=-1;
-					cout << "WB completed -->";
-
-						// Instruction completed, so stage number is now invalid.
-					return true;
-				}
-				else {
-					stalled = true;
-					stages[presentStage].setInstruction(id);
-					stallingRegister = rdIndex;
-					stallingInstructionId = registers[rdIndex].instructionId;
-					cout << "Register not writable -->";
-
-					return false;
-				}
+				stages[presentStage].setFree();
+				presentStage = stageToExecute;
+				stages[presentStage].setInstruction(id);
+				stageToExecute=-1;
+				cout << "WB stage done -->" ;
+				return true;
 			}
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				cout << "WB not free ->";
+				cout << "WB stage not free -->";
 
 				return false;
+
 			}
 		}
 	}

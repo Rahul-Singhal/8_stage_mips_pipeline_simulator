@@ -7,6 +7,10 @@ Sub::Sub(int rdIndex, int rsIndex, int rtIndex, int id){
   this->id = id;
 }
 
+void Sub::unstall(){
+  if(!registers[rdIndex].valid && registers[rdIndex].instructionId==id)
+    registers[rdIndex].unstall();
+}
 
 // depending on the return value of this bool, the program manager will put the appropriate stage of this instruction
 // in the next queue of instructions. if return value is false  =>  instruction is still in the old stage.
@@ -15,7 +19,7 @@ Sub::Sub(int rdIndex, int rsIndex, int rtIndex, int id){
 // If an instruction does not execute because the stage is not free or because registers are being written, then we 
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
-bool Sub::execute1(){
+bool Sub::execute1(int pc){
   // cout<<"MAIN CALL HUWA"<<endl;
   // Default Values:
   forwarded = false;

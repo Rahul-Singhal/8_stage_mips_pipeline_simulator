@@ -31,6 +31,8 @@ public:
 	// 	called to write back at the WB stage, returns true if value could be written, else false
 	bool write(int value, int instructionId, int instructionStage);
 
+	/*set valid bit to true , needed when we have to reverse the effect of someinstruction*/
+	void unstall();
 	//	returns a pair <status, value>
 	//pair <bool, int> read();
 

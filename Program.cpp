@@ -39,7 +39,30 @@ void Program::execute(){
 		for(int i = 9 ; i >= 1 ; i--){
 			for(int j = 0 ; j < sepInstructions[i].size() ; j++){
 				cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
-				sepInstructions[i][j]->execute1();
+				prevPc = programCounter;
+				sepInstructions[i][j]->execute1(programCounter);
+				nextPc = programCounter;
+				if(nextPc != prevPc){
+					cout<<"Branch taken and destination other than next instruction!"<<endl;
+					cout<<"Flush needed!"<<endl;
+					stages[0].setFree();
+					stages[1].setFree();
+					stages[2].setFree();
+					if(!fastBranching){
+						/*complications!
+						if predicate is calculated in EX then there is a chance
+						that some register was stalled due to the next instruction in the ID stage
+						we need to set that register free*/
+						/*solution
+						The only instruction which can do this is the next instruction(addr), so we need
+						to unstall its destination register, this destination register's name could
+						vary depending on the instruction, so we'll have to add this functionality
+						of unstalling in the individual classes where the dest reg is known
+						*/
+						stages[3].setFree();
+						code[prevPc+1].unstall();
+					}
+				}
 				cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
 			}
 		}

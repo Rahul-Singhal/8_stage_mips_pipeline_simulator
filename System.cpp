@@ -9,3 +9,5 @@ bool System::forwardingEnabled = false;
 int System::programCounter = 1;
 
 int System::multSubStages = 4;
+
+bool System::fastBranching = false;

@@ -30,6 +30,8 @@ private:
 	void runOneClockCycle(); // enough said
 	int instrId;
 	vector <vector <Mult*> > sepInstructions;
+	int prevPc;
+	int nextPc;
 };
 
 #endif

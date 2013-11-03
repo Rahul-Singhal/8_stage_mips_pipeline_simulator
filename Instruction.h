@@ -13,20 +13,21 @@ using namespace std;
 class Instruction: public System{
 public:
 	Instruction();
-  void init();
-  virtual bool execute();
+	void init();
+	virtual bool execute(int pc);
+	virtual void unstall();
 	// eigth stage
 	int stageToExecute;
-  int presentStage;
-  bool stalled;
-  int stallingInstructionId;
-  int stallingRegister;
-  bool forwarded;
-  int forwardedFromInstructionId;
-  int forwardedFromInstructionStage;
-  string display;
+	int presentStage;
+	bool stalled;
+	int stallingInstructionId;
+	int stallingRegister;
+	bool forwarded;
+	int forwardedFromInstructionId;
+	int forwardedFromInstructionStage;
+	string display;
 	int address;
-  int id;
+	int id;
 };
 
 #endif

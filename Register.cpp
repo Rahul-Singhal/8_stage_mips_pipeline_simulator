@@ -34,3 +34,6 @@ bool Register::write(int value, int instructionId, int instructionStage){
 	}
 }
 
+void Register::unstall(){
+	valid = true;
+}

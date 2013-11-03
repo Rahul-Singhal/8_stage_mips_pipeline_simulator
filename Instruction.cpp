@@ -13,7 +13,12 @@ void Instruction::init(){
   display = "";
 }
 
-bool Instruction::execute(){
+bool Instruction::execute(int pc){
   cout<<"FUCKED"<<endl;
   return false;
+}
+
+void Instruction::unstall(){
+	cout<<"FUCKED AGAIN"<<endl;
+	return;
 }
