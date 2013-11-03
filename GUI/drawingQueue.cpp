@@ -196,14 +196,6 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	int prStage = inst.getPresentStage();
 	double * colors = stageColorMap[prStage];
 	if(inst.getPresentStage() == 1){
-		//draw the instruction in side bar
-		// cout<<"here"<<endl;
-		// glPushMatrix();
-		// 	glTranslatef(-120-scrollX, -((instHeight+20)*inst.getId()), 0);
-		// 	glColor3f(0,0,0);
-		// 	render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, str.c_str());
-		// glPopMatrix();
-		//cout<<str<<endl;
 		instStrings.push_back(pair<int, string> (inst.getId(), str));
 	}
 	maxIdDrawn = maxIdDrawn > inst.getId()? maxIdDrawn:inst.getId();
