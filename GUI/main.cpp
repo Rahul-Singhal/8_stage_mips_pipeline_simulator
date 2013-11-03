@@ -35,7 +35,7 @@ static void display(void)
         glTranslatef(scrollX, scrollY, 0);
         glPushMatrix();
         glTranslatef(0,win_height,0);
-        dq.draw(scrollY);
+        dq.draw(scrollX, scrollY);
         glPopMatrix();
     glPopMatrix();
     glutSwapBuffers();
@@ -61,7 +61,7 @@ static void idle(void)
 
 void init(){
     vector <Instruction > v;
-    Instruction inst1(1,1,false,1, 20, false, 10, 20, "hey there1", 0);
+    Instruction inst1(1,1,false,1, 20, false, 10, 20, "add $t1, $t2, $t3", 0);
     Instruction inst2(4,2,false,1, 20, false, 10, 20, "hey there2", 0);
     Instruction inst3(4,3,false,1, 20, false, 10, 20, "hey there3", 0);
     Instruction inst4(4,4,false,1, 20, false, 10, 20, "hey there4", 0);
@@ -70,7 +70,7 @@ void init(){
     Instruction inst7(4,7,false,1, 20, false, 10, 20, "hey there7", 0);
     Instruction inst8(4,8,false,1, 20, false, 10, 20, "hey there8", 0);
 
-    Instruction inst11(1,1,false,1, 20, false, 10, 20, "hey there1", 1);
+    Instruction inst11(1,1,false,1, 20, false, 10, 20, "add $t4, $t1, $t3", 1);
     Instruction inst21(4,2,false,1, 20, false, 10, 20, "hey there2", 1);
 
     Instruction inst311(4,3,true,0, 20, false, 10, 20, "hey there2", 1);

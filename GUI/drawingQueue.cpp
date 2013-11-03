@@ -56,6 +56,37 @@ void DrawingQueue::drawHeader(){
 		glPopMatrix();
 	}
 }
+
+void DrawingQueue::drawSideBar(float scrollX){
+	glPushMatrix();
+	glBegin(GL_QUADS);
+		glColor3f(1,1,1);
+		glVertex2f(-500,500);
+        glVertex2f(-500,-((maxIdDrawn*(instHeight+20)) + 50));
+        glVertex2f(0, -((maxIdDrawn*(instHeight+20)) + 50));
+        glVertex2f(0,500);
+	glEnd();
+	glPopMatrix();
+
+	glPushMatrix();
+		glLineWidth(3);
+		glBegin(GL_LINES);
+		glColor3f(0,0,0);
+		glVertex2f(0,0);
+		glVertex2f(0,-((maxIdDrawn*(instHeight+20)) + 50));
+		glEnd();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-80,-instHeight,0);
+	for(int i = 0 ; i<instStrings.size(); i++){
+		glPushMatrix();
+		glTranslatef(0,-((instHeight+20)*instStrings[i].first), 0);
+		render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, instStrings[i].second.c_str());
+		glPopMatrix();
+	}
+	glPopMatrix();
+}
  
 
 DrawingQueue::DrawingQueue(){
@@ -132,9 +163,11 @@ void DrawingQueue::drawFinishedQueue(vector<Instruction> v){
 	//you need to call this function from your program and then call draw() which would essentially call glutPostRedisplay();
 }
 
-void DrawingQueue::draw(int scrollY){
+void DrawingQueue::draw(int scrollX, int scrollY){
+
+	instStrings.clear();
 	glPushMatrix();
-	glTranslatef(instWidth/2 + 20, -((3*instHeight)/2 + 20), 0);
+	glTranslatef(instWidth/2 + 150, -((3*instHeight)/2 + 20), 0);
 	for(int i =0 ; i<displayVector.size(); i++){
 		glPushMatrix();
 		for(int j = 0 ; j<displayVector[i].size(); j++){
@@ -144,9 +177,15 @@ void DrawingQueue::draw(int scrollY){
 		glPopMatrix();
 	}
 	glPopMatrix();
+
 	glPushMatrix();
-		glTranslatef(instWidth/2 + 20, -(instHeight/2 + 20) - scrollY, 0);
+		glTranslatef(instWidth/2 + 150, -(instHeight/2 + 20) - scrollY, 0);
 		drawHeader();
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(instWidth/2 + 110-scrollX, -(instHeight/2 + 20), 0);
+		drawSideBar(scrollX);
 	glPopMatrix();
 	
 }
@@ -156,6 +195,17 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	string str = inst.getDisplayString();
 	int prStage = inst.getPresentStage();
 	double * colors = stageColorMap[prStage];
+	if(inst.getPresentStage() == 1){
+		//draw the instruction in side bar
+		// cout<<"here"<<endl;
+		// glPushMatrix();
+		// 	glTranslatef(-120-scrollX, -((instHeight+20)*inst.getId()), 0);
+		// 	glColor3f(0,0,0);
+		// 	render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, str.c_str());
+		// glPopMatrix();
+		//cout<<str<<endl;
+		instStrings.push_back(pair<int, string> (inst.getId(), str));
+	}
 	maxIdDrawn = maxIdDrawn > inst.getId()? maxIdDrawn:inst.getId();
 	glPushMatrix();
 	glTranslatef((instWidth+2)*i, -((instHeight+20)*inst.getId()), 0);
