@@ -9,6 +9,9 @@
 #include "Parser.h"
 #include "System.h"
 #include "Add.h"
+#include "Addi.h"
+#include "Sub.h"
+#include "Mult.h"
 #include <list>
 #include <vector>
 
@@ -18,15 +21,15 @@ using namespace std;
 class Program: public System{
 public:
 	// Parser parser;
-	vector <Add> code;
-	list <Add> currInstructions;
+	vector <Mult> code;
+	list <Mult> currInstructions;
 	Program(string filename);
 	void execute();
 
 private:
 	void runOneClockCycle(); // enough said
 	int instrId;
-	vector <vector <Add*> > sepInstructions;
+	vector <vector <Mult*> > sepInstructions;
 };
 
 #endif

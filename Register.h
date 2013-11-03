@@ -16,6 +16,12 @@ class Register{
 public:
 	int id;
 
+	int value; // stores the value in register
+	bool valid; // true if the value written is valid
+	int instructionId; // if value is not valid, it stores which instruction has stalled the register, 
+										 //else stores which instruction wrote into the register last
+	int instructionStage; // which instruction stage wrote into the register, if not WB (stage 8) then we can get insights about forwarding
+
 	// Constructor, sets the initial value of register with id = id as value.
 	Register(int id, int value);
 
@@ -27,12 +33,6 @@ public:
 
 	//	returns a pair <status, value>
 	//pair <bool, int> read();
-
-	int value; // stores the value in register
-	bool valid; // true if the value written is valid
-	int instructionId; // if value is not valid, it stores which instruction has stalled the register, 
-										 //else stores which instruction wrote into the register last
-	int instructionStage; // which instruction stage wrote into the register, if not WB (stage 8) then we can get insights about forwarding
 
 };
 

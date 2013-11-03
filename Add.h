@@ -10,7 +10,7 @@ public:
 	int rtIndex;
 	int sum;
 	int a, b;
-	Add(int rdIndex, int rsIndex, int rtIndex);
+	Add(int rdIndex, int rsIndex, int rtIndex, int id);
 	bool execute1();
 };
 

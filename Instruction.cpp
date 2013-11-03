@@ -14,5 +14,6 @@ void Instruction::init(){
 }
 
 bool Instruction::execute(){
-	// cout<<"FUCKED"<<endl;
+  cout<<"FUCKED"<<endl;
+  return false;
 }

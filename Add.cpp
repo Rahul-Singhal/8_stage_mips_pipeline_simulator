@@ -1,6 +1,6 @@
 #include "Add.h"
 
-Add::Add(int rdIndex, int rsIndex, int rtIndex){
+Add::Add(int rdIndex, int rsIndex, int rtIndex, int id){
 	this->rdIndex = rdIndex;
 	this->rsIndex = rsIndex;
 	this->rtIndex = rtIndex;
@@ -82,6 +82,8 @@ bool Add::execute1(){
 						stalled = true;
 						stallingRegister = rsIndex;
 						stallingInstructionId = registers[rsIndex].instructionId;
+						cout << "rs register not readable -->";
+
 						return false;
 					}
 					else if (!registers[rtIndex].valid){
@@ -89,7 +91,9 @@ bool Add::execute1(){
 						stages[presentStage].setInstruction(id);
 						stalled = true;
 						stallingRegister = rtIndex;
-						stallingInstructionId = registers[rtIndex].instructionId;
+						stallingInstructionId = registers[rtIndex].instructionId;    
+						cout << "rt register not readable -->";
+
 						return false;
 					}
 
@@ -103,6 +107,8 @@ bool Add::execute1(){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
+						cout << "id completed -->";
+
 						return true;
 					}
 						// ASSUMING ONLY ONE FORWARDED VALUE
@@ -118,13 +124,15 @@ bool Add::execute1(){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
+						cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+
 						return true;
 					}
-					else if (registers[rsIndex].instructionStage!=8){
+					else if (registers[rtIndex].instructionStage!=8){
 						registers[rdIndex].stallRegister(id); 
 						forwarded = true;
-						forwardedFromInstructionId = registers[rsIndex].instructionId;
-						forwardedFromInstructionStage = registers[rsIndex].instructionStage;
+						forwardedFromInstructionId = registers[rtIndex].instructionId;
+						forwardedFromInstructionStage = registers[rtIndex].instructionStage;
 						a = registers[rsIndex].value;
 						b = registers[rtIndex].value;
 						stages[presentStage].setFree();
@@ -132,6 +140,8 @@ bool Add::execute1(){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
+						cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+
 						return true;
 					}
 
@@ -177,7 +187,7 @@ bool Add::execute1(){
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				cout << "stall ID -->" ;
+				cout << "ID not free -->" ;
 				return false;
 			}
 		}
@@ -192,12 +202,15 @@ bool Add::execute1(){
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);
 					stageToExecute++;
+					cout << "EX stage done -->" ;
 					return true;
 				}
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = stages[stageToExecute].instructionId;
 					stalled = true;
+					cout << "EX stage not free -->";
+
 					return false;
 				}
 			}
@@ -210,13 +223,15 @@ bool Add::execute1(){
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);
 					stageToExecute++;
-
+					cout << "MEM1 stage done -->" ;
 					return true;
 				}
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = stages[stageToExecute].instructionId;
 					stalled = true;
+					cout << "MEM1 stage not free -->";
+
 					return false;
 				}
 			}
@@ -228,13 +243,15 @@ bool Add::execute1(){
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);
 					stageToExecute++;
-
+					cout << "MEM2 stage done -->" ;
 					return true;
 				}
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = stages[stageToExecute].instructionId;
 					stalled = true;
+					cout << "MEM2 stage not free -->";
+
 					return false;
 				}
 			}
@@ -246,13 +263,17 @@ bool Add::execute1(){
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);
 					stageToExecute++;
+					cout << "MEM3 stage done -->" ;
 					return true;
 				}
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = stages[stageToExecute].instructionId;
 					stalled = true;
+					cout << "MEM3 stage not free -->";
+
 					return false;
+
 				}
 			}
 			case 8:
@@ -264,6 +285,8 @@ bool Add::execute1(){
 						presentStage = stageToExecute;
 						stages[presentStage].setInstruction(id);
 						stageToExecute=-1;
+						cout << "WB completed -->";
+
 						// Instruction completed, so stage number is now invalid.
 						return true;
 					}
@@ -272,6 +295,8 @@ bool Add::execute1(){
 						stages[presentStage].setInstruction(id);
 						stallingRegister = rdIndex;
 						stallingInstructionId = registers[rdIndex].instructionId;
+						cout << "Register not writable -->";
+
 						return false;
 					}
 				}
@@ -279,8 +304,11 @@ bool Add::execute1(){
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = stages[stageToExecute].instructionId;
 					stalled = true;
+					cout << "WB not free ->";
+
 					return false;
 				}
 			}
 		}
+		return false;
 	}

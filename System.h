@@ -18,6 +18,7 @@ public:
 	static vector <Stage> stages;
 	static int programCounter; // holds the index of the instruction which will be inserted 
 	static bool forwardingEnabled;
+  static int multSubStages;
 };
 
 #endif
