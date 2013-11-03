@@ -4,6 +4,8 @@ vector<Stage> System::stages(10, Stage(0));
 
 vector<Register> System::registers(32, Register(0, 0));
 
+vector<int> System::memory(10000, 0);
+
 bool System::forwardingEnabled = false;
 
 int System::programCounter = 1;
