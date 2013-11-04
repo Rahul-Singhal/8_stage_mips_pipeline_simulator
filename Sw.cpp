@@ -1,14 +1,14 @@
-#include "Beq.h"
+#include "Sw.h"
 
-Beq::Beq(int rsIndex, int rtIndex, int destPc, int id){
+Sw::Sw(int rsIndex, int rtIndex, int signExtImm, int id){
 	this->rsIndex = rsIndex;
 	this->rtIndex = rtIndex;
-	this->destPc = destPc;
+	this->signExtImm = signExtImm;
 	this->id = id;
 }
-
-void Beq::unstall(){
- 	return;
+/*Note than there is no WAW possible as no writing is going on on any register*/
+void Sw::unstall(){
+	return ;
 }
 
 // depending on the return value of this bool, the program manager will put the appropriate stage of this instruction
@@ -18,26 +18,23 @@ void Beq::unstall(){
 // If an instruction does not execute because the stage is not free or because registers are being written, then we 
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
-/*
-	the following execute will modify the program counter which is passed as parameter
-	in case the branch is taken. This change in branch will be detected in the program
-	and the the subsequent pipeline instructions will be flushed 
+/*	sw $t0, 4($t1)
+	In case of Sw no forwarding as no register is being written into*/
 
-	The functionality of calculating the branch predicate in ID itself is also provided
-	This is governed by a global bool variable "fastBranching"
-*/
 
-bool Beq::execute(int pc){
+bool Sw::execute(int pc){
+	// Default Values:
 	forwarded = false;
 	stalled = false;
 
+	// setting the status of register which is to be written as 1 for 1<=stageToExecute<5 (if any, assuming no forwarding)
 	switch(stageToExecute){
 		case 1: 
 		{
 			// IF 1 Stage
 			if(stages[stageToExecute].isFree()){
 				//registers[rdIndex].stallRegister(id)();
-				stages[presentStage].setFree(); /*Set stage 0 free so that next instruction come*/
+				stages[presentStage].setFree();
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
@@ -81,8 +78,6 @@ bool Beq::execute(int pc){
 		{
 			// ID Stage
 			// Assuming no forwarding and that the registers to be read must be free as of now.
-
-
 			if(stages[stageToExecute].isFree()){
 				if (forwardingEnabled) {
 
@@ -110,7 +105,6 @@ bool Beq::execute(int pc){
 
 					else if (  registers[rsIndex].instructionStage==8 && registers[rtIndex].instructionStage==8) {
 							// this is the most normal case, when all values are simply avaiable not forwarded.
-						/*Branch Instruction, no stalling of rdIndex as there is none*/
 						// registers[rdIndex].stallRegister(id); 
 						a = registers[rsIndex].value;
 						b = registers[rtIndex].value;
@@ -119,18 +113,13 @@ bool Beq::execute(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
-						if(fastBranching){
-							if(a==b)
-								pc = destPc-1;
-						}
 						cout << "id completed -->";
 
 						return true;
 					}
 						// ASSUMING ONLY ONE FORWARDED VALUE
 					else if (registers[rsIndex].instructionStage!=8){
-						/*Branch Instruction, no stalling of rdIndex as there is none*/
-						// registers[rdIndex].stallRegister(id);
+						// registers[rdIndex].stallRegister(id); 
 						forwarded = true;
 						forwardedFromInstructionId = registers[rsIndex].instructionId;
 						forwardedFromInstructionStage = registers[rsIndex].instructionStage;
@@ -141,17 +130,12 @@ bool Beq::execute(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
-						if(fastBranching){
-							if(a==b)
-								pc = destPc-1;
-						}
 						cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
 						return true;
 					}
 					else if (registers[rtIndex].instructionStage!=8){
-						/*Branch Instruction, no stalling of rdIndex as there is none*/
-						// registers[rdIndex].stallRegister(id);
+						// registers[rdIndex].stallRegister(id); 
 						forwarded = true;
 						forwardedFromInstructionId = registers[rtIndex].instructionId;
 						forwardedFromInstructionStage = registers[rtIndex].instructionStage;
@@ -162,10 +146,6 @@ bool Beq::execute(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
-						if(fastBranching){
-							if(a==b)
-								pc = destPc-1;
-						}
 						cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
 						return true;
@@ -196,8 +176,7 @@ bool Beq::execute(int pc){
 					}
 					else {
 							// this is the most normal case, when all values are simply avaiable not forwarded.
-						/*Branch Instruction, no stalling of rdIndex as there is none*/
-						// registers[rdIndex].stallRegister(id);
+						// registers[rdIndex].stallRegister(id); 
 						a = registers[rsIndex].value;
 						b = registers[rtIndex].value;
 						stages[presentStage].setFree();
@@ -205,10 +184,6 @@ bool Beq::execute(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
-						if(fastBranching){
-							if(a==b)
-								pc = destPc-1;
-						}
 						cout << "no stall ID -->" ;
 						return true;
 					}
@@ -225,14 +200,9 @@ bool Beq::execute(int pc){
 		case 4:
 		{
 			// EX Stage
-			/*Branch Instruction, no stalling of rdIndex as there is none*/
-						// registers[rdIndex].stallRegister(id);
+			// registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
-				if(!fastBranching){
-					if(a==b)
-						pc = destPc-1;
-				}
-				/*No rdIndex to write*/
+				sum = a+signExtImm;
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
@@ -292,9 +262,10 @@ bool Beq::execute(int pc){
 			}
 		}
 		case 7:
-		{
+		{	
 			// MEM 3 Stage
 			if(stages[stageToExecute].isFree()){
+				memory[sum]=b;
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
@@ -314,25 +285,23 @@ bool Beq::execute(int pc){
 		}
 		case 8:
 		{
-			// WB Stage Simple ! Nothing to write back
+			// WB Stage
 			if(stages[stageToExecute].isFree()){
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
 				stageToExecute=-1;
-				cout << "WB stage done -->" ;
+				cout << "MEM2 stage done -->" ;
 				return true;
 			}
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				cout << "WB stage not free -->";
+				cout << "MEM2 stage not free -->";
 
 				return false;
-
 			}
 		}
 	}
-	return false;
 }

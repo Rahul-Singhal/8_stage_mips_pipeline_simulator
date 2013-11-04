@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <utility>
 #include "Instruction.h"
 using namespace std;
 
@@ -20,12 +21,16 @@ private:
 	map<string, int> labelMap;
 	map<string, int> registerMap;
 	map<string, int> instructionIntMap;
+	map<string, pair<int, int> > dataMap;
 
 	void initMaps();
 	void syntaxError();
 	int convertToNumber(string str);
-
-
+	bool text;
+	bool data;
+	vector< char* > asciiTable;
+	vector< char* > asciizTable;
+	vector< vector<int> > wordTable;
 public:
 	Parser(string fileName);
 	void printLabels();
