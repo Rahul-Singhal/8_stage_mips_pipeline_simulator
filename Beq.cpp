@@ -1,6 +1,6 @@
 #include "Beq.h"
 
-Beq::Beq(int rsIndex, int rtIndex, int destPc){
+Beq::Beq(int rsIndex, int rtIndex, int destPc, int id){
 	this->rsIndex = rsIndex;
 	this->rtIndex = rtIndex;
 	this->destPc = destPc;

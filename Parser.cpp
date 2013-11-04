@@ -57,20 +57,21 @@ void Parser::initMaps(){
 }
 
 int Parser::convertToNumber(string str){
-    int i = 0;
+    int num = 0;
     for(int i=0; i<str.length(); i++){
-        if(str[i] >='0' && str[i]<='9') i = i*10 + (str[i]-'0');
+        if(str[i] >='0' && str[i]<='9') num = num*10 + (str[i]-'0');
         else return 2147483644;
     }
     //check before returning to handle overflow
-    return i;
+    return num;
 }
 
 
 Parser::Parser(string fileName){
 
     instructionNumber = 0;
-
+    text = true;
+    data = false;
     string str;
     ifstream infile;
     initMaps();
@@ -108,48 +109,111 @@ void Parser::parseLine(string str){
     int curLeng = strlen(curWord);
 
     if(curWord[0] == '#'){
+        return;
+    }
+    if (curWord[0] == '.'){
+        if (strcmp(curWord, ".data") == 0){
+            data = true;
+            text = false;
             return;
+        }
+        else if (strcmp (curWord, ".text") == 0){
+            data = false;
+            text = true;
+            return;
+        }
     }
 
     string strTemp;
     
-    if(curLeng > 1 && curWord[curLeng-1] == ':'){
-        strTemp = curWord;
-        labelMap[strTemp] = instructionNumber;
+    if (text){
+        if(curLeng > 1 && curWord[curLeng-1] == ':'){
+            strTemp = curWord;
+            labelMap[strTemp] = instructionNumber;
         //label detected
         //cout<<curWord<<endl<<endl<<endl<<endl;
-        lastWord = curWord;
-        curWord = strtok(NULL, ", \t");
-    }
-
-    while(curWord != NULL){
-        //cout<<curWord<<endl;
-        flag = true;
-        //detect comments
-        if(curWord[0] == '#'){
-            makeInstruction();
-            return;
+            lastWord = curWord;
+            curWord = strtok(NULL, ", \t");
         }
-        if(curWord[0] == ':'){
+
+        while(curWord != NULL){
+        //cout<<curWord<<endl;
+            flag = true;
+        //detect comments
+            if(curWord[0] == '#'){
+                makeInstruction();
+                return;
+            }
+            if(curWord[0] == ':'){
             //last word was label
             //cout<<curWord<<endl<<endl<<endl<<endl;
-            string strTemp = lastWord;
-            strTemp += ':';
-            labelMap[strTemp] = instructionNumber;
-            lineWords.pop_back();
-        }
-        else{
+                string strTemp = lastWord;
+                strTemp += ':';
+                labelMap[strTemp] = instructionNumber;
+                lineWords.pop_back();
+            }
+            else{
             //cout<<curWord<<" ";
-            strTemp = curWord;
-            lineWords.push_back(strTemp);
+                strTemp = curWord;
+                lineWords.push_back(strTemp);
+            }
+            lastWord = curWord;
+            curWord = strtok(NULL, ", \t");
         }
-        lastWord = curWord;
-        curWord = strtok(NULL, ", \t");
+        if(flag) cout<<endl;
+
+        makeInstruction();
     }
-    if(flag) cout<<endl;
+    if (data){
+        string dataName;
+        string dataType;
+        if(curLeng > 1 && curWord[curLeng-1] == ':'){
+            strTemp = curWord;
+            // labelMap[strTemp] = instructionNumber;
+            dataName = curWord;
+            lastWord = curWord;
+            curWord = strtok(NULL, ", \t");
+        }
+        if (curWord == NULL) {
+            cout << "SYNTAX ERROR IN DATA";
+            return;
+        }
+        dataType = curWord;
+        if (dataType == ".ascii"){
+            char* newascii = strtok(NULL,  "\"");
+            asciiTable.push_back(newascii);
+            dataMap[dataName] = make_pair(1, asciiTable.size()-1);
+            cout << "DATA " << dataMap[dataName].first <<  " " << dataName <<" asciiTable index = " << dataMap[dataName].second << " value = "<< asciiTable[dataMap[dataName].second] << endl; 
+        }
+        else if (dataType == ".asciiz"){
+            char* newasciiz = strtok(NULL,  "\"");
+            asciizTable.push_back(newasciiz);
+            dataMap[dataName] = make_pair(2, asciizTable.size()-1);
+            cout << "DATA " << dataMap[dataName].first <<  " " << dataName <<" asciizTable index = " << dataMap[dataName].second << " value = "<< asciizTable[dataMap[dataName].second] << endl; 
+        }
+        else if (dataType == ".word"){
+            char* newint = strtok(NULL,  ", \t");
+            vector <int> intVector;
+            while (newint!=NULL){
+                // cout << "here!!" << endl;
+                int integerValue = convertToNumber(newint);
+                // cout << integerValue << endl;
+                intVector.push_back(integerValue);
+                newint = strtok(NULL,  " , \t");
+                string a = "150";
+                // cout << convertToNumber(a) << endl;
+            }
+            wordTable.push_back(intVector);
+            dataMap[dataName] = make_pair(3, wordTable.size()-1);
+            cout << "DATA " << dataMap[dataName].first << " " << dataName << " wordTable index = " << dataMap[dataName].second  << " values = "; 
+            vector<int>  checkNum= wordTable[dataMap[dataName].second];
+            for (int k = 0 ; k<checkNum.size(); k++){
+                cout << checkNum[k] << " " ;
+            } 
+            cout << endl;
+        }
 
-    makeInstruction();
-
+    }
 }
 
 void Parser::syntaxError(){
@@ -169,182 +233,182 @@ void Parser::makeInstruction(){
     int reg1, reg2, reg3;
     switch(instructionIntMap[lineWords[0]]){
         case 0:
-            if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
-                reg1 = registerMap.find(lineWords[1])->second;
-                reg2 = registerMap.find(lineWords[2])->second;
-                if(registerMap.find(lineWords[3]) != registerMap.end()){
-                    reg3 = registerMap.find(lineWords[3])->second;
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
+            if(registerMap.find(lineWords[3]) != registerMap.end()){
+                reg3 = registerMap.find(lineWords[3])->second;
                     //make instruction object and push it into vector
-                    cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
-                }
-                else{
-                    //make instruction object and push it into vector
-                    if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"ADDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
-                    else syntaxError();
-                }
-                
+                cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
-            else syntaxError();
-            break;
-        case 1:
-            if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
-                reg1 = registerMap.find(lineWords[1])->second;
-                reg2 = registerMap.find(lineWords[2])->second;
-                //make instruction object and push it into vector
+            else{
+                    //make instruction object and push it into vector
                 if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"ADDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 else syntaxError();
             }
-            else syntaxError();
-            break;
-        case 2:
-            if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
-                reg1 = registerMap.find(lineWords[1])->second;
-                reg2 = registerMap.find(lineWords[2])->second;
 
-                if(registerMap.find(lineWords[3]) != registerMap.end()){
-                    reg3 = registerMap.find(lineWords[3])->second;
-                    //make instruction object and push it into vector
-                    cout<<"INSTRUCTION: "<<"AND "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
-                }
-                else{
-                    //make instruction object and push it into vector
-                    if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"ANDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
-                    else syntaxError();
-                }
-                
-            }
-            else syntaxError();
-            break;
-        case 3:
-            if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
-                reg1 = registerMap.find(lineWords[1])->second;
-                reg2 = registerMap.find(lineWords[2])->second;
+        }
+        else syntaxError();
+        break;
+        case 1:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
                 //make instruction object and push it into vector
+            if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"ADDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+            else syntaxError();
+        }
+        else syntaxError();
+        break;
+        case 2:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
+
+            if(registerMap.find(lineWords[3]) != registerMap.end()){
+                reg3 = registerMap.find(lineWords[3])->second;
+                    //make instruction object and push it into vector
+                cout<<"INSTRUCTION: "<<"AND "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+            }
+            else{
+                    //make instruction object and push it into vector
                 if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"ANDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 else syntaxError();
             }
-            else syntaxError();
-            break;
-        case 4:
-            if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
-                reg1 = registerMap.find(lineWords[1])->second;
-                reg2 = registerMap.find(lineWords[2])->second;
 
-                if(registerMap.find(lineWords[3]) != registerMap.end()){
-                    reg3 = registerMap.find(lineWords[3])->second;
-                    //make instruction object and push it into vector
-                    cout<<"INSTRUCTION: "<<"OR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
-                }
-                else{
-                    //make instruction object and push it into vector
-                    if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"ORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
-                    else syntaxError();
-                }
-                
-            }
-            else syntaxError();
-            break;
-        case 5:
-            if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
-                reg1 = registerMap.find(lineWords[1])->second;
-                reg2 = registerMap.find(lineWords[2])->second;
+        }
+        else syntaxError();
+        break;
+        case 3:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
                 //make instruction object and push it into vector
+            if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"ANDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+            else syntaxError();
+        }
+        else syntaxError();
+        break;
+        case 4:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
+
+            if(registerMap.find(lineWords[3]) != registerMap.end()){
+                reg3 = registerMap.find(lineWords[3])->second;
+                    //make instruction object and push it into vector
+                cout<<"INSTRUCTION: "<<"OR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+            }
+            else{
+                    //make instruction object and push it into vector
                 if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"ORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 else syntaxError();
             }
-            else syntaxError();
-            break;
-        case 6:
-            if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
-                reg1 = registerMap.find(lineWords[1])->second;
-                reg2 = registerMap.find(lineWords[2])->second;
 
-                if(registerMap.find(lineWords[3]) != registerMap.end()){
-                    reg3 = registerMap.find(lineWords[3])->second;
-                    //make instruction object and push it into vector
-                    cout<<"INSTRUCTION: "<<"SUB "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
-                }
-                else{
-                    //make instruction object and push it into vector
-                    if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"SUBI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
-                    else syntaxError();
-                }
-                
-            }
-            else syntaxError();
-            break;
-        case 7:
-            if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
-                reg1 = registerMap.find(lineWords[1])->second;
-                reg2 = registerMap.find(lineWords[2])->second;
-
-                if(registerMap.find(lineWords[3]) != registerMap.end()){
-                    reg3 = registerMap.find(lineWords[3])->second;
-                    //make instruction object and push it into vector
-                    cout<<"INSTRUCTION: "<<"XOR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
-                }
-                else{
-                    //make instruction object and push it into vector
-                    if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"XORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
-                    else syntaxError();
-                }
-                
-            }
-            else syntaxError();
-            break;
-        case 8:
-            if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
-                reg1 = registerMap.find(lineWords[1])->second;
-                reg2 = registerMap.find(lineWords[2])->second;
+        }
+        else syntaxError();
+        break;
+        case 5:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
                 //make instruction object and push it into vector
+            if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"ORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+            else syntaxError();
+        }
+        else syntaxError();
+        break;
+        case 6:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
+
+            if(registerMap.find(lineWords[3]) != registerMap.end()){
+                reg3 = registerMap.find(lineWords[3])->second;
+                    //make instruction object and push it into vector
+                cout<<"INSTRUCTION: "<<"SUB "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+            }
+            else{
+                    //make instruction object and push it into vector
+                if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"SUBI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+                else syntaxError();
+            }
+
+        }
+        else syntaxError();
+        break;
+        case 7:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
+
+            if(registerMap.find(lineWords[3]) != registerMap.end()){
+                reg3 = registerMap.find(lineWords[3])->second;
+                    //make instruction object and push it into vector
+                cout<<"INSTRUCTION: "<<"XOR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+            }
+            else{
+                    //make instruction object and push it into vector
                 if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"XORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 else syntaxError();
             }
+
+        }
+        else syntaxError();
+        break;
+        case 8:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
+                //make instruction object and push it into vector
+            if(convertToNumber(lineWords[3]) != 2147483644)cout<<"INSTRUCTION: "<<"XORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
             else syntaxError();
-            break;
+        }
+        else syntaxError();
+        break;
         case 9:
             //as of now la is only used to load values in register v0
-            if(registerMap.find(lineWords[1]) != registerMap.end()) {
-                reg1 = registerMap.find(lineWords[1])->second;
+        if(registerMap.find(lineWords[1]) != registerMap.end()) {
+            reg1 = registerMap.find(lineWords[1])->second;
                 //make instruction object and push it into vector
-                if(convertToNumber(lineWords[2]) != 2147483644)cout<<"INSTRUCTION: "<<"LA "<<reg1<<" "<<lineWords[2]<<endl;
-                else syntaxError();
-            }
+            if(convertToNumber(lineWords[2]) != 2147483644)cout<<"INSTRUCTION: "<<"LA "<<reg1<<" "<<lineWords[2]<<endl;
             else syntaxError();
-            break;
+        }
+        else syntaxError();
+        break;
         case 10:
-            if(registerMap.find(lineWords[1]) != registerMap.end()) {
-                reg1 = registerMap.find(lineWords[1])->second;
+        if(registerMap.find(lineWords[1]) != registerMap.end()) {
+            reg1 = registerMap.find(lineWords[1])->second;
                 //make instruction object and push it into vector
-                if(convertToNumber(lineWords[2]) != 2147483644)cout<<"INSTRUCTION: "<<"LI "<<reg1<<" "<<lineWords[2]<<endl;
-                else syntaxError();
-            }
+            if(convertToNumber(lineWords[2]) != 2147483644)cout<<"INSTRUCTION: "<<"LI "<<reg1<<" "<<lineWords[2]<<endl;
             else syntaxError();
-            break;
+        }
+        else syntaxError();
+        break;
         case 11:
-            if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
-                reg1 = registerMap.find(lineWords[1])->second;
-                reg2 = registerMap.find(lineWords[2])->second;
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
                 //make instruction object and push it into vector
-                cout<<"INSTRUCTION: "<<"NOT "<<reg1<<" "<<reg2<<" "<<endl;
-            }
-            else syntaxError();
-            break;
+            cout<<"INSTRUCTION: "<<"NOT "<<reg1<<" "<<reg2<<" "<<endl;
+        }
+        else syntaxError();
+        break;
         case 12:
-            cout<<"INSTRUCTION: SYSCALL"<<endl;
-            break;
+        cout<<"INSTRUCTION: SYSCALL"<<endl;
+        break;
         case 13:
-            if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
-                reg1 = registerMap.find(lineWords[1])->second;
-                reg2 = registerMap.find(lineWords[2])->second;
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
                 //make instruction object and push it into vector
-                cout<<"INSTRUCTION: "<<"MOVE "<<reg1<<" "<<reg2<<" "<<endl;
-            }
-            else syntaxError();
-            break;
+            cout<<"INSTRUCTION: "<<"MOVE "<<reg1<<" "<<reg2<<" "<<endl;
+        }
+        else syntaxError();
+        break;
         default:
-            syntaxError();
-            break;
+        syntaxError();
+        break;
     }
 
 
