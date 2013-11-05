@@ -12,7 +12,7 @@ public:
   int presentSubStage;
   int a, b;
   Mult(int rdIndex, int rsIndex, int rtIndex, int id);
-  bool execute1(int pc);
+  bool execute(int pc);
   void unstall();
 };
 

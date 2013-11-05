@@ -2,7 +2,7 @@
 using namespace std;
 
 Instruction::Instruction(){
-
+	cout<<"Instruction"<<endl;
 }
 
 

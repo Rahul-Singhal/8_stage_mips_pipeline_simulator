@@ -28,6 +28,7 @@ void Beq::unstall(){
 */
 
 bool Beq::execute(int pc){
+	cout<<"BEQ"<<endl;
 	forwarded = false;
 	stalled = false;
 
@@ -237,7 +238,8 @@ bool Beq::execute(int pc){
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
-				stageToExecute++;
+				/*Stage to execute will be MEM1 which is stage 7*/
+          		stageToExecute+=3;
 				cout << "EX stage done -->" ;
 				return true;
 			}
@@ -250,7 +252,7 @@ bool Beq::execute(int pc){
 				return false;
 			}
 		}
-		case 5:
+		case 7:
 		{
 			// MEM 1 Stage
 			//registers[rdIndex].stallRegister(id)();
@@ -271,7 +273,7 @@ bool Beq::execute(int pc){
 				return false;
 			}
 		}
-		case 6:
+		case 8:
 		{
 			// MEM 2 Stage
 			if(stages[stageToExecute].isFree()){
@@ -291,7 +293,7 @@ bool Beq::execute(int pc){
 				return false;
 			}
 		}
-		case 7:
+		case 9:
 		{
 			// MEM 3 Stage
 			if(stages[stageToExecute].isFree()){
@@ -312,7 +314,7 @@ bool Beq::execute(int pc){
 
 			}
 		}
-		case 8:
+		case 10:
 		{
 			// WB Stage Simple ! Nothing to write back
 			if(stages[stageToExecute].isFree()){

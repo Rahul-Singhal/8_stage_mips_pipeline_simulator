@@ -1,6 +1,6 @@
 #include "System.h"
 
-vector<Stage> System::stages(10, Stage(0));
+vector<Stage> System::stages(11, Stage(0));
 
 vector<Register> System::registers(32, Register(0, 0));
 

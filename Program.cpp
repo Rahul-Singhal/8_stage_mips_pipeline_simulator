@@ -1,20 +1,22 @@
 #include "Program.h"
  // : parser(filename)
 Program::Program(string filename){
-	code.assign(0,Mult(1,1,1,1));
+	code.assign(0, new Instruction());
 	// parser.parse(code);
-	Mult a(12, 10, 12, 1);
-	code.push_back(a);
-	code.push_back(a);
-	code.push_back(a);
-	code.push_back(a);
-	sepInstructions.assign(10, vector<Mult*>());
+	Add * i1 = new Add(1,2,3,0);
+	Mult * i2 = new Mult(1,2,3,0);
+	Sub * i3 = new Sub(1,2,3,0);
+	code.push_back(i1);
+	code.push_back(i2);
+	code.push_back(i3);
+	sepInstructions.assign(11, vector<Instruction*>(0, new Instruction()));
 }
 
 void Program::execute(){
-
-	for(int i = 0 ; i <= 9 ; i++)
+	// setting the stages
+	for(int i = 0 ; i <= 10 ; i++)
 		stages[i].number = i;
+	// initialising the registers once and for all
 	for(int i = 0 ; i < 32 ; i++){
 		registers[i].id = i;
 		registers[i].value = 0;
@@ -22,25 +24,25 @@ void Program::execute(){
 		registers[i].instructionStage = 8;
 	}
 
-
 	programCounter = 0;
 	instrId = 0;
-	code[programCounter].id = instrId;
-	code[programCounter].presentStage = 0;
-	code[programCounter].stageToExecute = 1;
+	code[programCounter]->id = instrId;
+	code[programCounter]->presentStage = 0;
+	code[programCounter]->stageToExecute = 1;
 	currInstructions.push_back(code[programCounter]);
 	while(!currInstructions.empty()){
 		// cout<<currInstructions.front().id<<":"<<currInstructions.front().presentStage<<":"<<currInstructions.front().stageToExecute<<endl;
-		list<Mult>::iterator it;
+		list<Instruction *>::iterator it;
+		//STABLE SORT
 		for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
-			sepInstructions[it->stageToExecute].push_back(&(*it));
+			sepInstructions[(*it)->stageToExecute].push_back(*it);
 		}
 		// the whole logic of running one clock cycle comes here
-		for(int i = 9 ; i >= 1 ; i--){
+		for(int i = 10 ; i >= 1 ; i--){
 			for(int j = 0 ; j < sepInstructions[i].size() ; j++){
 				cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
 				prevPc = programCounter;
-				sepInstructions[i][j]->execute1(programCounter);
+				sepInstructions[i][j]->execute(programCounter);
 				nextPc = programCounter;
 				if(nextPc != prevPc){
 					cout<<"Branch taken and destination other than next instruction!"<<endl;
@@ -62,9 +64,9 @@ void Program::execute(){
 						*/
 						stages[3].setFree();
 						for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
-							if(it->id == sepInstructions[i][j]->id){
+							if((*it)->id == sepInstructions[i][j]->id){
 								it++;
-								it->unstall(); /*unstalling the register*/
+								(*it)->unstall(); /*unstalling the register*/
 								break;
 							}
 						}
@@ -79,7 +81,7 @@ void Program::execute(){
 		
 		it = currInstructions.begin() ;
 		while(it != currInstructions.end()){
-			if(it->stageToExecute==-1)
+			if((*it)->stageToExecute==-1)
 				currInstructions.erase(it++);
 			else
 				it++;
@@ -89,15 +91,16 @@ void Program::execute(){
 			programCounter++;
 			if(programCounter < code.size()){
 				instrId++;		
-				code[programCounter].id = instrId;
-				code[programCounter].presentStage = 0;
-				code[programCounter].stageToExecute = 1;
+				code[programCounter]->id = instrId;
+				code[programCounter]->presentStage = 0;
+				code[programCounter]->stageToExecute = 1;
 				currInstructions.push_back(code[programCounter]);
 			}
 		}
 // Setting the stages free
 		for(int i = 0 ; i < stages.size() ; i++)
 			stages[i].setFree();
+// clearing the sorted buckets for the next cycle
 		for(int i = 1 ; i <= 9 ; i++ )
 			sepInstructions[i].clear();
 

@@ -20,7 +20,8 @@ void Mult::unstall(){
 // If an instruction does not execute because the stage is not free or because registers are being written, then we 
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
-bool Mult::execute1(int pc){
+bool Mult::execute(int pc){
+  cout<<"MULT"<<endl;
   // cout<<"MAIN CALL HUWA"<<endl;
   // Default Values:
   forwarded = false;
@@ -110,7 +111,8 @@ bool Mult::execute1(int pc){
             stages[presentStage].setFree();
             presentStage = stageToExecute;
             stages[presentStage].setInstruction(id);
-            stageToExecute = 9;
+            /*Next stage would be mult which is stage 5*/
+            stageToExecute += 2;
             stalled = false;
             cout << "id completed -->";
 
@@ -127,7 +129,8 @@ bool Mult::execute1(int pc){
             stages[presentStage].setFree();
             presentStage = stageToExecute;
             stages[presentStage].setInstruction(id);
-            stageToExecute = 9;
+            /*Next stage would be mult which is stage 5*/
+            stageToExecute += 2;
             stalled = false;
             cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
@@ -143,7 +146,8 @@ bool Mult::execute1(int pc){
             stages[presentStage].setFree();
             presentStage = stageToExecute;
             stages[presentStage].setInstruction(id);
-            stageToExecute = 9;
+            /*Next stage would be mult which is stage 5*/
+            stageToExecute += 2;
             stalled = false;
             cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
@@ -153,7 +157,7 @@ bool Mult::execute1(int pc){
         }
         else {
           // forwarding disabled
-          
+
             // either values are forwarded, or normally stored
           if (!registers[rsIndex].valid || registers[rsIndex].instructionStage!=8){
               // forwarded value
@@ -181,7 +185,8 @@ bool Mult::execute1(int pc){
             stages[presentStage].setFree();
             presentStage = stageToExecute;
             stages[presentStage].setInstruction(id);
-            stageToExecute = 9;
+            /*Next stage would be mult which is stage 5*/
+            stageToExecute += 2;
             stalled = false;
             cout << "no stall ID -->" ;
             return true;
@@ -196,131 +201,131 @@ bool Mult::execute1(int pc){
         return false;
       }
     }
-    case 9:
+    case 5:
     {
-      // EX Stage
+      // Mult Stage
       registers[rdIndex].stallRegister(id);
       if(stages[stageToExecute].isFree()){
         product = a*b;
-          registers[rdIndex].write(product,id,stageToExecute); // TODO : Will it ever return false?
-          stages[presentStage].setFree();
-          presentStage = stageToExecute;
-          stages[presentStage].setInstruction(id);
-          presentSubStage++;
-          if (presentSubStage == multSubStages){
-            stageToExecute = 5;
-                      cout << "MULT stage done -->" ;
-
-          }
-          else {
-            cout << "MULT substage = " << presentSubStage  << "-->"; 
-          }
-          return true;
+        registers[rdIndex].write(product,id,stageToExecute); // TODO : Will it ever return false?
+        stages[presentStage].setFree();
+        presentStage = stageToExecute;
+        stages[presentStage].setInstruction(id);
+        presentSubStage++;
+        if (presentSubStage == multSubStages){
+          /*Next stage is MEM1 which is stage 7*/
+          stageToExecute += 2;
+          cout << "MULT stage done -->" ;
         }
-        else{
-          stages[presentStage].setInstruction(id);
-          stallingInstructionId = stages[stageToExecute].instructionId;
-          stalled = true;
-          cout << "MULT stage not free -->";
-
-          return false;
+        else {
+          cout << "MULT substage = " << presentSubStage  << "-->"; 
         }
+        return true;
       }
-      case 5:
-      {
-      // MEM 1 Stage
-      //registers[rdIndex].stallRegister(id)();
-        if(stages[stageToExecute].isFree()){
-          stages[presentStage].setFree();
-          presentStage = stageToExecute;
-          stages[presentStage].setInstruction(id);
-          stageToExecute++;
-          cout << "MEM1 stage done -->" ;
-          return true;
-        }
-        else{
-          stages[presentStage].setInstruction(id);
-          stallingInstructionId = stages[stageToExecute].instructionId;
-          stalled = true;
-          cout << "MEM1 stage not free -->";
+      else{
+        stages[presentStage].setInstruction(id);
+        stallingInstructionId = stages[stageToExecute].instructionId;
+        stalled = true;
+        cout << "MULT stage not free -->";
 
-          return false;
-        }
-      }
-      case 6:
-      {
-      // MEM 2 Stage
-        if(stages[stageToExecute].isFree()){
-          stages[presentStage].setFree();
-          presentStage = stageToExecute;
-          stages[presentStage].setInstruction(id);
-          stageToExecute++;
-          cout << "MEM2 stage done -->" ;
-          return true;
-        }
-        else{
-          stages[presentStage].setInstruction(id);
-          stallingInstructionId = stages[stageToExecute].instructionId;
-          stalled = true;
-          cout << "MEM2 stage not free -->";
-
-          return false;
-        }
-      }
-      case 7:
-      {
-      // MEM 3 Stage
-        if(stages[stageToExecute].isFree()){
-          stages[presentStage].setFree();
-          presentStage = stageToExecute;
-          stages[presentStage].setInstruction(id);
-          stageToExecute++;
-          cout << "MEM3 stage done -->" ;
-          return true;
-        }
-        else{
-          stages[presentStage].setInstruction(id);
-          stallingInstructionId = stages[stageToExecute].instructionId;
-          stalled = true;
-          cout << "MEM3 stage not free -->";
-
-          return false;
-
-        }
-      }
-      case 8:
-      {
-      // WB Stage
-        if(stages[stageToExecute].isFree()){
-          if (registers[rdIndex].write(product,id,stageToExecute)){
-            stages[presentStage].setFree();
-            presentStage = stageToExecute;
-            stages[presentStage].setInstruction(id);
-            stageToExecute=-1;
-            cout << "WB completed -->";
-
-            // Instruction completed, so stage number is now invalid.
-            return true;
-          }
-          else {
-            stalled = true;
-            stages[presentStage].setInstruction(id);
-            stallingRegister = rdIndex;
-            stallingInstructionId = registers[rdIndex].instructionId;
-            cout << "Register not writable -->";
-
-            return false;
-          }
-        }
-        else{
-          stages[presentStage].setInstruction(id);
-          stallingInstructionId = stages[stageToExecute].instructionId;
-          stalled = true;
-          cout << "WB not free ->";
-
-          return false;
-        }
+        return false;
       }
     }
-    return false;
+    case 7:
+    {
+      // MEM 1 Stage
+      //registers[rdIndex].stallRegister(id)();
+      if(stages[stageToExecute].isFree()){
+        stages[presentStage].setFree();
+        presentStage = stageToExecute;
+        stages[presentStage].setInstruction(id);
+        stageToExecute++;
+        cout << "MEM1 stage done -->" ;
+        return true;
+      }
+      else{
+        stages[presentStage].setInstruction(id);
+        stallingInstructionId = stages[stageToExecute].instructionId;
+        stalled = true;
+        cout << "MEM1 stage not free -->";
+
+        return false;
+      }
+    }
+    case 8:
+    {
+      // MEM 2 Stage
+      if(stages[stageToExecute].isFree()){
+        stages[presentStage].setFree();
+        presentStage = stageToExecute;
+        stages[presentStage].setInstruction(id);
+        stageToExecute++;
+        cout << "MEM2 stage done -->" ;
+        return true;
+      }
+      else{
+        stages[presentStage].setInstruction(id);
+        stallingInstructionId = stages[stageToExecute].instructionId;
+        stalled = true;
+        cout << "MEM2 stage not free -->";
+
+        return false;
+      }
+    }
+    case 9:
+    {
+      // MEM 3 Stage
+      if(stages[stageToExecute].isFree()){
+        stages[presentStage].setFree();
+        presentStage = stageToExecute;
+        stages[presentStage].setInstruction(id);
+        stageToExecute++;
+        cout << "MEM3 stage done -->" ;
+        return true;
+      }
+      else{
+        stages[presentStage].setInstruction(id);
+        stallingInstructionId = stages[stageToExecute].instructionId;
+        stalled = true;
+        cout << "MEM3 stage not free -->";
+
+        return false;
+
+      }
+    }
+    case 10:
+    {
+      // WB Stage
+      if(stages[stageToExecute].isFree()){
+        if (registers[rdIndex].write(product,id,stageToExecute)){
+          stages[presentStage].setFree();
+          presentStage = stageToExecute;
+          stages[presentStage].setInstruction(id);
+          stageToExecute=-1;
+          cout << "WB completed -->";
+
+            // Instruction completed, so stage number is now invalid.
+          return true;
+        }
+        else {
+          stalled = true;
+          stages[presentStage].setInstruction(id);
+          stallingRegister = rdIndex;
+          stallingInstructionId = registers[rdIndex].instructionId;
+          cout << "Register not writable -->";
+
+          return false;
+        }
+      }
+      else{
+        stages[presentStage].setInstruction(id);
+        stallingInstructionId = stages[stageToExecute].instructionId;
+        stalled = true;
+        cout << "WB not free ->";
+
+        return false;
+      }
+    }
   }
+  return false;
+}

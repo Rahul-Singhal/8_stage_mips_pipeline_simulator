@@ -19,7 +19,8 @@ void Sub::unstall(){
 // If an instruction does not execute because the stage is not free or because registers are being written, then we 
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
-bool Sub::execute1(int pc){
+bool Sub::execute(int pc){
+  cout<<"SUB"<<endl;
   // cout<<"MAIN CALL HUWA"<<endl;
   // Default Values:
   forwarded = false;
@@ -201,7 +202,8 @@ bool Sub::execute1(int pc){
         stages[presentStage].setFree();
         presentStage = stageToExecute;
         stages[presentStage].setInstruction(id);
-        stageToExecute++;
+        /*Stage to execute will be MEM1 which is stage 7*/
+        stageToExecute+=3;
         cout << "EX stage done -->" ;
         return true;
       }
@@ -213,7 +215,7 @@ bool Sub::execute1(int pc){
         return false;
       }
     }
-    case 5:
+    case 7:
     {
       // MEM 1 Stage
       //registers[rdIndex].stallRegister(id)();
@@ -233,7 +235,7 @@ bool Sub::execute1(int pc){
         return false;
       }
     }
-    case 6:
+    case 8:
     {
       // MEM 2 Stage
       if(stages[stageToExecute].isFree()){
@@ -252,7 +254,7 @@ bool Sub::execute1(int pc){
         return false;
       }
     }
-    case 7:
+    case 9:
     {
       // MEM 3 Stage
       if(stages[stageToExecute].isFree()){
@@ -272,7 +274,7 @@ bool Sub::execute1(int pc){
         return false;
       }
     }
-    case 8:
+    case 10:
     {
       // WB Stage
       if(stages[stageToExecute].isFree()){
