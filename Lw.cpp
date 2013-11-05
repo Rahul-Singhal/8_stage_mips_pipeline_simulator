@@ -24,6 +24,7 @@ void Lw::unstall(){
 	In case of Lw forwarding will be from MEM3 to ID as total MEM access is required*/
 
 bool Lw::execute(int pc){
+	cout<<"LW"<<endl;
 	// Default Values:
 	forwarded = false;
 	stalled = false;
@@ -171,7 +172,8 @@ bool Lw::execute(int pc){
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
-				stageToExecute++;
+				/*Stage to execute will be MEM1 which is stage 7*/
+          		stageToExecute+=3;
 				cout << "EX stage done -->" ;
 				return true;
 			}
@@ -184,7 +186,7 @@ bool Lw::execute(int pc){
 				return false;
 			}
 		}
-		case 5:
+		case 7:
 		{
 			// MEM 1 Stage
 			registers[rtIndex].stallRegister(id);
@@ -205,7 +207,7 @@ bool Lw::execute(int pc){
 				return false;
 			}
 		}
-		case 6:
+		case 8:
 		{
 			// MEM 2 Stage
 			registers[rtIndex].stallRegister(id);
@@ -226,7 +228,7 @@ bool Lw::execute(int pc){
 				return false;
 			}
 		}
-		case 7:
+		case 9:
 		{
 			// MEM 3 Stage
 			/*If register is not writable, i am stalling the register*/
@@ -262,7 +264,7 @@ bool Lw::execute(int pc){
 
 			}
 		}
-		case 8:
+		case 10:
 		{
 			// WB Stage
 			if(stages[stageToExecute].isFree()){

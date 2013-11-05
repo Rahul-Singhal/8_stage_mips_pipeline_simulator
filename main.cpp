@@ -7,12 +7,13 @@ using namespace std;
 
 
 int main(){
-	// Parser myParser("gcd.asm");
-	// myParser.printLabels();
+
+	 Parser myParser("gcd.asm");
+	myParser.printLabels();
   
-  // Program program("gcd.asm");
-  // program.execute();
-	// /*cout<<endl;
+  Program program("gcd.asm");
+  program.execute();
+	cout<<endl;
 
   Memory mem;
   mem.storeWord (2,-80);

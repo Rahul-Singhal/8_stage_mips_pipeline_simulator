@@ -21,6 +21,7 @@ void Li::unstall(){
 /*In case of Li forwarding will be from EX to ID as no MEM access is required*/
 
 bool Li::execute(int pc){
+	cout<<"LI"<<endl;
 	// Default Values:
 	forwarded = false;
 	stalled = false;
@@ -105,7 +106,8 @@ bool Li::execute(int pc){
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
-				stageToExecute++;
+				/*Stage to execute will be MEM1 which is stage 7*/
+          		stageToExecute+=3;
 				cout << "EX stage done -->" ;
 				return true;
 			}
@@ -118,7 +120,7 @@ bool Li::execute(int pc){
 				return false;
 			}
 		}
-		case 5:
+		case 7:
 		{
 			// MEM 1 Stage
 			//registers[rdIndex].stallRegister(id)();
@@ -139,7 +141,7 @@ bool Li::execute(int pc){
 				return false;
 			}
 		}
-		case 6:
+		case 8:
 		{
 			// MEM 2 Stage
 			if(stages[stageToExecute].isFree()){
@@ -159,7 +161,7 @@ bool Li::execute(int pc){
 				return false;
 			}
 		}
-		case 7:
+		case 9:
 		{
 			// MEM 3 Stage
 			if(stages[stageToExecute].isFree()){
@@ -180,7 +182,7 @@ bool Li::execute(int pc){
 
 			}
 		}
-		case 8:
+		case 10:
 		{
 			// WB Stage
 			if(stages[stageToExecute].isFree()){

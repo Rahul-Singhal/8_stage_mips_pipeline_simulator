@@ -11,7 +11,7 @@ public:
   int sum;
   int a, b;
   Addi(int rtIndex, int rsIndex, int immediate, int id);
-  bool execute1();
+  bool execute();
 };
 
 #endif
