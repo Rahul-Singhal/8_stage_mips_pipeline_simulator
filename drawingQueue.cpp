@@ -90,6 +90,7 @@ void DrawingQueue::drawSideBar(float scrollX){
  
 
 DrawingQueue::DrawingQueue(){
+	cout<<"IT COMES HERE"<<endl;
 	instHeight = 20;
 	instWidth = 50;
 	maxIdDrawn = 2;
@@ -166,6 +167,8 @@ void DrawingQueue::drawFinishedQueue(vector<Instruction> v){
 void DrawingQueue::draw(int scrollX, int scrollY){
 
 	instStrings.clear();
+
+	
 	glPushMatrix();
 	glTranslatef(instWidth/2 + 150, -((3*instHeight)/2 + 20), 0);
 	for(int i =0 ; i<displayVector.size(); i++){
@@ -177,7 +180,6 @@ void DrawingQueue::draw(int scrollX, int scrollY){
 		glPopMatrix();
 	}
 	glPopMatrix();
-
 	glPushMatrix();
 		glTranslatef(instWidth/2 + 150, -(instHeight/2 + 20) - scrollY, 0);
 		drawHeader();
@@ -187,7 +189,6 @@ void DrawingQueue::draw(int scrollX, int scrollY){
 		glTranslatef(instWidth/2 + 110-scrollX, -(instHeight/2 + 20), 0);
 		drawSideBar(scrollX);
 	glPopMatrix();
-	
 }
 
 void DrawingQueue::drawInstruction(Instruction inst, int i, int j){

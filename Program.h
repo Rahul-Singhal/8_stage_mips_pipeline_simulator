@@ -46,8 +46,9 @@ public:
 	vector <Instruction *> code;
 	list <Instruction *> currInstructions;
 	Program(string filename);
-	void execute();
-
+	list <Instruction *> execute();
+	void executeAll();
+	void init();
 private:
 	void runOneClockCycle(); // enough said
 	int instrId;

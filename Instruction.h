@@ -13,6 +13,7 @@ using namespace std;
 class Instruction: public System{
 public:
 	Instruction();
+	Instruction(int s2ex, int ps, bool stall, int stallInstId, int stallReg, bool forw, int forwfromInstId, int forwStage, string disp, int i);
 	void init();
 	virtual bool execute(int pc);
 	virtual void unstall();
@@ -28,6 +29,18 @@ public:
 	string display;
 	int address;
 	int id;
+
+
+	int getStageToExecute();
+	int getPresentStage();
+	bool getStalled();
+	int getStallingInstructionId();
+	int getStallingRegister();
+	bool getForwarded();
+	int getForwardedFromInstructionId();
+	int getForwardedFromInstructionStage();
+	string getDisplayString();
+	int getId();
 };
 
 #endif
