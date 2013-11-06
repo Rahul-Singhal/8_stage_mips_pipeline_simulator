@@ -84,7 +84,7 @@ list <Instruction *> Program::execute(){
 			cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
 		}
 	}
-	
+	list <Instruction *> returnInstructions(currInstructions);
 	it = currInstructions.begin() ;
 	while(it != currInstructions.end()){
 		if((*it)->stageToExecute==-1)
@@ -111,7 +111,7 @@ list <Instruction *> Program::execute(){
 		sepInstructions[i].clear();
 
 	cout<<"cycle"<< endl;
-	return currInstructions;
+	return returnInstructions;
 }
 	
 
