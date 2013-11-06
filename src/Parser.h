@@ -7,6 +7,7 @@
 #include <iostream>
 #include <map>
 #include <utility>
+#include "Instruction.h"
 #include "memory.h"
 #include "System.h"
 #include "Add.h"

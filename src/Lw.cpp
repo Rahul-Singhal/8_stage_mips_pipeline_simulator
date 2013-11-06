@@ -7,6 +7,10 @@ Lw::Lw(int rsIndex, int rtIndex, int signExtImm, int id){
 	this->id = id;
 }
 
+Lw::Lw(int rsIndex, string address, int signExtImm, int id){
+
+}
+
 void Lw::unstall(){
 	if(!registers[rtIndex].valid && registers[rtIndex].instructionId==id)
 		registers[rtIndex].unstall();

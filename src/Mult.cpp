@@ -8,6 +8,10 @@ Mult::Mult(int rdIndex, int rsIndex, int rtIndex, int id){
   this->presentSubStage = 0;
 }
 
+Mult::Mult(int rdIndex, int rsIndex, int id){
+  
+}
+
 void Mult::unstall(){
   if(!registers[rdIndex].valid && registers[rdIndex].instructionId==id)
     registers[rdIndex].unstall();

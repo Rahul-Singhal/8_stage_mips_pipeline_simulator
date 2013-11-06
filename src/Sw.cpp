@@ -6,6 +6,10 @@ Sw::Sw(int rsIndex, int rtIndex, int signExtImm, int id){
 	this->signExtImm = signExtImm;
 	this->id = id;
 }
+
+Sw::Sw(int rsIndex, string address, int signExtImm, int id){
+	
+}
 /*Note than there is no WAW possible as no writing is going on on any register*/
 void Sw::unstall(){
 	return ;

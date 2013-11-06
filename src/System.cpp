@@ -12,6 +12,6 @@ int System::multSubStages = 4;
 
 bool System::fastBranching = false;
 
-System::Memory System::memory();
+Memory System::memory=Memory();
 
 map<string, int> System::labelMap;
