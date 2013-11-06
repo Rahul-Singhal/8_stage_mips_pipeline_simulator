@@ -2,7 +2,17 @@
 using namespace std;
 
 Instruction::Instruction(){
-	cout<<"Instruction"<<endl;
+	//cout<<"Instruction"<<endl;
+	stageToExecute = 1;
+	presentStage = 0;
+	stalled = false;
+	stallingInstructionId = 0;
+	stallingRegister = 0;
+	forwarded =false;
+	forwardedFromInstructionId = 0;
+	forwardedFromInstructionStage = 0;
+	display = "default";
+	id = 0;
 }
 
 Instruction::Instruction(int s2ex, int ps, bool stall, int stallInstId, int stallReg, bool forw, int forwfromInstId, int forwStage, string disp, int i){
@@ -26,12 +36,12 @@ void Instruction::init(){
 }
 
 bool Instruction::execute(int pc){
-  cout<<"FUCKED"<<endl;
+  //cout<<"FUCKED"<<endl;
   return false;
 }
 
 void Instruction::unstall(){
-	cout<<"FUCKED AGAIN"<<endl;
+	//cout<<"FUCKED AGAIN"<<endl;
 	return;
 }
 

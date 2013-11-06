@@ -20,8 +20,8 @@ void Sub::unstall(){
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
 bool Sub::execute(int pc){
-  cout<<"SUB"<<endl;
-  // cout<<"MAIN CALL HUWA"<<endl;
+  // //cout<<"SUB"<<endl;
+  // //cout<<"MAIN CALL HUWA"<<endl;
   // Default Values:
   forwarded = false;
   stalled = false;
@@ -39,7 +39,7 @@ bool Sub::execute(int pc){
         stageToExecute++;
         stalled = false;
         display = "IF1";
-        cout << "if1 -->" ;
+        cout << "sub if1 -->" <<endl;
         return true;
       }
       else{
@@ -47,7 +47,7 @@ bool Sub::execute(int pc){
         stalled = true;
         stallingInstructionId = stages[stageToExecute].instructionId;
         display = "Waiting for IF1 to be free!";
-        cout << "if1 - wait -->" ;
+        cout << "sub if1 - wait -->" <<endl;
         return false;
       }
     }
@@ -61,7 +61,7 @@ bool Sub::execute(int pc){
         stageToExecute++;
         stalled = false;
         display = "IF2";
-        cout << "if2 -->" ;
+        cout << " sub if2 -->" <<endl;
         return true;
       }
       else {
@@ -69,7 +69,7 @@ bool Sub::execute(int pc){
         stalled = true;
         stallingInstructionId = stages[stageToExecute].instructionId;
         display = "Waiting for IF2 to be free!";
-        cout << "if2 - wait -->" ;
+        cout << "sub if2 - wait -->" <<endl;
         return false;
       }
     }
@@ -87,7 +87,7 @@ bool Sub::execute(int pc){
             stalled = true;
             stallingRegister = rsIndex;
             stallingInstructionId = registers[rsIndex].instructionId;
-            cout << "rs register not readable -->";
+            cout << "sub id rs register not readable -->"<<endl;
             return false;
           }
           else if (!registers[rtIndex].valid){
@@ -96,11 +96,12 @@ bool Sub::execute(int pc){
             stalled = true;
             stallingRegister = rtIndex;
             stallingInstructionId = registers[rtIndex].instructionId;
-            cout << "rt register not readable -->";
+            cout << "sub id rt register not readable -->"<<endl;
             return false;
           }
 
-          else if (  registers[rsIndex].instructionStage==8 && registers[rtIndex].instructionStage==8) {
+          else if (  registers[rsIndex].instructionStage==10 && registers[rtIndex].instructionStage==10) {
+            //cout<<"CUMS"<<endl;
               // this is the most normal case, when all values are simply avaiable not forwarded.
             registers[rdIndex].stallRegister(id); 
             a = registers[rsIndex].value;
@@ -110,12 +111,12 @@ bool Sub::execute(int pc){
             stages[presentStage].setInstruction(id);
             stageToExecute++;
             stalled = false;
-            cout << "id completed -->";
+            cout << "sub id completed forwarded-->"<<endl;
 
             return true;
           }
             // ASSUMING ONLY ONE FORWARDED VALUE
-          else if (registers[rsIndex].instructionStage!=8){
+          else if (registers[rsIndex].instructionStage!=10){
             registers[rdIndex].stallRegister(id); 
             forwarded = true;
             forwardedFromInstructionId = registers[rsIndex].instructionId;
@@ -127,10 +128,10 @@ bool Sub::execute(int pc){
             stages[presentStage].setInstruction(id);
             stageToExecute++;
             stalled = false;
-            cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+            cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" <<endl;
             return true;
           }
-          else if (registers[rtIndex].instructionStage!=8){
+          else if (registers[rtIndex].instructionStage!=10){
             registers[rdIndex].stallRegister(id); 
             forwarded = true;
             forwardedFromInstructionId = registers[rtIndex].instructionId;
@@ -142,7 +143,7 @@ bool Sub::execute(int pc){
             stages[presentStage].setInstruction(id);
             stageToExecute++;
             stalled = false;
-            cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+            cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" <<endl;
             return true;
           }
 
@@ -151,22 +152,25 @@ bool Sub::execute(int pc){
           // forwarding disabled
 
             // either values are forwarded, or normally stored
-          if (!registers[rsIndex].valid || registers[rsIndex].instructionStage!=8){
+          if (!registers[rsIndex].valid || registers[rsIndex].instructionStage!=10){
+            //cout<<registers[rsIndex].instructionStage<<endl;
               // forwarded value
             stages[presentStage].setInstruction(id);
             stalled = true;
             stallingRegister = rsIndex;
             stallingInstructionId = registers[rsIndex].instructionId;
-            cout << "ID stalls due to rs -->";
+            cout << "sub ID stalls due to rs -->"<<endl;
             return false;
           }
-          else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=8){
+          else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=10){
               // when rtIndex is not available without forwarding
+            /*cout<<registers[rtIndex].valid<<endl;
+            cout<<registers[rtIndex].instructionStage<<endl;*/
             stages[presentStage].setInstruction(id);
             stalled = true;
             stallingRegister = rtIndex;
             stallingInstructionId = registers[rtIndex].instructionId;
-            cout << "ID stalls due to rt -->"; 
+            cout << "sub ID stalls due to rt -->"<<endl;
             return false;
           }
           else {
@@ -179,7 +183,7 @@ bool Sub::execute(int pc){
             stages[presentStage].setInstruction(id);
             stageToExecute++;
             stalled = false;
-            cout << "no stall ID -->" ;
+            cout << "sub no stall ID -->" <<endl;
             return true;
           }
         } 
@@ -188,7 +192,7 @@ bool Sub::execute(int pc){
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "ID not free-->" ;
+        cout << "sub ID not free-->" <<endl;
         return false;
       }
     }
@@ -204,14 +208,14 @@ bool Sub::execute(int pc){
         stages[presentStage].setInstruction(id);
         /*Stage to execute will be MEM1 which is stage 7*/
         stageToExecute+=3;
-        cout << "EX stage done -->" ;
+        cout << "sub EX stage done -->" <<endl;
         return true;
       }
       else{
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "EX stage not free -->";
+        cout << "sub EX stage not free -->"<<endl;
         return false;
       }
     }
@@ -224,14 +228,14 @@ bool Sub::execute(int pc){
         presentStage = stageToExecute;
         stages[presentStage].setInstruction(id);
         stageToExecute++;
-        cout << "MEM1 done -->";
+        cout << "sub MEM1 done -->"<<endl;
         return true;
       }
       else{
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "MEM1 not free -->";
+        cout << "sub MEM1 not free -->"<<endl;
         return false;
       }
     }
@@ -243,14 +247,14 @@ bool Sub::execute(int pc){
         presentStage = stageToExecute;
         stages[presentStage].setInstruction(id);
         stageToExecute++;
-        cout << "MEM2 done -->";
+        cout << "sub MEM2 done -->"<<endl;
         return true;
       }
       else{
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "MEM2 not free -->";
+        cout << "sub MEM2 not free -->"<<endl;
         return false;
       }
     }
@@ -262,7 +266,7 @@ bool Sub::execute(int pc){
         presentStage = stageToExecute;
         stages[presentStage].setInstruction(id);
         stageToExecute++;
-        cout << "MEM3 done -->";
+        cout << "sub MEM3 done -->"<<endl;
 
         return true;
       }
@@ -270,7 +274,7 @@ bool Sub::execute(int pc){
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "MEM3 not free -->";
+        cout << "sub MEM3 not free -->"<<endl;
         return false;
       }
     }
@@ -283,7 +287,7 @@ bool Sub::execute(int pc){
           presentStage = stageToExecute;
           stages[presentStage].setInstruction(id);
           stageToExecute=-1;
-          cout << "WB completed -->";
+          //cout << "WB completed -->";
             // Instruction completed, so stage number is now invalid.
           return true;
         }
@@ -292,7 +296,7 @@ bool Sub::execute(int pc){
           stages[presentStage].setInstruction(id);
           stallingRegister = rdIndex;
           stallingInstructionId = registers[rdIndex].instructionId;
-          cout << "Register not writable -->";
+          //cout << "Register not writable -->";
           return false;
         }
       }
@@ -300,7 +304,7 @@ bool Sub::execute(int pc){
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "WB not free ->";
+        //cout << "WB not free ->";
         return false;
       }
     }

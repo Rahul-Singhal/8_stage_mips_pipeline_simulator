@@ -90,7 +90,7 @@ void DrawingQueue::drawSideBar(float scrollX){
  
 
 DrawingQueue::DrawingQueue(){
-	cout<<"IT COMES HERE"<<endl;
+	// //cout<<"IT COMES HERE"<<endl;
 	instHeight = 20;
 	instWidth = 50;
 	maxIdDrawn = 2;

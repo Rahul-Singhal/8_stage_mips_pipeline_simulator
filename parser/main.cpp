@@ -5,7 +5,7 @@ using namespace std;
 
 int main(){
 	Parser p("test.s");
-	cout<<"\n\n"<<endl;
+	//cout<<"\n\n"<<endl;
 	p.printLabels();
 	return 0;
 }

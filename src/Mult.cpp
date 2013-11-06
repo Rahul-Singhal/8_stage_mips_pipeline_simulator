@@ -21,8 +21,8 @@ void Mult::unstall(){
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
 bool Mult::execute(int pc){
-  cout<<"MULT"<<endl;
-  // cout<<"MAIN CALL HUWA"<<endl;
+  // //cout<<"MULT"<<endl;
+  // //cout<<"MAIN CALL HUWA"<<endl;
   // Default Values:
   forwarded = false;
   stalled = false;
@@ -40,7 +40,7 @@ bool Mult::execute(int pc){
         stageToExecute++;
         stalled = false;
         display = "IF1";
-        cout << "if1 -->" ;
+        //cout << "if1 -->" ;
         return true;
       }
       else{
@@ -48,7 +48,7 @@ bool Mult::execute(int pc){
         stalled = true;
         stallingInstructionId = stages[stageToExecute].instructionId;
         display = "Waiting for IF1 to be free!";
-        cout << "if1 - wait -->" ;
+        //cout << "if1 - wait -->" ;
         return false;
       }
     }
@@ -62,7 +62,7 @@ bool Mult::execute(int pc){
         stageToExecute++;
         stalled = false;
         display = "IF2";
-        cout << "if2 -->" ;
+        //cout << "if2 -->" ;
         return true;
       }
       else {
@@ -70,7 +70,7 @@ bool Mult::execute(int pc){
         stalled = true;
         stallingInstructionId = stages[stageToExecute].instructionId;
         display = "Waiting for IF2 to be free!";
-        cout << "if2 - wait -->" ;
+        //cout << "if2 - wait -->" ;
         return false;
       }
     }
@@ -88,7 +88,7 @@ bool Mult::execute(int pc){
             stalled = true;
             stallingRegister = rsIndex;
             stallingInstructionId = registers[rsIndex].instructionId;
-            cout << "rs register not readable -->";
+            //cout << "rs register not readable -->";
 
             return false;
           }
@@ -98,12 +98,12 @@ bool Mult::execute(int pc){
             stalled = true;
             stallingRegister = rtIndex;
             stallingInstructionId = registers[rtIndex].instructionId;    
-            cout << "rt register not readable -->";
+            //cout << "rt register not readable -->";
 
             return false;
           }
 
-          else if (  registers[rsIndex].instructionStage==8 && registers[rtIndex].instructionStage==8) {
+          else if (  registers[rsIndex].instructionStage==10 && registers[rtIndex].instructionStage==10) {
               // this is the most normal case, when all values are simply avaiable not forwarded.
             registers[rdIndex].stallRegister(id); 
             a = registers[rsIndex].value;
@@ -114,12 +114,12 @@ bool Mult::execute(int pc){
             /*Next stage would be mult which is stage 5*/
             stageToExecute += 2;
             stalled = false;
-            cout << "id completed -->";
+            //cout << "id completed -->";
 
             return true;
           }
             // ASSUMING ONLY ONE FORWARDED VALUE
-          else if (registers[rsIndex].instructionStage!=8){
+          else if (registers[rsIndex].instructionStage!=10){
             registers[rdIndex].stallRegister(id); 
             forwarded = true;
             forwardedFromInstructionId = registers[rsIndex].instructionId;
@@ -132,11 +132,11 @@ bool Mult::execute(int pc){
             /*Next stage would be mult which is stage 5*/
             stageToExecute += 2;
             stalled = false;
-            cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+            //cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
             return true;
           }
-          else if (registers[rtIndex].instructionStage!=8){
+          else if (registers[rtIndex].instructionStage!=10){
             registers[rdIndex].stallRegister(id); 
             forwarded = true;
             forwardedFromInstructionId = registers[rtIndex].instructionId;
@@ -149,7 +149,7 @@ bool Mult::execute(int pc){
             /*Next stage would be mult which is stage 5*/
             stageToExecute += 2;
             stalled = false;
-            cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+            //cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
             return true;
           }
@@ -159,22 +159,22 @@ bool Mult::execute(int pc){
           // forwarding disabled
 
             // either values are forwarded, or normally stored
-          if (!registers[rsIndex].valid || registers[rsIndex].instructionStage!=8){
+          if (!registers[rsIndex].valid || registers[rsIndex].instructionStage!=10){
               // forwarded value
             stages[presentStage].setInstruction(id);
             stalled = true;
             stallingRegister = rsIndex;
             stallingInstructionId = registers[rsIndex].instructionId;
-            cout << "ID stalls due to rs -->";
+            //cout << "mult ID stalls due to rs -->";
             return false;
           }
-          else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=8){
+          else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=10){
               // when rtIndex is not available without forwarding
             stages[presentStage].setInstruction(id);
             stalled = true;
             stallingRegister = rtIndex;
             stallingInstructionId = registers[rtIndex].instructionId;
-            cout << "ID stalls due to rt -->"; 
+            //cout << "ID stalls due to rt -->"; 
             return false;
           }
           else {
@@ -188,7 +188,7 @@ bool Mult::execute(int pc){
             /*Next stage would be mult which is stage 5*/
             stageToExecute += 2;
             stalled = false;
-            cout << "no stall ID -->" ;
+            //cout << "no stall ID -->" ;
             return true;
           }
         } 
@@ -197,7 +197,7 @@ bool Mult::execute(int pc){
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "ID not free -->" ;
+        //cout << "ID not free -->" ;
         return false;
       }
     }
@@ -207,18 +207,18 @@ bool Mult::execute(int pc){
       registers[rdIndex].stallRegister(id);
       if(stages[stageToExecute].isFree()){
         product = a*b;
-        registers[rdIndex].write(product,id,stageToExecute); // TODO : Will it ever return false?
         stages[presentStage].setFree();
         presentStage = stageToExecute;
         stages[presentStage].setInstruction(id);
         presentSubStage++;
         if (presentSubStage == multSubStages){
           /*Next stage is MEM1 which is stage 7*/
+          registers[rdIndex].write(product,id,stageToExecute); // TODO : Will it ever return false?
           stageToExecute += 2;
-          cout << "MULT stage done -->" ;
+          //cout << "MULT stage done -->" ;
         }
         else {
-          cout << "MULT substage = " << presentSubStage  << "-->"; 
+          //cout << "MULT substage = " << presentSubStage  << "-->"; 
         }
         return true;
       }
@@ -226,7 +226,7 @@ bool Mult::execute(int pc){
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "MULT stage not free -->";
+        //cout << "MULT stage not free -->";
 
         return false;
       }
@@ -240,14 +240,14 @@ bool Mult::execute(int pc){
         presentStage = stageToExecute;
         stages[presentStage].setInstruction(id);
         stageToExecute++;
-        cout << "MEM1 stage done -->" ;
+        //cout << "MEM1 stage done -->" ;
         return true;
       }
       else{
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "MEM1 stage not free -->";
+        //cout << "MEM1 stage not free -->";
 
         return false;
       }
@@ -260,14 +260,14 @@ bool Mult::execute(int pc){
         presentStage = stageToExecute;
         stages[presentStage].setInstruction(id);
         stageToExecute++;
-        cout << "MEM2 stage done -->" ;
+        //cout << "MEM2 stage done -->" ;
         return true;
       }
       else{
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "MEM2 stage not free -->";
+        //cout << "MEM2 stage not free -->";
 
         return false;
       }
@@ -280,14 +280,14 @@ bool Mult::execute(int pc){
         presentStage = stageToExecute;
         stages[presentStage].setInstruction(id);
         stageToExecute++;
-        cout << "MEM3 stage done -->" ;
+        //cout << "MEM3 stage done -->" ;
         return true;
       }
       else{
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "MEM3 stage not free -->";
+        //cout << "MEM3 stage not free -->";
 
         return false;
 
@@ -298,11 +298,12 @@ bool Mult::execute(int pc){
       // WB Stage
       if(stages[stageToExecute].isFree()){
         if (registers[rdIndex].write(product,id,stageToExecute)){
+          //cout<<"write true aaya "<<endl;
           stages[presentStage].setFree();
           presentStage = stageToExecute;
           stages[presentStage].setInstruction(id);
           stageToExecute=-1;
-          cout << "WB completed -->";
+          //cout << "WB completed -->";
 
             // Instruction completed, so stage number is now invalid.
           return true;
@@ -312,7 +313,7 @@ bool Mult::execute(int pc){
           stages[presentStage].setInstruction(id);
           stallingRegister = rdIndex;
           stallingInstructionId = registers[rdIndex].instructionId;
-          cout << "Register not writable -->";
+          //cout << "Register not writable -->";
 
           return false;
         }
@@ -321,7 +322,7 @@ bool Mult::execute(int pc){
         stages[presentStage].setInstruction(id);
         stallingInstructionId = stages[stageToExecute].instructionId;
         stalled = true;
-        cout << "WB not free ->";
+        //cout << "WB not free ->";
 
         return false;
       }

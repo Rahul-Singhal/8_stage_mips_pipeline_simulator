@@ -7,7 +7,7 @@ Program::Program(string filename){
 	// parser.parse(code);
 	Add * i1 = new Add(1,2,3,0);
 	Mult * i2 = new Mult(1,2,3,0);
-	Sub * i3 = new Sub(1,2,3,0);
+	Sub * i3 = new Sub(1,2,1,0);
 	code.push_back(i1);
 	code.push_back(i2);
 	code.push_back(i3);
@@ -18,7 +18,7 @@ void Program::init(){
 	//Initialising
 	// setting the stages
 	for(int i = 0 ; i <= 10 ; i++){
-		cout<<i<<endl;
+		// //cout<<i<<endl;
 		stages[i].number = i;
 	}
 	// initialising the registers once and for all
@@ -26,7 +26,7 @@ void Program::init(){
 		registers[i].id = i;
 		registers[i].value = 0;
 		registers[i].valid = true;
-		registers[i].instructionStage = 8;
+		registers[i].instructionStage = 10;
 	}
 
 	programCounter = 0;
@@ -38,6 +38,7 @@ void Program::init(){
 }
 
 vector <Instruction> Program::execute(){
+	//cout<<currInstructions.size()<<endl;
 	list<Instruction *>::iterator it;
 		//STABLE SORT
 	for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
@@ -46,13 +47,13 @@ vector <Instruction> Program::execute(){
 		// the whole logic of running one clock cycle comes here
 	for(int i = 10 ; i >= 1 ; i--){
 		for(int j = 0 ; j < sepInstructions[i].size() ; j++){
-			cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
+			// //cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
 			prevPc = programCounter;
 			sepInstructions[i][j]->execute(programCounter);
 			nextPc = programCounter;
 			if(nextPc != prevPc){
-				cout<<"Branch taken and destination other than next instruction!"<<endl;
-				cout<<"Flush needed!"<<endl;
+				// //cout<<"Branch taken and destination other than next instruction!"<<endl;
+				// //cout<<"Flush needed!"<<endl;
 					/*setting stages free*/
 				stages[0].setFree();
 				stages[1].setFree();
@@ -81,7 +82,7 @@ vector <Instruction> Program::execute(){
 						currInstructions.erase(it++);
 				}
 			}
-			cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
+			// //cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
 		}
 	}
 	vector <Instruction> returnInstructions(0, Instruction());
@@ -115,7 +116,7 @@ vector <Instruction> Program::execute(){
 	for(int i = 1 ; i <= 9 ; i++ )
 		sepInstructions[i].clear();
 
-	cout<<"cycle"<< endl;
+	// //cout<<"cycle"<< endl;
 	return returnInstructions;
 }
 	
@@ -123,7 +124,7 @@ vector <Instruction> Program::execute(){
 void Program::executeAll(){
 
 	while(!currInstructions.empty()){
-		// cout<<currInstructions.front().id<<":"<<currInstructions.front().presentStage<<":"<<currInstructions.front().stageToExecute<<endl;
+		// //cout<<currInstructions.front().id<<":"<<currInstructions.front().presentStage<<":"<<currInstructions.front().stageToExecute<<endl;
 		list<Instruction *>::iterator it;
 		//STABLE SORT
 		for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
@@ -132,13 +133,13 @@ void Program::executeAll(){
 		// the whole logic of running one clock cycle comes here
 		for(int i = 10 ; i >= 1 ; i--){
 			for(int j = 0 ; j < sepInstructions[i].size() ; j++){
-				cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
+				// //cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
 				prevPc = programCounter;
 				sepInstructions[i][j]->execute(programCounter);
 				nextPc = programCounter;
 				if(nextPc != prevPc){
-					cout<<"Branch taken and destination other than next instruction!"<<endl;
-					cout<<"Flush needed!"<<endl;
+					//cout<<"Branch taken and destination other than next instruction!"<<endl;
+					//cout<<"Flush needed!"<<endl;
 					/*setting stages free*/
 					stages[0].setFree();
 					stages[1].setFree();
@@ -167,7 +168,7 @@ void Program::executeAll(){
 							currInstructions.erase(it++);
 					}
 				}
-				cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
+				// //cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
 			}
 		}
 		
@@ -196,6 +197,6 @@ void Program::executeAll(){
 		for(int i = 1 ; i <= 9 ; i++ )
 			sepInstructions[i].clear();
 
-		cout<<"cycle"<< endl;
+		//cout<<"cycle"<< endl;
 	}
 }

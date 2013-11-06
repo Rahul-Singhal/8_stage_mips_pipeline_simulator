@@ -52,6 +52,7 @@ static void key(unsigned char key, int x, int y)
             exit(0);
             break;
         case 's':
+            // p.execute();
             dq.drawFinishedQueue(p.execute());
             break;
     }
