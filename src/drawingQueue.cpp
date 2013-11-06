@@ -90,6 +90,7 @@ void DrawingQueue::drawSideBar(float scrollX){
  
 
 DrawingQueue::DrawingQueue(){
+	cout<<"IT COMES HERE"<<endl;
 	instHeight = 20;
 	instWidth = 50;
 	maxIdDrawn = 2;
@@ -130,28 +131,42 @@ DrawingQueue::DrawingQueue(){
 	stageColorMap[5][0]= 0.803922;
 	stageColorMap[5][1]= 0.360784;
 	stageColorMap[5][2]= 0.360784;
-	stageStringMap[5]="MEM1";
+	stageStringMap[5]="MULT";
 
 	//stage6
 	stageColorMap[6] = new double[3];
 	stageColorMap[6][0]= 0.737255;
 	stageColorMap[6][1]= 0.560784;
 	stageColorMap[6][2]= 0.560784;
-	stageStringMap[6]="MEM2";
+	stageStringMap[6]="DIV";
 
 	//stage7
 	stageColorMap[7] = new double[3];
 	stageColorMap[7][0]= 0.282353;
 	stageColorMap[7][1]= 0.239216;
 	stageColorMap[7][2]= 0.545098;
-	stageStringMap[7]="MEM3";
+	stageStringMap[7]="MEM1";
 
 	//stage8
 	stageColorMap[8] = new double[3];
 	stageColorMap[8][0]= 0;
 	stageColorMap[8][1]= 0.74902;
 	stageColorMap[8][2]= 1;
-	stageStringMap[8]="WB";
+	stageStringMap[8]="MEM2";
+
+	//stage8
+	stageColorMap[9] = new double[3];
+	stageColorMap[9][0]= 0;
+	stageColorMap[9][1]= 0.74902;
+	stageColorMap[9][2]= 1;
+	stageStringMap[9]="MEM3";
+
+	//stage8
+	stageColorMap[10] = new double[3];
+	stageColorMap[10][0]= 0;
+	stageColorMap[10][1]= 0.74902;
+	stageColorMap[10][2]= 1;
+	stageStringMap[10]="WB";
 
 
 
@@ -166,6 +181,8 @@ void DrawingQueue::drawFinishedQueue(vector<Instruction> v){
 void DrawingQueue::draw(int scrollX, int scrollY){
 
 	instStrings.clear();
+
+	
 	glPushMatrix();
 	glTranslatef(instWidth/2 + 150, -((3*instHeight)/2 + 20), 0);
 	for(int i =0 ; i<displayVector.size(); i++){
@@ -177,7 +194,6 @@ void DrawingQueue::draw(int scrollX, int scrollY){
 		glPopMatrix();
 	}
 	glPopMatrix();
-
 	glPushMatrix();
 		glTranslatef(instWidth/2 + 150, -(instHeight/2 + 20) - scrollY, 0);
 		drawHeader();
@@ -187,7 +203,6 @@ void DrawingQueue::draw(int scrollX, int scrollY){
 		glTranslatef(instWidth/2 + 110-scrollX, -(instHeight/2 + 20), 0);
 		drawSideBar(scrollX);
 	glPopMatrix();
-	
 }
 
 void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
@@ -202,8 +217,8 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	glPushMatrix();
 	glTranslatef((instWidth+2)*i, -((instHeight+20)*inst.getId()), 0);
     glBegin(GL_QUADS);
-        glColor3f(colors[0],colors[1],colors[2]);
-        //glColor3f(0,0,1);
+        // glColor3f(colors[0],colors[1],colors[2]);
+        glColor3f(0,0,1);
         glVertex2f(-instWidth/2,instHeight/2);
         glVertex2f(instWidth/2,instHeight/2);
         glVertex2f(instWidth/2,-instHeight/2);
