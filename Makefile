@@ -18,7 +18,7 @@ OBJDIR = $(PROJECT_ROOT)/obj
 BINDIR = $(PROJECT_ROOT)/bin
 
 LIBS = -lGL -lGLU -lglut
-TARGET = archi
+TARGET = 8_stage_mips_simulator
 
 SRCS := $(wildcard $(SRCDIR)/*.cpp)
 INCS := $(wildcard $(SRCDIR)/*.h)
