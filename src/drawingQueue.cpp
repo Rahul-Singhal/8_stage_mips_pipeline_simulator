@@ -167,10 +167,6 @@ DrawingQueue::DrawingQueue(){
 	stageColorMap[10][1]= 0.647059;
 	stageColorMap[10][2]= 0;
 	stageStringMap[10]="WB";
-
-
-
-
 }
 
 void DrawingQueue::drawFinishedQueue(vector<Instruction> v){
