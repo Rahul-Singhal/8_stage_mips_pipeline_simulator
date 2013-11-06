@@ -52,13 +52,7 @@ static void key(unsigned char key, int x, int y)
             exit(0);
             break;
         case 's':
-            vector <Instruction> v(0, Instruction());
-            list <Instruction *> l = p.execute();
-            cout<<l.size()<<endl;
-            list <Instruction *>::iterator it;
-            for(it = l.begin() ; it != l.end() ; it++)
-                v.push_back((**it));
-            dq.drawFinishedQueue(v);
+            dq.drawFinishedQueue(p.execute());
             break;
     }
     glutPostRedisplay();

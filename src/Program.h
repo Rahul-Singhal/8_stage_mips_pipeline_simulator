@@ -46,7 +46,7 @@ public:
 	vector <Instruction *> code;
 	list <Instruction *> currInstructions;
 	Program(string filename);
-	list <Instruction *> execute();
+	vector <Instruction> execute();
 	void executeAll();
 	void init();
 private:

@@ -37,7 +37,7 @@ void Program::init(){
 	currInstructions.push_back(code[programCounter]);
 }
 
-list <Instruction *> Program::execute(){
+vector <Instruction> Program::execute(){
 	list<Instruction *>::iterator it;
 		//STABLE SORT
 	for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
@@ -84,7 +84,12 @@ list <Instruction *> Program::execute(){
 			cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
 		}
 	}
-	list <Instruction *> returnInstructions(currInstructions);
+	vector <Instruction> returnInstructions(0, Instruction());
+	it = currInstructions.begin() ;
+	while(it != currInstructions.end()){
+		returnInstructions.push_back(**it);
+		it++;
+	}
 	it = currInstructions.begin() ;
 	while(it != currInstructions.end()){
 		if((*it)->stageToExecute==-1)
