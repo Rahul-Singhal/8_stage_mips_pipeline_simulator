@@ -234,7 +234,7 @@ bool Lw::execute(int pc){
 			/*If register is not writable, i am stalling the register*/
 			registers[rtIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
-				if (registers[rtIndex].write(memory[sum],id,stageToExecute)){
+				if (registers[rtIndex].write(memory.loadWord(sum),id,stageToExecute)){
 					stages[presentStage].setFree();
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);

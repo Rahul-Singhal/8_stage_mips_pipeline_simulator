@@ -267,7 +267,8 @@ bool Sw::execute(int pc){
 		{	
 			// MEM 3 Stage
 			if(stages[stageToExecute].isFree()){
-				memory[sum]=b;
+				//memory[sum]=b;
+				memory.storeWord(sum,b);
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);

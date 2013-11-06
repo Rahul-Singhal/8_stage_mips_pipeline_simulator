@@ -1,5 +1,6 @@
 #include "Memory.h"
 using namespace std;
+
 Memory::Memory(){
   store.push_back((char)0);
   freePointer = 0;

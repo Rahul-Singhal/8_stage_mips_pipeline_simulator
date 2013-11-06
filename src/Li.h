@@ -9,8 +9,10 @@
 using namespace std;
 
 class Li: public Instruction{
+private:
 	int rdIndex;
 	int immediate;
+public:
 	Li(int rdIndex, int immediate, int id);
 	bool execute(int pc);
 	void unstall();
