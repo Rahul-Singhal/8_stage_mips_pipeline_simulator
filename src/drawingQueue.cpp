@@ -154,18 +154,18 @@ DrawingQueue::DrawingQueue(){
 	stageColorMap[8][2]= 1;
 	stageStringMap[8]="MEM2";
 
-	//stage8
+	//stage9
 	stageColorMap[9] = new double[3];
-	stageColorMap[9][0]= 0;
-	stageColorMap[9][1]= 0.74902;
-	stageColorMap[9][2]= 1;
+	stageColorMap[9][0]= 0.12549;
+	stageColorMap[9][1]= 0.698039;
+	stageColorMap[9][2]= 0.666667;
 	stageStringMap[9]="MEM3";
 
-	//stage8
+	//stage10
 	stageColorMap[10] = new double[3];
-	stageColorMap[10][0]= 0;
-	stageColorMap[10][1]= 0.74902;
-	stageColorMap[10][2]= 1;
+	stageColorMap[10][0]= 1;
+	stageColorMap[10][1]= 0.647059;
+	stageColorMap[10][2]= 0;
 	stageStringMap[10]="WB";
 
 
@@ -209,6 +209,7 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	//draw the instruction corresponding to ith column and jth row in 
 	string str = inst.getDisplayString();
 	int prStage = inst.getPresentStage();
+	if(prStage == 0) return;
 	double * colors = stageColorMap[prStage];
 	if(inst.getPresentStage() == 1){
 		instStrings.push_back(pair<int, string> (inst.getId(), str));
@@ -217,8 +218,8 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	glPushMatrix();
 	glTranslatef((instWidth+2)*i, -((instHeight+20)*inst.getId()), 0);
     glBegin(GL_QUADS);
-        // glColor3f(colors[0],colors[1],colors[2]);
-        glColor3f(0,0,1);
+        glColor3f(colors[0],colors[1],colors[2]);
+        //glColor3f(0,0,1);
         glVertex2f(-instWidth/2,instHeight/2);
         glVertex2f(instWidth/2,instHeight/2);
         glVertex2f(instWidth/2,-instHeight/2);
