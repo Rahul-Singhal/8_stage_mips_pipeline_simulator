@@ -39,7 +39,7 @@ bool Add::execute(int pc){
 				stageToExecute++;
 				stalled = false;
 				display = "IF1";
-				//cout << "if1 -->" ;
+				cout << "if1 -->" <<endl;
 				return true;
 			}
 			else{
@@ -47,7 +47,7 @@ bool Add::execute(int pc){
 				stalled = true;
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				display = "Waiting for IF1 to be free!";
-				//cout << "if1 - wait -->" ;
+				cout << "if1 - wait -->"<<endl ;
 				return false;
 			}
 		}
@@ -61,7 +61,7 @@ bool Add::execute(int pc){
 				stageToExecute++;
 				stalled = false;
 				display = "IF2";
-				//cout << "if2 -->" ;
+				cout << "if2 -->" <<endl;
 				return true;
 			}
 			else {
@@ -69,7 +69,7 @@ bool Add::execute(int pc){
 				stalled = true;
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				display = "Waiting for IF2 to be free!";
-				//cout << "if2 - wait -->" ;
+				cout << "if2 - wait -->" <<endl;
 				return false;
 			}
 		}
@@ -87,7 +87,7 @@ bool Add::execute(int pc){
 						stalled = true;
 						stallingRegister = rsIndex;
 						stallingInstructionId = registers[rsIndex].instructionId;
-						//cout << "rs register not readable -->";
+						cout << "rs register not readable -->"<<endl;
 
 						return false;
 					}
@@ -97,7 +97,7 @@ bool Add::execute(int pc){
 						stalled = true;
 						stallingRegister = rtIndex;
 						stallingInstructionId = registers[rtIndex].instructionId;    
-						//cout << "rt register not readable -->";
+						cout << "rt register not readable -->"<<endl;
 
 						return false;
 					}
@@ -112,7 +112,7 @@ bool Add::execute(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
-						//cout << "id completed -->";
+						cout << "id completed -->"<<endl;
 
 						return true;
 					}
@@ -129,7 +129,7 @@ bool Add::execute(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
-						//cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+						cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" <<endl;
 
 						return true;
 					}
@@ -145,7 +145,7 @@ bool Add::execute(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
-						//cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+						cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" <<endl;
 
 						return true;
 					}
@@ -163,7 +163,7 @@ bool Add::execute(int pc){
 						stalled = true;
 						stallingRegister = rsIndex;
 						stallingInstructionId = registers[rsIndex].instructionId;
-						//cout << "add ID stalls due to rs -->";
+						cout << "add ID stalls due to rs -->"<<endl;
 						return false;
 					}
 					else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=10){
@@ -172,7 +172,7 @@ bool Add::execute(int pc){
 						stalled = true;
 						stallingRegister = rtIndex;
 						stallingInstructionId = registers[rtIndex].instructionId;
-						//cout << "ID stalls due to rt -->"; 
+						cout << "ID stalls due to rt -->"<<endl; 
 						return false;
 					}
 					else {
@@ -185,7 +185,7 @@ bool Add::execute(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
-						//cout << "no stall ID -->" ;
+						cout << "no stall ID -->" <<endl;
 						return true;
 					}
 				}	
@@ -194,7 +194,7 @@ bool Add::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				//cout << "ID not free -->" ;
+				cout << "ID not free -->"<<endl ;
 				return false;
 			}
 		}
@@ -210,14 +210,14 @@ bool Add::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				/*Stage to execute will be MEM1 which is stage 7*/
 				stageToExecute+=3;
-				//cout << "EX stage done -->" ;
+				cout << "EX stage done -->" <<endl;
 				return true;
 			}
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				//cout << "EX stage not free -->";
+				cout << "EX stage not free -->"<<endl;
 
 				return false;
 			}
@@ -231,14 +231,14 @@ bool Add::execute(int pc){
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
-				//cout << "MEM1 stage done -->" ;
+				cout << "MEM1 stage done -->" <<endl;
 				return true;
 			}
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				//cout << "MEM1 stage not free -->";
+				cout << "MEM1 stage not free -->"<<endl;
 
 				return false;
 			}
@@ -251,14 +251,14 @@ bool Add::execute(int pc){
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
-				//cout << "MEM2 stage done -->" ;
+				cout << "MEM2 stage done -->" <<endl;
 				return true;
 			}
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				//cout << "MEM2 stage not free -->";
+				cout << "MEM2 stage not free -->"<<endl;
 
 				return false;
 			}
@@ -271,14 +271,14 @@ bool Add::execute(int pc){
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
-				//cout << "MEM3 stage done -->" ;
+				cout << "MEM3 stage done -->" <<endl;
 				return true;
 			}
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				//cout << "MEM3 stage not free -->";
+				cout << "MEM3 stage not free -->"<<endl;
 
 				return false;
 
@@ -293,7 +293,7 @@ bool Add::execute(int pc){
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);
 					stageToExecute=-1;
-					//cout << "WB completed -->";
+					cout << "WB completed -->"<<endl;
 
 						// Instruction completed, so stage number is now invalid.
 					return true;
@@ -303,8 +303,7 @@ bool Add::execute(int pc){
 					stages[presentStage].setInstruction(id);
 					stallingRegister = rdIndex;
 					stallingInstructionId = registers[rdIndex].instructionId;
-					//cout << "Register not writable -->";
-
+					cout << "Register not writable -->"<<endl;
 					return false;
 				}
 			}
@@ -312,7 +311,7 @@ bool Add::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				//cout << "WB not free ->";
+				cout << "WB not free ->"<<endl;
 
 				return false;
 			}

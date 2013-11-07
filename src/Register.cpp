@@ -7,7 +7,7 @@ Register::Register(int id, int value){
 }
 
 void Register::stallRegister(int instructionId){
-	if (valid) {
+	if (valid && instructionStage==10) {
 		valid = false;
 		this->instructionId = instructionId;
 	}
@@ -15,11 +15,13 @@ void Register::stallRegister(int instructionId){
 
 
 bool Register::write(int value, int instructionId, int instructionStage){
+	cout<<value<<":"<<instructionId<<":"<<instructionStage<<endl;
 	if (valid) {
 		valid = true;
 		this->instructionId = instructionId;
 		this->instructionStage = instructionStage;
 		this->value = value; 
+		cout<<"valid"<<" "<<valid<<":"<<value<<"return true"<<endl;
 		return true;
 	}
 	else if (instructionId == this->instructionId){
@@ -27,9 +29,11 @@ bool Register::write(int value, int instructionId, int instructionStage){
 		this->instructionStage = instructionStage;
 		this->value = value; 
 		valid = true;
+		cout<<"not valid but my own instruction"<<" "<<valid<<":"<<value<<"return true"<<endl;
 		return true;
 	}
 	else {
+		cout<<"invalid return false"<<endl;
 		return false;
 	}
 }
