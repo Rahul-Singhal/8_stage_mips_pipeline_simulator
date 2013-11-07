@@ -15,7 +15,7 @@ Addi::Addi(int rtIndex, int rsIndex, int immediate, int id){
 // If an instruction does not execute because the stage is not free or because registers are being written, then we 
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
-bool Addi::execute(){
+bool Addi::execute(int pc){
   // //cout<<"ADDI"<<endl;
   // //cout<<"MAIN CALL HUWA"<<endl;
   // Default Values:
