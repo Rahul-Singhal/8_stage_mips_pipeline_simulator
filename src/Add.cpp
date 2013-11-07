@@ -225,7 +225,7 @@ bool Add::execute(int pc){
 		case 7:
 		{
 			// MEM 1 Stage
-			//registers[rdIndex].stallRegister(id)();
+			registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
@@ -246,6 +246,7 @@ bool Add::execute(int pc){
 		case 8:
 		{
 			// MEM 2 Stage
+			registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
@@ -266,6 +267,7 @@ bool Add::execute(int pc){
 		case 9:
 		{
 			// MEM 3 Stage
+			registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
@@ -287,6 +289,7 @@ bool Add::execute(int pc){
 		case 10:
 		{
 			// WB Stage
+			registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
 				if (registers[rdIndex].write(sum,id,stageToExecute)){
 					stages[presentStage].setFree();

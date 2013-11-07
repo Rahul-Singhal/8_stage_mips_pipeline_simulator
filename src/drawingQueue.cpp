@@ -205,11 +205,12 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	//draw the instruction corresponding to ith column and jth row in 
 	string str = inst.getDisplayString();
 	int prStage = inst.getPresentStage();
+	//cout<<"YONESS"<<inst.getId()<<"YONESS"<<endl;
 	if(prStage == 0) return;
 	double * colors = stageColorMap[prStage];
-	if(inst.getPresentStage() == 1){
-		instStrings.push_back(pair<int, string> (inst.getId(), str));
-	}
+	// if(inst.getPresentStage() == 1){
+	// 	instStrings.push_back(pair<int, string> (inst.getId(), str));
+	// }
 	maxIdDrawn = maxIdDrawn > inst.getId()? maxIdDrawn:inst.getId();
 	glPushMatrix();
 	glTranslatef((instWidth+2)*i, -((instHeight+20)*inst.getId()), 0);
@@ -229,38 +230,38 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
     if(inst.getStalled()){
     	render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, "STALL");
     	int lastQueueStartId = displayVector[i-1][0].getId();
-    	if(displayVector[i-1][inst.getId() - lastQueueStartId].getStalled()){
-    		//no need to draw any more arrows
+    	// if(displayVector[i-1][inst.getId() - lastQueueStartId].getStalled()){
+    	// 	//no need to draw any more arrows
+    	// }
+    	// else{
+    	// 	//draw arrow
+    	// 	int alpha = 1;
+    	// 	int lastQueueStartId = displayVector[i-alpha][0].getId();
+    	// 	// stage 3 is ID
+    	// 	while(!(displayVector[i-alpha][inst.getStallingInstructionId() - lastQueueStartId].getPresentStage() == 3)){
+    	// 		alpha++;
+    	// 		lastQueueStartId = displayVector[i-alpha][0].getId();
+    	// 	}
+    	// 	//draw arrow from rectangle alpha blocks back and inst.getId()-inst.getStallingInstructionId() up
+
+    	// 	drawArrow(alpha, inst.getId()-inst.getStallingInstructionId());
+
     	}
-    	else{
-    		//draw arrow
-    		int alpha = 1;
-    		int lastQueueStartId = displayVector[i-alpha][0].getId();
-    		// stage 3 is ID
-    		while(!(displayVector[i-alpha][inst.getStallingInstructionId() - lastQueueStartId].getPresentStage() == 3)){
-    			alpha++;
-    			lastQueueStartId = displayVector[i-alpha][0].getId();
-    		}
-    		//draw arrow from rectangle alpha blocks back and inst.getId()-inst.getStallingInstructionId() up
 
-    		drawArrow(alpha, inst.getId()-inst.getStallingInstructionId());
-
-    	}
-
-	}
+	// }
 	if(inst.getForwarded()){
 		//draw arrow to display forwarding
 
 		int alpha = 1;
 		int lastQueueStartId = displayVector[i-alpha][0].getId();
 		// 
-		while(!(displayVector[i-alpha][inst.getForwardedFromInstructionId() - lastQueueStartId].getPresentStage() == inst.getForwardedFromInstructionStage())){
-			alpha++;
-			lastQueueStartId = displayVector[i-alpha][0].getId();
-		}
+		// while(!(displayVector[i-alpha][inst.getForwardedFromInstructionId() - lastQueueStartId].getPresentStage() == inst.getForwardedFromInstructionStage())){
+		// 	alpha++;
+		// 	lastQueueStartId = displayVector[i-alpha][0].getId();
+		// }
 
-		//draw arrow from rectangle alpha blocks back and inst.getId()-inst.getStallingInstructionId() up
-		drawArrow(alpha, inst.getId()-inst.getForwardedFromInstructionId());
+		// //draw arrow from rectangle alpha blocks back and inst.getId()-inst.getStallingInstructionId() up
+		// drawArrow(alpha, inst.getId()-inst.getForwardedFromInstructionId());
 
 	}
     glPopMatrix();

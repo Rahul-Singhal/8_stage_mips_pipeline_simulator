@@ -6,17 +6,20 @@ Program::Program(string filename){
 	code.assign(0, new Instruction());
 	// parser.parse(code);
 	Add * i1 = new Add(1,2,3,0);
-	Mult * i2 = new Mult(1,2,3,0);
+	Add * i2 = new Add(1,2,3,0);
 	Add * i3 = new Add(1,2,1,0);
 	Add * i4 = new Add(1,2,1,0);
 	Add * i5 = new Add(1,2,1,0);
-	Sub * i6 = new Sub(1,2,1,0);
+	Add * i6 = new Add(1,2,1,0);
+	Add * i7 = new Add(1,2,1,0);
 	code.push_back(i1);
 	code.push_back(i2);
 	code.push_back(i3);
 	code.push_back(i4);
 	code.push_back(i5);
 	code.push_back(i6);
+	code.push_back(i7);
+
 	sepInstructions.assign(11, vector<Instruction*>(0, new Instruction()));
 }
 
