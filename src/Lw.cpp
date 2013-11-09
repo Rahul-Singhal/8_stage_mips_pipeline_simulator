@@ -342,7 +342,7 @@ bool Lw::execute(int pc){
 			// WB Stage
 					if(stages[stageToExecute].isFree()){
 						if(!forwardingEnabled)
-							registers[rtIndex].unstallRegister(sum, id);
+							registers[rtIndex].unstallRegister(memory.loadWord(sum), id);
 						stages[presentStage].setFree();
 						presentStage = stageToExecute;
 						stages[presentStage].setInstruction(id);

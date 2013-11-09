@@ -2,7 +2,7 @@
 using namespace std;
 
 Memory::Memory(){
-  store.push_back((char)0);
+  store.assign(1024, 'a');
   freePointer = 0;
 }
 
