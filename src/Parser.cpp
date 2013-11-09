@@ -78,7 +78,7 @@ int Parser::convertToNumber(string str){
 
 Parser::Parser(string fileName, vector<Instruction *> & code){
 
-    codeVector = code;
+    // codeVector = code;
 
     instructionNumber = 0;
     text = true;
@@ -89,15 +89,40 @@ Parser::Parser(string fileName, vector<Instruction *> & code){
     infile.open(fileName.c_str());
     //string str1 = "la $a0, prompt1      #read the numbers, s0 contains the first number and s1 contains the second number";
     //parseLine(str1);
+
     while(getline(infile,str)){
         parseLine(str);
-        //v.push_back(str);  
-
+    //v.push_back(str);  
     }
 
+    code = codeVector;
+    cout << &code << endl;
+    cout << code.size() << endl;
     infile.close();
 }
 
+vector<Instruction *> Parser::getVector(string fileName){
+     instructionNumber = 0;
+    text = true;
+    data = false;
+    string str;
+    ifstream infile;
+    initMaps();
+    infile.open(fileName.c_str());
+    //string str1 = "la $a0, prompt1      #read the numbers, s0 contains the first number and s1 contains the second number";
+    //parseLine(str1);
+
+    while(getline(infile,str)){
+        parseLine(str);
+    //v.push_back(str);  
+    }
+
+    
+    infile.close();
+    return codeVector;
+}
+
+Parser::Parser(){}
 void Parser::printLabels(){
     ////cout<<endl<<"LABEL MAPPING"<<endl;
     map<string,int>::iterator it;

@@ -16,6 +16,7 @@
 #include <list>
 #include <vector>
 #include <iterator>
+#include <cstring>
 
 /*
 
@@ -42,7 +43,7 @@ using namespace std;
 
 class Program: public System{
 public:
-	// Parser parser;
+	Parser parser;
 	vector <Instruction *> code;
 	list <Instruction *> currInstructions;
 	Program(string filename);

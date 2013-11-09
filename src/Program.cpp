@@ -2,21 +2,22 @@
  // : parser(filename)
 
 
-Program::Program(string filename){
-	code.assign(0, new Instruction());
+Program::Program(string filename) {
+	// code.assign(0, new Instruction());
+	// Parser parser(filename, code);
 	// parser.parse(code);
-	Add * i1 = new Add(1,2,3,0);
-	Mult * i2 = new Mult(1,2,1,0);
-	Beq * i3 = new Beq(1,2,0,0);
-	Add * i4 = new Add(1,2,3,0);
-	Mult * i5 = new Mult(1,2,1,0);
-	Mult * i6 = new Mult(1,2,3,0);
-	code.push_back(i1);
-	code.push_back(i2);
-	code.push_back(i3);
-	code.push_back(i4);
-	code.push_back(i5);
-	code.push_back(i6);
+	// Add * i1 = new Add(1,2,3,0);
+	// Add * i2 = new Add(1,2,3,0);
+	// Beq * i3 = new Beq(4,4,0,0);
+	// Add * i4 = new Add(1,2,3,0);
+	// Add * i5 = new Add(1,2,3,0);
+	// Add * i6 = new Add(1,2,3,0);
+	// code.push_back(i1);
+	// code.push_back(i2);
+	// code.push_back(i3);
+	// code.push_back(i4);
+	// code.push_back(i5);
+	// code.push_back(i6);
 	/*Mult * i1 = new Mult(1,2,3,0);
 	Mult * i2 = new Mult(1,2,3,0);
 	Add * i3 = new Add(1,2,1,0);
@@ -31,6 +32,10 @@ Program::Program(string filename){
 	code.push_back(i5);
 	code.push_back(i6);
 	code.push_back(i7);*/
+	code = parser.getVector(filename);
+	// cout << &code << endl;
+	// cout << "HERE1" <<endl;
+	// cout << code.size() << endl;
 
 	sepInstructions.assign(11, vector<Instruction*>(0, new Instruction()));
 }

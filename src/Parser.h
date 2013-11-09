@@ -41,6 +41,8 @@ private:
 	//vector< vector<int> > wordTable;
 public:
 	Parser(string fileName , vector<Instruction *> & code);
+	vector<Instruction *> getVector(string fileName);
+	Parser();
 	void printLabels();
 	void parseLine(string str);
 	void makeInstruction();
