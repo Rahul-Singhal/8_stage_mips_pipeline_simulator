@@ -1,19 +1,19 @@
-#ifndef ADD_H
-#define ADD_H
+#ifndef SRLV_H
+#define SRLV_H
 
 #include "Instruction.h"
 
-class Add: public Instruction{
+class Srlv: public Instruction{
 public:
 	int rdIndex;
 	int rsIndex;
 	int rtIndex;
 	int sum;
 	int a, b;
-	Add(int rdIndex, int rsIndex, int rtIndex, int id);
-	Add(Add &a);
-	Add(const Add &i);
-	Add * clone();
+	Srlv(int rdIndex, int rsIndex, int rtIndex, int id);
+	Srlv(Srlv &a);
+	Srlv(const Srlv &i);
+	Srlv * clone();
 	bool execute(int pc);
 	void unstall();
 };

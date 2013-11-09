@@ -1,17 +1,17 @@
-#include "Add.h"
+#include "Srav.h"
 
-Add::Add(int rdIndex, int rsIndex, int rtIndex, int id){
+Srav::Srav(int rdIndex, int rsIndex, int rtIndex, int id){
 	this->rdIndex = rdIndex;
 	this->rsIndex = rsIndex;
 	this->rtIndex = rtIndex;
 	this->id = id;
 }
 
-Add* Add::clone(){
-	return new Add (*this);
+Srav* Srav::clone(){
+	return new Srav (*this);
 }
 
-Add::Add(const Add &i){
+Srav::Srav(const Srav &i){
 	this->stageToExecute = i.stageToExecute;
 	this->presentStage = i.presentStage;
 	this->stalled = i.stalled;
@@ -31,7 +31,7 @@ Add::Add(const Add &i){
 }
 
 
-Add::Add(Add &i){
+Srav::Srav(Srav &i){
 	this->stageToExecute = i.stageToExecute;
 	this->presentStage = i.presentStage;
 	this->stalled = i.stalled;
@@ -50,7 +50,7 @@ Add::Add(Add &i){
 	this->b = i.b;
 }
 
-void Add::unstall(){
+void Srav::unstall(){
 	registers[rdIndex].unstall(id);	
 }
 
@@ -61,8 +61,8 @@ void Add::unstall(){
 // If an instruction does not execute because the stage is not free or because registers are being written, then we 
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
-bool Add::execute(int pc){
-	// ////cout<<"###ADD####"<<endl;
+bool Srav::execute(int pc){
+	// ////cout<<"###Srav####"<<endl;
 	// ////cout<<"MAIN CALL HUWA"<<endl;
 	// Default Values:
 	forwarded = false;
@@ -219,7 +219,7 @@ bool Add::execute(int pc){
 						stalled = true;
 						stallingRegister = rsIndex;
 						stallingInstructionId = registers[rsIndex].instructionId;
-						//cout << "add ID stalls due to rs -->"<<endl;
+						//cout << "Srav ID stalls due to rs -->"<<endl;
 						return false;
 					}
 					else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=10){

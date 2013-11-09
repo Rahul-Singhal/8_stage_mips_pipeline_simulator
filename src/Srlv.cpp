@@ -1,17 +1,17 @@
-#include "Add.h"
+#include "Srlv.h"
 
-Add::Add(int rdIndex, int rsIndex, int rtIndex, int id){
+Srlv::Srlv(int rdIndex, int rsIndex, int rtIndex, int id){
 	this->rdIndex = rdIndex;
 	this->rsIndex = rsIndex;
 	this->rtIndex = rtIndex;
 	this->id = id;
 }
 
-Add* Add::clone(){
-	return new Add (*this);
+Srlv* Srlv::clone(){
+	return new Srlv (*this);
 }
 
-Add::Add(const Add &i){
+Srlv::Srlv(const Srlv &i){
 	this->stageToExecute = i.stageToExecute;
 	this->presentStage = i.presentStage;
 	this->stalled = i.stalled;
@@ -31,7 +31,7 @@ Add::Add(const Add &i){
 }
 
 
-Add::Add(Add &i){
+Srlv::Srlv(Srlv &i){
 	this->stageToExecute = i.stageToExecute;
 	this->presentStage = i.presentStage;
 	this->stalled = i.stalled;
@@ -50,7 +50,7 @@ Add::Add(Add &i){
 	this->b = i.b;
 }
 
-void Add::unstall(){
+void Srlv::unstall(){
 	registers[rdIndex].unstall(id);	
 }
 
@@ -61,8 +61,8 @@ void Add::unstall(){
 // If an instruction does not execute because the stage is not free or because registers are being written, then we 
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
-bool Add::execute(int pc){
-	// ////cout<<"###ADD####"<<endl;
+bool Srlv::execute(int pc){
+	// ////cout<<"###Srlv####"<<endl;
 	// ////cout<<"MAIN CALL HUWA"<<endl;
 	// Default Values:
 	forwarded = false;
@@ -219,7 +219,7 @@ bool Add::execute(int pc){
 						stalled = true;
 						stallingRegister = rsIndex;
 						stallingInstructionId = registers[rsIndex].instructionId;
-						//cout << "add ID stalls due to rs -->"<<endl;
+						//cout << "Srlv ID stalls due to rs -->"<<endl;
 						return false;
 					}
 					else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=10){
@@ -259,7 +259,7 @@ bool Add::execute(int pc){
 			// EX Stage
 			// registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
-				sum = a+b;
+				sum = a>>b;
 				if(forwardingEnabled)
 					registers[rdIndex].unstallRegister(sum, id); // TODO : Will it ever return false?
 				stages[presentStage].setFree();
