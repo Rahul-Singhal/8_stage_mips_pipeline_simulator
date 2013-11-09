@@ -1,21 +1,21 @@
-#ifndef ADD_H
-#define ADD_H
+#ifndef SRL_H
+#define SRL_H
 
 #include "Instruction.h"
 
-class Add: public Instruction{
+class Srl: public Instruction{
 public:
-	int rdIndex;
-	int rsIndex;
-	int rtIndex;
-	int sum;
-	int a, b;
-	Add(int rdIndex, int rsIndex, int rtIndex, int id);
-	Add(Add &a);
-	Add(const Add &i);
-	Add * clone();
-	bool execute(int pc);
-	void unstall();
+  int rdIndex;
+  int rsIndex;
+  int shamt;
+  int sum;
+  int a, b;
+  Srl(int rdIndex, int rsIndex, int shamt, int id);
+  Srl(Srl &a);
+  Srl(const Srl &i);
+  Srl * clone();
+  bool execute(int pc);
+  void unstall();
 };
 
 #endif
