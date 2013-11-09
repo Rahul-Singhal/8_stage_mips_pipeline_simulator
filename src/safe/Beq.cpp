@@ -7,48 +7,8 @@ Beq::Beq(int rsIndex, int rtIndex, int destPc, int id){
 	this->id = id;
 }
 
-Beq::Beq(const Beq &i){
-	this->stageToExecute = i.stageToExecute;
-	this->presentStage = i.presentStage;
-	this->stalled = i.stalled;
-	this->stallingInstructionId = i.stallingInstructionId;
-	this->stallingRegister = i.stallingRegister;
-	this->forwarded =i.forwarded;
-	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
-	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
-	this->display = i.display;
-	this->id = i.id;
-	this->rtIndex = i.rtIndex;
-	this->rsIndex = i.rsIndex;
-	this->destPc = i.destPc;
-	this->a = i.a;
-	this->b = i.b;
-}
-
-Beq::Beq(Beq &i){
-	this->stageToExecute = i.stageToExecute;
-	this->presentStage = i.presentStage;
-	this->stalled = i.stalled;
-	this->stallingInstructionId = i.stallingInstructionId;
-	this->stallingRegister = i.stallingRegister;
-	this->forwarded =i.forwarded;
-	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
-	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
-	this->display = i.display;
-	this->id = i.id;
-	this->rtIndex = i.rtIndex;
-	this->rsIndex = i.rsIndex;
-	this->destPc = i.destPc;
-	this->a = i.a;
-	this->b = i.b;
-}
-
-void Beq::unstall(int instructionId){
+void Beq::unstall(){
  	return;
-}
-
-Beq * Beq::clone(){
-	return new Beq(*this);
 }
 
 // depending on the return value of this bool, the program manager will put the appropriate stage of this instruction
@@ -123,12 +83,12 @@ bool Beq::execute(int pc){
 			// ID Stage
 			// Assuming no forwarding and that the registers to be read must be free as of now.
 
+			stages[presentStage].setFree();
+			presentStage = stageToExecute;
+			stages[presentStage].setInstruction(id);
 			if(stages[stageToExecute].isFree()){
-					/*if (forwardingEnabled) {*/
+				/*if (forwardingEnabled) {*/
 
-					stages[presentStage].setFree();
-					presentStage = stageToExecute;
-					stages[presentStage].setInstruction(id);
 						// either values are forwarded, or normally stored
 					if (!registers[rsIndex].isValid()){
 							// forwarded value
@@ -160,10 +120,8 @@ bool Beq::execute(int pc){
 						stageToExecute++;
 						stalled = false;
 						if(fastBranching){
-							cout<<a<<"::::::::::::::::::"<<b<<endl;
-							if(a==b){
-								programCounter = destPc-1;
-							}
+							if(a==b)
+								pc = destPc-1;
 						}
 						////cout << "id completed -->";
 
@@ -276,7 +234,6 @@ bool Beq::execute(int pc){
 				// }	
 			}
 			else {
-				cout<<"Yes its coming here"<<endl;
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
@@ -291,9 +248,8 @@ bool Beq::execute(int pc){
 						// registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
 				if(!fastBranching){
-					cout<<a<<"::::::::::::::::::"<<b<<endl;
 					if(a==b)
-						programCounter = destPc-1;
+						pc = destPc-1;
 				}
 				/*No rdIndex to write*/
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?

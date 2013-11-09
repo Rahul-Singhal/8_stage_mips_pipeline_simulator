@@ -9,8 +9,8 @@
 #include "Parser.h"
 #include "System.h"
 #include "Add.h"
-#include "Addi.h"
-#include "Sub.h"
+// #include "Addi.h"
+// #include "Sub.h"
 #include "Mult.h"
 #include "Instruction.h"
 #include <list>

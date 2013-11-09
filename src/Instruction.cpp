@@ -2,7 +2,7 @@
 using namespace std;
 
 Instruction::Instruction(){
-	//cout<<"Instruction"<<endl;
+	////cout<<"Instruction"<<endl;
 	stageToExecute = 1;
 	presentStage = 0;
 	stalled = false;
@@ -13,6 +13,32 @@ Instruction::Instruction(){
 	forwardedFromInstructionStage = 0;
 	display = "default";
 	id = 0;
+}
+
+Instruction::Instruction(const Instruction &i){
+	this->stageToExecute = i.stageToExecute;
+	this->presentStage = i.presentStage;
+	this->stalled = i.stalled;
+	this->stallingInstructionId = i.stallingInstructionId;
+	this->stallingRegister = i.stallingRegister;
+	this->forwarded =i.forwarded;
+	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
+	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
+	this->display = i.display;
+	this->id = i.id;
+}
+
+Instruction::Instruction(Instruction &i){
+	this->stageToExecute = i.stageToExecute;
+	this->presentStage = i.presentStage;
+	this->stalled = i.stalled;
+	this->stallingInstructionId = i.stallingInstructionId;
+	this->stallingRegister = i.stallingRegister;
+	this->forwarded =i.forwarded;
+	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
+	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
+	this->display = i.display;
+	this->id = i.id;
 }
 
 Instruction::Instruction(int s2ex, int ps, bool stall, int stallInstId, int stallReg, bool forw, int forwfromInstId, int forwStage, string disp, int i){
@@ -28,6 +54,7 @@ Instruction::Instruction(int s2ex, int ps, bool stall, int stallInstId, int stal
 	id = i;
 }
 
+
 void Instruction::init(){
   stageToExecute = 1;
   presentStage = 0;
@@ -35,13 +62,17 @@ void Instruction::init(){
   display = "";
 }
 
+Instruction* Instruction::clone(){
+	return new Instruction (*this);
+}
+
 bool Instruction::execute(int pc){
-  //cout<<"FUCKED"<<endl;
+  ////cout<<"FUCKED"<<endl;
   return false;
 }
 
 void Instruction::unstall(){
-	//cout<<"FUCKED AGAIN"<<endl;
+	////cout<<"FUCKED AGAIN"<<endl;
 	return;
 }
 

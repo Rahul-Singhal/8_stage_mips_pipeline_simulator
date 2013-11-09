@@ -13,11 +13,8 @@ private:
 	int a, b;
 public:
 	Beq(int rsIndex, int rtIndex, int destPc, int id);
-	Beq(Beq &b);
-	Beq(const Beq &i);
 	bool execute(int pc);
-	void unstall(int instructionId);
-	Beq * clone();
+	void unstall();
 };
 
 #endif

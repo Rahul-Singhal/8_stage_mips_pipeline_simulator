@@ -21,7 +21,7 @@ void Li::unstall(){
 /*In case of Li forwarding will be from EX to ID as no MEM access is required*/
 
 bool Li::execute(int pc){
-	// //cout<<"LI"<<endl;
+	// ////cout<<"LI"<<endl;
 	// Default Values:
 	forwarded = false;
 	stalled = false;
@@ -38,7 +38,7 @@ bool Li::execute(int pc){
 				stageToExecute++;
 				stalled = false;
 				display = "IF1";
-				//cout << "if1 -->" ;
+				////cout << "if1 -->" ;
 				return true;
 			}
 			else{
@@ -46,7 +46,7 @@ bool Li::execute(int pc){
 				stalled = true;
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				display = "Waiting for IF1 to be free!";
-				//cout << "if1 - wait -->" ;
+				////cout << "if1 - wait -->" ;
 				return false;
 			}
 		}
@@ -60,7 +60,7 @@ bool Li::execute(int pc){
 				stageToExecute++;
 				stalled = false;
 				display = "IF2";
-				//cout << "if2 -->" ;
+				////cout << "if2 -->" ;
 				return true;
 			}
 			else {
@@ -68,7 +68,7 @@ bool Li::execute(int pc){
 				stalled = true;
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				display = "Waiting for IF2 to be free!";
-				//cout << "if2 - wait -->" ;
+				////cout << "if2 - wait -->" ;
 				return false;
 			}
 		}
@@ -84,7 +84,7 @@ bool Li::execute(int pc){
 				stageToExecute++;
 				stalled = false;
 				display = "ID";
-				//cout << "id -->" ;
+				////cout << "id -->" ;
 				return true;
 			}
 			else {
@@ -92,7 +92,7 @@ bool Li::execute(int pc){
 				stalled = true;
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				display = "Waiting for id to be free!";
-				//cout << "id - wait -->" ;
+				////cout << "id - wait -->" ;
 				return false;
 			}
 		}
@@ -108,14 +108,14 @@ bool Li::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				/*Stage to execute will be MEM1 which is stage 7*/
           		stageToExecute+=3;
-				//cout << "EX stage done -->" ;
+				////cout << "EX stage done -->" ;
 				return true;
 			}
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				//cout << "EX stage not free -->";
+				////cout << "EX stage not free -->";
 
 				return false;
 			}
@@ -129,14 +129,14 @@ bool Li::execute(int pc){
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
-				//cout << "MEM1 stage done -->" ;
+				////cout << "MEM1 stage done -->" ;
 				return true;
 			}
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				//cout << "MEM1 stage not free -->";
+				////cout << "MEM1 stage not free -->";
 
 				return false;
 			}
@@ -149,14 +149,14 @@ bool Li::execute(int pc){
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
-				//cout << "MEM2 stage done -->" ;
+				////cout << "MEM2 stage done -->" ;
 				return true;
 			}
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				//cout << "MEM2 stage not free -->";
+				////cout << "MEM2 stage not free -->";
 
 				return false;
 			}
@@ -169,14 +169,14 @@ bool Li::execute(int pc){
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
-				//cout << "MEM3 stage done -->" ;
+				////cout << "MEM3 stage done -->" ;
 				return true;
 			}
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				//cout << "MEM3 stage not free -->";
+				////cout << "MEM3 stage not free -->";
 
 				return false;
 
@@ -191,7 +191,7 @@ bool Li::execute(int pc){
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);
 					stageToExecute=-1;
-					//cout << "WB completed -->";
+					////cout << "WB completed -->";
 
 						// Instruction completed, so stage number is now invalid.
 					return true;
@@ -201,7 +201,7 @@ bool Li::execute(int pc){
 					stages[presentStage].setInstruction(id);
 					stallingRegister = rdIndex;
 					stallingInstructionId = registers[rdIndex].instructionId;
-					//cout << "Register not writable -->";
+					////cout << "Register not writable -->";
 
 					return false;
 				}
@@ -210,7 +210,7 @@ bool Li::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
-				//cout << "WB not free ->";
+				////cout << "WB not free ->";
 
 				return false;
 			}

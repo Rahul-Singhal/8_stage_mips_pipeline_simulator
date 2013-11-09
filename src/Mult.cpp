@@ -9,12 +9,51 @@ Mult::Mult(int rdIndex, int rsIndex, int rtIndex, int id){
 }
 
 Mult::Mult(int rdIndex, int rsIndex, int id){
-  
+
+}
+
+Mult::Mult(const Mult &i){
+  this->stageToExecute = i.stageToExecute;
+  this->presentStage = i.presentStage;
+  this->stalled = i.stalled;
+  this->stallingInstructionId = i.stallingInstructionId;
+  this->stallingRegister = i.stallingRegister;
+  this->forwarded =i.forwarded;
+  this->forwardedFromInstructionId = i.forwardedFromInstructionId;
+  this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
+  this->display = i.display;
+  this->id = i.id;
+  this->rdIndex = i.rdIndex;
+  this->rsIndex = i.rsIndex;
+  this->rtIndex = i.rtIndex;
+  this->product = i.product;
+  this->a = i.a;
+  this->b = i.b;
+  this->presentSubStage = i.presentSubStage;
+}
+
+Mult::Mult(Mult &i){
+  this->stageToExecute = i.stageToExecute;
+  this->presentStage = i.presentStage;
+  this->stalled = i.stalled;
+  this->stallingInstructionId = i.stallingInstructionId;
+  this->stallingRegister = i.stallingRegister;
+  this->forwarded =i.forwarded;
+  this->forwardedFromInstructionId = i.forwardedFromInstructionId;
+  this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
+  this->display = i.display;
+  this->id = i.id;
+  this->rdIndex = i.rdIndex;
+  this->rsIndex = i.rsIndex;
+  this->rtIndex = i.rtIndex;
+  this->product = i.product;
+  this->a = i.a;
+  this->b = i.b;
+  this->presentSubStage = i.presentSubStage;
 }
 
 void Mult::unstall(){
-  if(!registers[rdIndex].valid && registers[rdIndex].instructionId==id)
-    registers[rdIndex].unstall();
+  registers[rdIndex].unstall(id); 
 }
 
 // depending on the return value of this bool, the program manager will put the appropriate stage of this instruction
@@ -25,8 +64,8 @@ void Mult::unstall(){
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
 bool Mult::execute(int pc){
-  // //cout<<"MULT"<<endl;
-  // //cout<<"MAIN CALL HUWA"<<endl;
+  // ////cout<<"MULT"<<endl;
+  // ////cout<<"MAIN CALL HUWA"<<endl;
   // Default Values:
   forwarded = false;
   stalled = false;
@@ -44,7 +83,7 @@ bool Mult::execute(int pc){
         stageToExecute++;
         stalled = false;
         display = "IF1";
-        //cout << "if1 -->" ;
+        ////cout << "if1 -->" ;
         return true;
       }
       else{
@@ -52,7 +91,7 @@ bool Mult::execute(int pc){
         stalled = true;
         stallingInstructionId = stages[stageToExecute].instructionId;
         display = "Waiting for IF1 to be free!";
-        //cout << "if1 - wait -->" ;
+        ////cout << "if1 - wait -->" ;
         return false;
       }
     }
@@ -66,7 +105,7 @@ bool Mult::execute(int pc){
         stageToExecute++;
         stalled = false;
         display = "IF2";
-        //cout << "if2 -->" ;
+        ////cout << "if2 -->" ;
         return true;
       }
       else {
@@ -74,7 +113,7 @@ bool Mult::execute(int pc){
         stalled = true;
         stallingInstructionId = stages[stageToExecute].instructionId;
         display = "Waiting for IF2 to be free!";
-        //cout << "if2 - wait -->" ;
+        ////cout << "if2 - wait -->" ;
         return false;
       }
     }
@@ -83,31 +122,46 @@ bool Mult::execute(int pc){
       // ID Stage
       // Assuming no forwarding and that the registers to be read must be free as of now.
       if(stages[stageToExecute].isFree()){
-        if (forwardingEnabled) {
-
+        /*if (forwardingEnabled) {*/
+        stages[presentStage].setFree();
+        presentStage = stageToExecute;
+        stages[presentStage].setInstruction(id);
             // either values are forwarded, or normally stored
-          if (!registers[rsIndex].valid){
+        if (!registers[rsIndex].isValid()){
               // forwarded value
-            stages[presentStage].setInstruction(id);
-            stalled = true;
-            stallingRegister = rsIndex;
-            stallingInstructionId = registers[rsIndex].instructionId;
-            //cout << "rs register not readable -->";
+          // stages[presentStage].setInstruction(id);
+          stalled = true;
+          stallingRegister = rsIndex;
+            // stallingInstructionId = registers[rsIndex].instructionId;
+            ////cout << "rs register not readable -->";
 
-            return false;
-          }
-          else if (!registers[rtIndex].valid){
+          return false;
+        }
+        else if (!registers[rtIndex].isValid()){
               // when rtIndex is not available without forwarding
-            stages[presentStage].setInstruction(id);
-            stalled = true;
-            stallingRegister = rtIndex;
-            stallingInstructionId = registers[rtIndex].instructionId;    
-            //cout << "rt register not readable -->";
+          // stages[presentStage].setInstruction(id);
+          stalled = true;
+          stallingRegister = rtIndex;
+            // stallingInstructionId = registers[rtIndex].instructionId;    
+            ////cout << "rt register not readable -->";
 
-            return false;
-          }
+          return false;
+        }
 
-          else if (  registers[rsIndex].instructionStage==10 && registers[rtIndex].instructionStage==10) {
+        else
+        {
+          registers[rdIndex].stallRegister(id); 
+          a = registers[rsIndex].value;
+          b = registers[rtIndex].value;
+            // stages[presentStage].setFree();
+            // presentStage = stageToExecute;
+            // stages[presentStage].setInstruction(id);
+          stageToExecute += 2;
+          stalled = false;
+            ////cout << "id completed -->";
+
+          return true;
+          } /*if (  registers[rsIndex].instructionStage==10 && registers[rtIndex].instructionStage==10) {
               // this is the most normal case, when all values are simply avaiable not forwarded.
             registers[rdIndex].stallRegister(id); 
             a = registers[rsIndex].value;
@@ -115,10 +169,9 @@ bool Mult::execute(int pc){
             stages[presentStage].setFree();
             presentStage = stageToExecute;
             stages[presentStage].setInstruction(id);
-            /*Next stage would be mult which is stage 5*/
             stageToExecute += 2;
             stalled = false;
-            //cout << "id completed -->";
+            ////cout << "id completed -->";
 
             return true;
           }
@@ -133,10 +186,9 @@ bool Mult::execute(int pc){
             stages[presentStage].setFree();
             presentStage = stageToExecute;
             stages[presentStage].setInstruction(id);
-            /*Next stage would be mult which is stage 5*/
             stageToExecute += 2;
             stalled = false;
-            //cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+            ////cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
             return true;
           }
@@ -150,15 +202,14 @@ bool Mult::execute(int pc){
             stages[presentStage].setFree();
             presentStage = stageToExecute;
             stages[presentStage].setInstruction(id);
-            /*Next stage would be mult which is stage 5*/
             stageToExecute += 2;
             stalled = false;
-            //cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+            ////cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
             return true;
-          }
+          }*/
 
-        }
+        /*}
         else {
           // forwarding disabled
 
@@ -169,7 +220,7 @@ bool Mult::execute(int pc){
             stalled = true;
             stallingRegister = rsIndex;
             stallingInstructionId = registers[rsIndex].instructionId;
-            //cout << "mult ID stalls due to rs -->";
+            ////cout << "mult ID stalls due to rs -->";
             return false;
           }
           else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=10){
@@ -178,7 +229,7 @@ bool Mult::execute(int pc){
             stalled = true;
             stallingRegister = rtIndex;
             stallingInstructionId = registers[rtIndex].instructionId;
-            //cout << "ID stalls due to rt -->"; 
+            ////cout << "ID stalls due to rt -->"; 
             return false;
           }
           else {
@@ -189,125 +240,136 @@ bool Mult::execute(int pc){
             stages[presentStage].setFree();
             presentStage = stageToExecute;
             stages[presentStage].setInstruction(id);
-            /*Next stage would be mult which is stage 5*/
             stageToExecute += 2;
             stalled = false;
-            //cout << "no stall ID -->" ;
+            ////cout << "no stall ID -->" ;
             return true;
           }
-        } 
-      }
-      else {
-        stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
-        stalled = true;
-        //cout << "ID not free -->" ;
-        return false;
-      }
-    }
-    case 5:
-    {
-      // Mult Stage
-      registers[rdIndex].stallRegister(id);
-      if(stages[stageToExecute].isFree()){
-        product = a*b;
-        stages[presentStage].setFree();
-        presentStage = stageToExecute;
-        stages[presentStage].setInstruction(id);
-        presentSubStage++;
-        if (presentSubStage == multSubStages){
-          /*Next stage is MEM1 which is stage 7*/
-          registers[rdIndex].write(product,id,stageToExecute); // TODO : Will it ever return false?
-          stageToExecute += 2;
-          //cout << "MULT stage done -->" ;
+        } */
         }
         else {
-          //cout << "MULT substage = " << presentSubStage  << "-->"; 
+          stages[presentStage].setInstruction(id);
+          stallingInstructionId = stages[stageToExecute].instructionId;
+          stalled = true;
+        ////cout << "ID not free -->" ;
+          return false;
         }
-        return true;
       }
-      else{
-        stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
-        stalled = true;
-        //cout << "MULT stage not free -->";
+      case 5:
+      {
+      // Mult Stage
+      // registers[rdIndex].stallRegister(id);
+        if(stages[stageToExecute].isFree()){
+          product = a*b;
+          stages[presentStage].setFree();
+          presentStage = stageToExecute;
+          stages[presentStage].setInstruction(id);
+          presentSubStage++;
+          if (presentSubStage == multSubStages){
+          /*Next stage is MEM1 which is stage 7*/
+          // registers[rdIndex].write(product,id,stageToExecute); // TODO : Will it ever return false?
+            if(forwardingEnabled)
+              registers[rdIndex].unstallRegister(product, id);
+            stageToExecute += 2;
+          ////cout << "MULT stage done -->" ;
+          }
+          else {
+          ////cout << "MULT substage = " << presentSubStage  << "-->"; 
+          }
+          return true;
+        }
+        else{
+          stages[presentStage].setInstruction(id);
+          stallingInstructionId = stages[stageToExecute].instructionId;
+          stalled = true;
+        ////cout << "MULT stage not free -->";
 
-        return false;
+          return false;
+        }
       }
-    }
-    case 7:
-    {
+      case 7:
+      {
       // MEM 1 Stage
       //registers[rdIndex].stallRegister(id)();
-      if(stages[stageToExecute].isFree()){
-        stages[presentStage].setFree();
-        presentStage = stageToExecute;
-        stages[presentStage].setInstruction(id);
-        stageToExecute++;
-        //cout << "MEM1 stage done -->" ;
-        return true;
-      }
-      else{
-        stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
-        stalled = true;
-        //cout << "MEM1 stage not free -->";
+        if(stages[stageToExecute].isFree()){
+          stages[presentStage].setFree();
+          presentStage = stageToExecute;
+          stages[presentStage].setInstruction(id);
+          stageToExecute++;
+        ////cout << "MEM1 stage done -->" ;
+          return true;
+        }
+        else{
+          stages[presentStage].setInstruction(id);
+          stallingInstructionId = stages[stageToExecute].instructionId;
+          stalled = true;
+        ////cout << "MEM1 stage not free -->";
 
-        return false;
+          return false;
+        }
       }
-    }
-    case 8:
-    {
+      case 8:
+      {
       // MEM 2 Stage
-      if(stages[stageToExecute].isFree()){
-        stages[presentStage].setFree();
-        presentStage = stageToExecute;
-        stages[presentStage].setInstruction(id);
-        stageToExecute++;
-        //cout << "MEM2 stage done -->" ;
-        return true;
-      }
-      else{
-        stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
-        stalled = true;
-        //cout << "MEM2 stage not free -->";
+        if(stages[stageToExecute].isFree()){
+          stages[presentStage].setFree();
+          presentStage = stageToExecute;
+          stages[presentStage].setInstruction(id);
+          stageToExecute++;
+        ////cout << "MEM2 stage done -->" ;
+          return true;
+        }
+        else{
+          stages[presentStage].setInstruction(id);
+          stallingInstructionId = stages[stageToExecute].instructionId;
+          stalled = true;
+        ////cout << "MEM2 stage not free -->";
 
-        return false;
+          return false;
+        }
       }
-    }
-    case 9:
-    {
+      case 9:
+      {
       // MEM 3 Stage
-      if(stages[stageToExecute].isFree()){
+        if(stages[stageToExecute].isFree()){
+          stages[presentStage].setFree();
+          presentStage = stageToExecute;
+          stages[presentStage].setInstruction(id);
+          stageToExecute++;
+        ////cout << "MEM3 stage done -->" ;
+          return true;
+        }
+        else{
+          stages[presentStage].setInstruction(id);
+          stallingInstructionId = stages[stageToExecute].instructionId;
+          stalled = true;
+        ////cout << "MEM3 stage not free -->";
+
+          return false;
+
+        }
+      }
+      case 10:
+      {
+      // WB Stage
+        if(stages[stageToExecute].isFree()){
+         if(!forwardingEnabled)
+          registers[rdIndex].unstallRegister(product, id);
         stages[presentStage].setFree();
         presentStage = stageToExecute;
         stages[presentStage].setInstruction(id);
-        stageToExecute++;
-        //cout << "MEM3 stage done -->" ;
+        stageToExecute=-1;
+          ////cout << "WB completed -->";
+
+            // Instruction completed, so stage number is now invalid.
         return true;
-      }
-      else{
-        stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
-        stalled = true;
-        //cout << "MEM3 stage not free -->";
-
-        return false;
-
-      }
-    }
-    case 10:
-    {
-      // WB Stage
-      if(stages[stageToExecute].isFree()){
-        if (registers[rdIndex].write(product,id,stageToExecute)){
-          //cout<<"write true aaya "<<endl;
+        /*if (registers[rdIndex].write(product,id,stageToExecute)){
+          ////cout<<"write true aaya "<<endl;
           stages[presentStage].setFree();
           presentStage = stageToExecute;
           stages[presentStage].setInstruction(id);
           stageToExecute=-1;
-          //cout << "WB completed -->";
+          ////cout << "WB completed -->";
 
             // Instruction completed, so stage number is now invalid.
           return true;
@@ -317,20 +379,20 @@ bool Mult::execute(int pc){
           stages[presentStage].setInstruction(id);
           stallingRegister = rdIndex;
           stallingInstructionId = registers[rdIndex].instructionId;
-          //cout << "Register not writable -->";
+          ////cout << "Register not writable -->";
+
+          return false;
+        }*/
+        }
+        else{
+          stages[presentStage].setInstruction(id);
+          stallingInstructionId = stages[stageToExecute].instructionId;
+          stalled = true;
+        ////cout << "WB not free ->";
 
           return false;
         }
       }
-      else{
-        stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
-        stalled = true;
-        //cout << "WB not free ->";
-
-        return false;
-      }
     }
+    return false;
   }
-  return false;
-}

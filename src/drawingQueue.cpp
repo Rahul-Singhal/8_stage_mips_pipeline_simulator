@@ -90,7 +90,7 @@ void DrawingQueue::drawSideBar(float scrollX){
  
 
 DrawingQueue::DrawingQueue(){
-	// //cout<<"IT COMES HERE"<<endl;
+	// ////cout<<"IT COMES HERE"<<endl;
 	instHeight = 20;
 	instWidth = 50;
 	maxIdDrawn = 2;
@@ -205,7 +205,7 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	//draw the instruction corresponding to ith column and jth row in 
 	string str = inst.getDisplayString();
 	int prStage = inst.getPresentStage();
-	//cout<<"YONESS"<<inst.getId()<<"YONESS"<<endl;
+	////cout<<"YONESS"<<inst.getId()<<"YONESS"<<endl;
 	if(prStage == 0) return;
 	double * colors = stageColorMap[prStage];
 	// if(inst.getPresentStage() == 1){

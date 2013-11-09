@@ -11,12 +11,12 @@
 #include "memory.h"
 #include "System.h"
 #include "Add.h"
-#include "Addi.h"
-#include "Sub.h"
+// #include "Addi.h"
+// #include "Sub.h"
 #include "Mult.h"
-#include "Li.h"
+// #include "Li.h"
 #include "Beq.h"
-#include "Sw.h"
+// #include "Sw.h"
 #include "Lw.h"
 using namespace std;
 

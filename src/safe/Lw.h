@@ -22,11 +22,9 @@ private:
 public:
 	Lw(int rsIndex, int rtIndex, int signExtImm, int id);
 	Lw(int rsIndex, string address, int signExtImm, int id);
-	Lw(const Lw &i);
 	bool execute(int pc);
-	void unstall(int instructionId);
-	Lw * clone();
-	Lw(Lw &l);
+	void unstall();
+
 };
 
 #endif

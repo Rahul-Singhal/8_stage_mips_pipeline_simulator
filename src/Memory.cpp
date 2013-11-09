@@ -7,13 +7,13 @@ Memory::Memory(){
 }
 
 void Memory::storeWord(int address, int word){
-  // //cout << strlen(store) << endl;
+  // ////cout << strlen(store) << endl;
   if (address+4 < store.size()){
     store[address+3] = word & 0xFF;
     store[address+2] = word & 0xFF00;
     store[address+1] = word & 0xFF0000;
     store[address] = word & 0xFF000000;
-    // //cout << (int)store[address+3] << endl;
+    // ////cout << (int)store[address+3] << endl;
   }
   else {
     store.resize(store.size()*2);
@@ -32,7 +32,7 @@ int Memory::loadWord(int address){
     return Int32;
   }
   else {
-    //cout << "word Out of Memory Bounds!" << endl; 
+    ////cout << "word Out of Memory Bounds!" << endl; 
     return 0;    
   }
 }
@@ -52,7 +52,7 @@ char Memory::loadByte(int address){
     return store[address];
   }
   else {
-    //cout << "byte Out of Memory Bounds!" << endl; 
+    ////cout << "byte Out of Memory Bounds!" << endl; 
     return (char)0;
   }
 }
@@ -161,7 +161,7 @@ string Memory::getString(int address){
       k++;
     }
     string str(store.begin()+address, store.begin()+k);
-    //cout << strlen(str.c_str()) << endl;
+    ////cout << strlen(str.c_str()) << endl;
     return str;
   }
   else return "";

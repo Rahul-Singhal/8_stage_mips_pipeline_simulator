@@ -11,6 +11,9 @@ public:
 	int sum;
 	int a, b;
 	Add(int rdIndex, int rsIndex, int rtIndex, int id);
+	Add(Add &a);
+	Add(const Add &i);
+	Add * clone();
 	bool execute(int pc);
 	void unstall();
 };
