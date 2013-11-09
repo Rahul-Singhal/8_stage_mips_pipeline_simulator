@@ -1,4 +1,6 @@
-#include <GL/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
 #include <stdlib.h>
 #include "Instruction.h"
 #include <iostream>
@@ -8,7 +10,7 @@ using namespace std;
  
 float scrollX = 0;
 float scrollY = 0;
-Program p("shit");
+Program p("gcd.asm");
 int win_height, win_width;
 
 DrawingQueue dq;
