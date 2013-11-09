@@ -63,6 +63,7 @@ int Memory::loadAddress(string label){
 
 int Memory::storeAscii(string label, string ascii){
   int place = freePointer;
+  cout<<"Label = "<<label<<" ascii = "<<ascii<<endl;
   if (freePointer+strlen(ascii.c_str()) < store.size()){
     int i = 0 ;
     while (i<strlen(ascii.c_str())){

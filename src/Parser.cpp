@@ -578,7 +578,7 @@ void Parser::makeInstruction(){
                 offset = strtok(lword, "( ");
                 address = strtok(NULL, "( )\t");
                 if(convertToNumber(offset) != 2147483644){
-                    // codeVector.push_back(new Lw(reg1,address, convertToNumber(offset),0));
+                    codeVector.push_back(new Lw(reg1,address, convertToNumber(offset),0));
                     //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();

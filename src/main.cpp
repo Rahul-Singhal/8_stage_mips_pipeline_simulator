@@ -1,6 +1,7 @@
-#include <OpenGL/gl.h>
+/*#include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
-#include <GLUT/glut.h>
+#include <GLUT/glut.h>*/
+#include <GL/glut.h>
 #include <stdlib.h>
 #include "Instruction.h"
 #include <iostream>

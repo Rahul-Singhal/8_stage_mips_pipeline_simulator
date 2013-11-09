@@ -3,9 +3,7 @@
 #include <vector>
 #include <string>
 #include "Instruction.h"
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
+#include <GL/glut.h>
 #include <map>
 #include <utility>
 using namespace std;
