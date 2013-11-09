@@ -160,7 +160,7 @@ bool Beq::execute(int pc){
 						stageToExecute++;
 						stalled = false;
 						if(fastBranching){
-							cout<<a<<"::::::::::::::::::"<<b<<endl;
+							// cout<<a<<"::::::::::::::::::"<<b<<endl;
 							if(a==b){
 								programCounter = destPc-1;
 							}
@@ -276,7 +276,7 @@ bool Beq::execute(int pc){
 				// }	
 			}
 			else {
-				cout<<"Yes its coming here"<<endl;
+				// cout<<"Yes its coming here"<<endl;
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
@@ -291,7 +291,7 @@ bool Beq::execute(int pc){
 						// registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
 				if(!fastBranching){
-					cout<<a<<"::::::::::::::::::"<<b<<endl;
+					// cout<<a<<"::::::::::::::::::"<<b<<endl;
 					if(a==b)
 						programCounter = destPc-1;
 				}

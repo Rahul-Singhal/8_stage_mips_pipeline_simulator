@@ -51,6 +51,9 @@ Mult::Mult(Mult &i){
   this->b = i.b;
   this->presentSubStage = i.presentSubStage;
 }
+Mult* Mult::clone(){
+  return new Mult (*this);
+}
 
 void Mult::unstall(){
   registers[rdIndex].unstall(id); 

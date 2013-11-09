@@ -6,11 +6,11 @@ Program::Program(string filename){
 	code.assign(0, new Instruction());
 	// parser.parse(code);
 	Add * i1 = new Add(1,2,3,0);
-	Add * i2 = new Add(1,2,3,0);
-	Beq * i3 = new Beq(4,4,0,0);
+	Mult * i2 = new Mult(1,2,1,0);
+	Beq * i3 = new Beq(1,2,0,0);
 	Add * i4 = new Add(1,2,3,0);
-	Add * i5 = new Add(1,2,3,0);
-	Add * i6 = new Add(1,2,3,0);
+	Mult * i5 = new Mult(1,2,1,0);
+	Mult * i6 = new Mult(1,2,3,0);
 	code.push_back(i1);
 	code.push_back(i2);
 	code.push_back(i3);
@@ -63,12 +63,12 @@ vector <Instruction> Program::execute(){
 	// cout<<currInstructions.size()<<endl;
 	list<Instruction *>::iterator it;
 		//STABLE SORT
-	cout<<"starts with ";
+	// cout<<"starts with ";
 	for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
-		cout<<(*it)->id<<", "<<(*it)->presentStage<<", "<<(*it)->stageToExecute<<" :: ";
+		// cout<<(*it)->id<<", "<<(*it)->presentStage<<", "<<(*it)->stageToExecute<<" :: ";
 		sepInstructions[(*it)->stageToExecute].push_back(*it);
 	}
-	cout<<endl;
+	// cout<<endl;
 		// the whole logic of running one clock cycle comes here
 	prevPc = programCounter;
 	for(int i = 10 ; i >= 1 ; i--){
@@ -131,12 +131,12 @@ vector <Instruction> Program::execute(){
 			it++;
 	}		
 	it = currInstructions.begin();
-	cout<<"ends up with ";
-	while(it != currInstructions.end()){
+	// cout<<"ends up with ";
+	/*while(it != currInstructions.end()){
 		cout<<(*it)->id<<", "<<(*it)->presentStage<<", "<<(*it)->stageToExecute<<" :: ";
 		it++;
 	}
-	cout<<endl;
+	cout<<endl;*/
 	if(stages[0].isFree()){
 		// cout<<"is ke ander aaya "<<endl;
 		programCounter++;

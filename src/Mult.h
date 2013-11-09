@@ -15,6 +15,7 @@ public:
   //implement this and store the result in registers hi and lo
   Mult(int rdIndex, int rsIndex, int id);
   Mult(const Mult &m);
+  Mult * clone();
   Mult(Mult &m);
   bool execute(int pc);
   void unstall();

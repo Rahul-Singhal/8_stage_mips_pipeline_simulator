@@ -53,16 +53,10 @@ bool Register::write(int value, int instructionId, int instructionStage){
 }
 */
 void Register::unstall(int instructionId){
-	list <int>::iterator it;
-	for(it = blockingInstructions.begin() ; it != blockingInstructions.end() ; it++)
-	{
-		if (instructionId == *it)
-		{
-        blockingInstructions.erase(it++);  // alternatively, i = items.erase(i);
-    }
-    else
-    {
-    	++it;
-    }
-}	
+	// instructionId = 10;
+	// cout<<instructionId<<" unstalls "<<id<<". size= "<<blockingInstructions.size()<<endl;
+	// cout<<blockingInstructions.front()<<":"<<blockingInstructions.back()<<endl;
+	blockingInstructions.remove(instructionId);
+	// cout<<"size= "<<blockingInstructions.size()<<endl;
+
 }
