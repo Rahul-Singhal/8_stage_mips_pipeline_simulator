@@ -1,9 +1,9 @@
-#ifndef BEQ_H
-#define BEQ_H
+#ifndef BGT_H
+#define BGT_H
 
 #include "Instruction.h"
 
-class Beq: public Instruction{
+class Bgt: public Instruction{
 private:
 	int rsIndex;
 	int rtIndex;
@@ -12,12 +12,12 @@ private:
 	int destPc;
 	int a, b;
 public:
-	Beq(int rsIndex, int rtIndex, string label, int id);
-	Beq(Beq &b);
-	Beq(const Beq &i);
+	Bgt(int rsIndex, int rtIndex, int destPc, int id);
+	Bgt(Bgt &b);
+	Bgt(const Bgt &i);
 	bool execute(int pc);
 	void unstall(int instructionId);
-	Beq * clone();
+	Bgt * clone();
 };
 
 #endif

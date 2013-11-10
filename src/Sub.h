@@ -3,7 +3,7 @@
 
 #include "Instruction.h"
 
-class SUB: public Instruction{
+class Sub: public Instruction{
 public:
 	int rdIndex;
 	int rsIndex;

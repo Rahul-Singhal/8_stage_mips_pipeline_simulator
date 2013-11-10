@@ -1,19 +1,69 @@
-#include "Lw.h"
+#include "Lb.h"
 
-Lw::Lw(int rsIndex, int rtIndex, int signExtImm, int id){
+Lb::Lb(int rtIndex, int rsIndex, int signExtImm, int id){
 	this->rsIndex = rsIndex;
 	this->rtIndex = rtIndex;
 	this->signExtImm = signExtImm;
 	this->id = id;
+	this->label = false;
 }
 
-Lw::Lw(int rsIndex, string address, int signExtImm, int id){
-
+Lb::Lb(int rtIndex, string address, int signExtImm, int id){
+	this->rtIndex = rtIndex;
+	this->address = address;
+	this->signExtImm = signExtImm;
+	this->id = id;
+	this->label = true;
 }
 
-void Lw::unstall(){
+Lb::Lb(const Lb &i){
+
+	this->stageToExecute = i.stageToExecute;
+	this->presentStage = i.presentStage;
+	this->stalled = i.stalled;
+	this->stallingInstructionId = i.stallingInstructionId;
+	this->stallingRegister = i.stallingRegister;
+	this->forwarded =i.forwarded;
+	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
+	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
+	this->display = i.display;
+	this->id = i.id;
+	this->rsIndex = i.rsIndex;
+	this->rtIndex = i.rtIndex;
+	this->signExtImm = i.signExtImm;
+	this->sum = i.sum;
+	this->a = i.a;
+	this->b = i.b;
+	this->label = i.label;
+}
+
+Lb::Lb(Lb &i){
+
+	this->stageToExecute = i.stageToExecute;
+	this->presentStage = i.presentStage;
+	this->stalled = i.stalled;
+	this->stallingInstructionId = i.stallingInstructionId;
+	this->stallingRegister = i.stallingRegister;
+	this->forwarded =i.forwarded;
+	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
+	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
+	this->display = i.display;
+	this->id = i.id;
+	this->rsIndex = i.rsIndex;
+	this->rtIndex = i.rtIndex;
+	this->signExtImm = i.signExtImm;
+	this->sum = i.sum;
+	this->a = i.a;
+	this->b = i.b;
+}
+
+Lb * Lb::clone(){
+	return new Lb(*this);
+}
+
+void Lb::unstall(int instructionId){
 	if(!registers[rtIndex].isValid())
-		registers[rtIndex].unstall();
+		registers[rtIndex].unstall(instructionId);
 }
 
 
@@ -25,9 +75,9 @@ void Lw::unstall(){
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
 /*	lw $t0, 4($t1)
-	In case of Lw forwarding will be from MEM3 to ID as total MEM access is required*/
+	In case of Lb forwarding will be from MEM3 to ID as total MEM access is required*/
 
-bool Lw::execute(int pc){
+bool Lb::execute(int pc){
 	// ////cout<<"LW"<<endl;
 	// Default Values:
 	forwarded = false;
@@ -90,28 +140,39 @@ bool Lw::execute(int pc){
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
 						// either values are forwarded, or normally stored
-				if (!registers[rsIndex].isValid()){
-							// forwarded value
-					// stages[presentStage].setInstruction(id);
-					stalled = true;
-					stallingRegister = rsIndex;
-					// stallingInstructionId = registers[rsIndex].instructionId;
-						////cout << "rs register not readable -->";
+				if(!label){
+					if (!registers[rsIndex].isValid()){
+								// forwarded value
+						// stages[presentStage].setInstruction(id);
+						stalled = true;
+						stallingRegister = rsIndex;
+						// stallingInstructionId = registers[rsIndex].instructionId;
+							////cout << "rs register not readable -->";
 
-					return false;
-				}
-				else{
+						return false;
+					}
+					else{
+						registers[rtIndex].stallRegister(id); 
+						a = registers[rsIndex].value;
+						b = signExtImm;
+						// stages[presentStage].setFree();
+						// presentStage = stageToExecute;
+						// stages[presentStage].setInstruction(id);
+						stageToExecute++;
+						stalled = false;
+							////cout << "id completed -->";
+
+						return true;
+					}
+				}else{
 					registers[rtIndex].stallRegister(id); 
-					a = registers[rsIndex].value;
+					a = memory.loadAddress(address);
 					b = signExtImm;
 					// stages[presentStage].setFree();
 					// presentStage = stageToExecute;
 					// stages[presentStage].setInstruction(id);
 					stageToExecute++;
 					stalled = false;
-						////cout << "id completed -->";
-
-					return true;
 				}
 					/*else if (  registers[rsIndex].instructionStage==10 ) {
 							// this is the most normal case, when all values are simply avaiable not forwarded.
@@ -187,8 +248,6 @@ bool Lw::execute(int pc){
 			// registers[rtIndex].stallRegister(id);
 				if(stages[stageToExecute].isFree()){
 					sum = a+b;
-					if(forwardingEnabled)
-						registers[rtIndex].unstallRegister(sum, id);
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?
 					stages[presentStage].setFree();
 					presentStage = stageToExecute;
@@ -255,7 +314,18 @@ bool Lw::execute(int pc){
 			/*If register is not writable, i am stalling the register*/
 			// registers[rtIndex].stallRegister(id);
 				if(stages[stageToExecute].isFree()){
-					if (registers[rtIndex].write(memory.loadWord(sum),id,stageToExecute)){
+					if(forwardingEnabled){
+						registers[rtIndex].unstallRegister((int)memory.loadByte(sum), id);
+					}
+					stages[presentStage].setFree();
+					presentStage = stageToExecute;
+					stages[presentStage].setInstruction(id);
+					stageToExecute++;
+					////cout << "MEM3 completed -->";
+
+						// Instruction completed, so stage number is now invalid.
+					return true;	
+					/*if (registers[rtIndex].write(memory.loadWord(sum),id,stageToExecute)){
 						stages[presentStage].setFree();
 						presentStage = stageToExecute;
 						stages[presentStage].setInstruction(id);
@@ -269,36 +339,36 @@ bool Lw::execute(int pc){
 						stalled = true;
 						stages[presentStage].setInstruction(id);
 						stallingRegister = rtIndex;
-						stallingInstructionId = registers[rtIndex].instructionId;
+						// stallingInstructionId = registers[rtIndex].instructionId;
 					////cout << "Register not writable -->";
 
 						return false;
+					}*/
 					}
-				}
-				else{
-					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionId;
-					stalled = true;
+					else{
+						stages[presentStage].setInstruction(id);
+						stallingInstructionId = stages[stageToExecute].instructionId;
+						stalled = true;
 				////cout << "MEM3 stage not free -->";
 
-					return false;
+						return false;
 
+					}
 				}
-			}
-			case 10:
-			{
+				case 10:
+				{
 			// WB Stage
-				if(stages[stageToExecute].isFree()){
-					if(!forwardingEnabled)
-						registers[rtIndex].unstallRegister(sum, id);
-					stages[presentStage].setFree();
-					presentStage = stageToExecute;
-					stages[presentStage].setInstruction(id);
-					stageToExecute=-1;
+					if(stages[stageToExecute].isFree()){
+						if(!forwardingEnabled)
+							registers[rtIndex].unstallRegister(memory.loadWord(sum), id);
+						stages[presentStage].setFree();
+						presentStage = stageToExecute;
+						stages[presentStage].setInstruction(id);
+						stageToExecute=-1;
 					////cout << "WB completed -->";
 
 						// Instruction completed, so stage number is now invalid.
-					return true;
+						return true;
 				/*if (registers[rtIndex].write(sum,id,stageToExecute)){
 					stages[presentStage].setFree();
 					presentStage = stageToExecute;

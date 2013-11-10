@@ -11,7 +11,7 @@ using namespace std;
  
 float scrollX = 0;
 float scrollY = 0;
-Program p("gcd.asm");
+Program * p;
 int win_height, win_width;
 
 DrawingQueue dq;
@@ -56,7 +56,7 @@ static void key(unsigned char key, int x, int y)
             break;
         case 's':
             // p.execute();
-            dq.drawFinishedQueue(p.execute());
+            dq.drawFinishedQueue(p->execute());
             break;
     }
     glutPostRedisplay();
@@ -68,7 +68,8 @@ static void idle(void)
 }
 
 void init(){
-    p.init();
+    p = new Program("gcd.asm");
+    p->init();
     /*vector <Instruction > v;
     Instruction inst1(1,1,false,1, 20, false, 10, 20, "add $t1, $t2, $t3", 0);
     Instruction inst2(4,2,false,1, 20, false, 10, 20, "hey there2", 0);

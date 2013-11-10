@@ -4,7 +4,7 @@ vector<Stage> System::stages(11, Stage(0));
 
 vector<Register> System::registers(32, Register(0, 0));
 
-bool System::forwardingEnabled = true;
+bool System::forwardingEnabled = false;
 
 int System::programCounter = 1;
 
@@ -14,4 +14,6 @@ bool System::fastBranching = false;
 
 Memory System::memory=Memory();
 
-map<string, int> System::labelMap;
+map<string, int> System::labelMap = *(new map<string , int>);
+
+bool System::programOver = false;

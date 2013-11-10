@@ -1,23 +1,23 @@
-#ifndef BEQ_H
-#define BEQ_H
+#ifndef B_H
+#define B_H
 
 #include "Instruction.h"
 
-class Beq: public Instruction{
+class B: public Instruction{
 private:
-	int rsIndex;
-	int rtIndex;
+	// int rsIndex;
+	// int rtIndex;
 	// I assume the following variable will hold the address to the next instruction
 	// if the branch is taken
 	int destPc;
-	int a, b;
+	// int a, b;
 public:
-	Beq(int rsIndex, int rtIndex, string label, int id);
-	Beq(Beq &b);
-	Beq(const Beq &i);
+	B(string label, int id);
+	B(B &b);
+	B(const B &i);
 	bool execute(int pc);
 	void unstall(int instructionId);
-	Beq * clone();
+	B * clone();
 };
 
 #endif

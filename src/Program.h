@@ -14,6 +14,8 @@
 #include "Mult.h"
 #include "Instruction.h"
 #include <list>
+#include <map>
+#include <string>
 #include <vector>
 #include <iterator>
 #include <cstring>

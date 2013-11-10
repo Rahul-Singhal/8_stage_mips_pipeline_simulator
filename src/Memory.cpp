@@ -7,6 +7,7 @@ Memory::Memory(){
 }
 
 void Memory::storeWord(int address, int word){
+  //cout<<"STORING THE WORD "<<word<<endl;
   // ////cout << strlen(store) << endl;
   if (address+4 < store.size()){
     store[address+3] = word & 0xFF;
@@ -38,6 +39,7 @@ int Memory::loadWord(int address){
 }
 
 void Memory::storeByte(int address, char byte){
+  //cout<<"STORING THE BYTE "<<byte<<endl;
   if (address+1 < store.size()){
     store[address] = byte; 
   }
@@ -62,8 +64,9 @@ int Memory::loadAddress(string label){
 }
 
 int Memory::storeAscii(string label, string ascii){
+  //cout<<"STRING THE ASCII "<<ascii<<endl;
   int place = freePointer;
-  cout<<"Label = "<<label<<" ascii = "<<ascii<<endl;
+  //cout<<"Label = "<<label<<" ascii = "<<ascii<<endl;
   if (freePointer+strlen(ascii.c_str()) < store.size()){
     int i = 0 ;
     while (i<strlen(ascii.c_str())){
@@ -142,6 +145,7 @@ int Memory::storeWords(string label, vector<int> v){
 }
 
 int Memory::allocateSpace(string label, int count){
+  //cout<<"ALLOCATING SPACE  "<<count<<endl;
   int place = freePointer;
   if (freePointer + count < store.size()){
     freePointer += count;

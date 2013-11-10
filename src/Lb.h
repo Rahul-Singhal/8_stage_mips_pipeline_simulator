@@ -1,5 +1,5 @@
-#ifndef LW_H
-#define LW_H
+#ifndef LB_H
+#define LB_H
 
 /*
 	Highlights
@@ -13,22 +13,22 @@
 #include <string>
 #include "Instruction.h"
 
-class Lw: public Instruction{
+class Lb: public Instruction{
 private:
 	int rsIndex;  // Source
 	int rtIndex;  // Destination
 	int signExtImm;
-	string address;
 	int a, b, sum;
+	string address;
 	bool label;
 public:
-	Lw(int rtIndex, int rsIndex, int signExtImm, int id);
-	Lw(int rtIndex, string address, int signExtImm, int id);
-	Lw(const Lw &i);
+	Lb(int rtIndex, int rsIndex, int signExtImm, int id);
+	Lb(int rtIndex, string address, int signExtImm, int id);
+	Lb(const Lb &i);
 	bool execute(int pc);
 	void unstall(int instructionId);
-	Lw * clone();
-	Lw(Lw &l);
+	Lb * clone();
+	Lb(Lb &l);
 };
 
 #endif

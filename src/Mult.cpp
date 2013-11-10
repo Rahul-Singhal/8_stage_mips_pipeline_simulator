@@ -92,7 +92,7 @@ bool Mult::execute(int pc){
       else{
         stages[presentStage].setInstruction(id);
         stalled = true;
-        stallingInstructionId = stages[stageToExecute].instructionId;
+        stallingInstructionId = -1;
         display = "Waiting for IF1 to be free!";
         ////cout << "if1 - wait -->" ;
         return false;
@@ -114,7 +114,7 @@ bool Mult::execute(int pc){
       else {
         stages[presentStage].setInstruction(id);
         stalled = true;
-        stallingInstructionId = stages[stageToExecute].instructionId;
+        stallingInstructionId = -1;
         display = "Waiting for IF2 to be free!";
         ////cout << "if2 - wait -->" ;
         return false;
@@ -135,7 +135,7 @@ bool Mult::execute(int pc){
           // stages[presentStage].setInstruction(id);
           stalled = true;
           stallingRegister = rsIndex;
-            // stallingInstructionId = registers[rsIndex].instructionId;
+          stallingInstructionId = registers[rsIndex].instructionId;
             ////cout << "rs register not readable -->";
 
           return false;
@@ -145,7 +145,7 @@ bool Mult::execute(int pc){
           // stages[presentStage].setInstruction(id);
           stalled = true;
           stallingRegister = rtIndex;
-            // stallingInstructionId = registers[rtIndex].instructionId;    
+            stallingInstructionId = registers[rtIndex].instructionId;    
             ////cout << "rt register not readable -->";
 
           return false;
@@ -252,7 +252,7 @@ bool Mult::execute(int pc){
         }
         else {
           stages[presentStage].setInstruction(id);
-          stallingInstructionId = stages[stageToExecute].instructionId;
+          stallingInstructionId = -1;
           stalled = true;
         ////cout << "ID not free -->" ;
           return false;
@@ -283,7 +283,7 @@ bool Mult::execute(int pc){
         }
         else{
           stages[presentStage].setInstruction(id);
-          stallingInstructionId = stages[stageToExecute].instructionId;
+          stallingInstructionId = -1;
           stalled = true;
         ////cout << "MULT stage not free -->";
 
@@ -304,7 +304,7 @@ bool Mult::execute(int pc){
         }
         else{
           stages[presentStage].setInstruction(id);
-          stallingInstructionId = stages[stageToExecute].instructionId;
+          stallingInstructionId = -1;
           stalled = true;
         ////cout << "MEM1 stage not free -->";
 
@@ -324,7 +324,7 @@ bool Mult::execute(int pc){
         }
         else{
           stages[presentStage].setInstruction(id);
-          stallingInstructionId = stages[stageToExecute].instructionId;
+          stallingInstructionId = -1;
           stalled = true;
         ////cout << "MEM2 stage not free -->";
 
@@ -344,7 +344,7 @@ bool Mult::execute(int pc){
         }
         else{
           stages[presentStage].setInstruction(id);
-          stallingInstructionId = stages[stageToExecute].instructionId;
+          stallingInstructionId = -1;
           stalled = true;
         ////cout << "MEM3 stage not free -->";
 
@@ -389,7 +389,7 @@ bool Mult::execute(int pc){
         }
         else{
           stages[presentStage].setInstruction(id);
-          stallingInstructionId = stages[stageToExecute].instructionId;
+          stallingInstructionId = -1;
           stalled = true;
         ////cout << "WB not free ->";
 

@@ -17,9 +17,9 @@ Xor::Xor(const Xor &i){
 	this->stalled = i.stalled;
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
-	this->fXorwarded =i.fXorwarded;
-	this->fXorwardedFromInstructionId = i.fXorwardedFromInstructionId;
-	this->fXorwardedFromInstructionStage = i.fXorwardedFromInstructionStage;
+	this->forwarded =i.forwarded;
+	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
+	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
 	this->id = i.id;
 	this->rdIndex = i.rdIndex;
@@ -37,9 +37,9 @@ Xor::Xor(Xor &i){
 	this->stalled = i.stalled;
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
-	this->fXorwarded =i.fXorwarded;
-	this->fXorwardedFromInstructionId = i.fXorwardedFromInstructionId;
-	this->fXorwardedFromInstructionStage = i.fXorwardedFromInstructionStage;
+	this->forwarded =i.forwarded;
+	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
+	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
 	this->id = i.id;
 	this->rdIndex = i.rdIndex;
@@ -65,10 +65,10 @@ bool Xor::execute(int pc){
 	// ////cout<<"###Xor####"<<endl;
 	// ////cout<<"MAIN CALL HUWA"<<endl;
 	// Default Values:
-	fXorwarded = false;
+	forwarded = false;
 	stalled = false;
 
-	// setting the status of register which is to be written as 1 fXor 1<=stageToExecute<5 (if any, assuming no fXorwarding)
+	// setting the status of register which is to be written as 1 for 1<=stageToExecute<5 (if any, assuming no forwarding)
 	switch(stageToExecute){
 		case 1: 
 		{
@@ -88,7 +88,7 @@ bool Xor::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = stages[stageToExecute].instructionId;
-				display = "Waiting fXor IF1 to be free!";
+				display = "Waiting for IF1 to be free!";
 				//cout << "if1 - wait -->"<<endl ;
 				return false;
 			}
@@ -110,7 +110,7 @@ bool Xor::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = stages[stageToExecute].instructionId;
-				display = "Waiting fXor IF2 to be free!";
+				display = "Waiting for IF2 to be free!";
 				//cout << "if2 - wait -->" <<endl;
 				return false;
 			}
@@ -118,15 +118,15 @@ bool Xor::execute(int pc){
 		case 3:
 		{
 			// ID Stage
-			// Assuming no fXorwarding Xor that the registers to be read must be free as of now.
+			// Assuming no forwarding Xor that the registers to be read must be free as of now.
 			if(stages[stageToExecute].isFree()){
-				/*if (fXorwardingEnabled) {*/
+				/*if (forwardingEnabled) {*/
 					stages[presentStage].setFree();
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);
-						// either values are fXorwarded, Xor nXormally stXored
+						// either values are forwarded, Xor nXormally stXored
 					if (!registers[rsIndex].isValid()){
-							// fXorwarded value
+							// forwarded value
 						// stages[presentStage].setInstruction(id);
 						stalled = true;
 						stallingRegister = rsIndex;
@@ -136,7 +136,7 @@ bool Xor::execute(int pc){
 						return false;
 					}
 					else if (!registers[rtIndex].isValid()){
-							// when rtIndex is not available without fXorwarding
+							// when rtIndex is not available without forwarding
 						// stages[presentStage].setInstruction(id);
 						stalled = true;
 						stallingRegister = rtIndex;
@@ -159,7 +159,7 @@ bool Xor::execute(int pc){
 
 						return true;
 					}/*if (  registers[rsIndex].instructionStage==10 && registers[rtIndex].instructionStage==10) {
-							// this is the most nXormal case, when all values are simply avaiable not fXorwarded.
+							// this is the most nXormal case, when all values are simply avaiable not forwarded.
 						registers[rdIndex].stallRegister(id); 
 						a = registers[rsIndex].value;
 						b = registers[rtIndex].value;
@@ -172,12 +172,12 @@ bool Xor::execute(int pc){
 
 						return true;
 					}
-						// ASSUMING ONLY ONE FXorWARDED VALUE
+						// ASSUMING ONLY ONE forwarded VALUE
 					else if (registers[rsIndex].instructionStage!=10){
 						registers[rdIndex].stallRegister(id); 
-						fXorwarded = true;
-						fXorwardedFromInstructionId = registers[rsIndex].instructionId;
-						fXorwardedFromInstructionStage = registers[rsIndex].instructionStage;
+						forwarded = true;
+						forwardedFromInstructionId = registers[rsIndex].instructionId;
+						forwardedFromInstructionStage = registers[rsIndex].instructionStage;
 						a = registers[rsIndex].value;
 						b = registers[rtIndex].value;
 						stages[presentStage].setFree();
@@ -185,15 +185,15 @@ bool Xor::execute(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
-						//cout << "rs value fXorwarded from id = " << fXorwardedFromInstructionId << " stage = " << fXorwardedFromInstructionStage << "-->" <<endl;
+						//cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" <<endl;
 
 						return true;
 					}
 					else if (registers[rtIndex].instructionStage!=10){
 						registers[rdIndex].stallRegister(id); 
-						fXorwarded = true;
-						fXorwardedFromInstructionId = registers[rtIndex].instructionId;
-						fXorwardedFromInstructionStage = registers[rtIndex].instructionStage;
+						forwarded = true;
+						forwardedFromInstructionId = registers[rtIndex].instructionId;
+						forwardedFromInstructionStage = registers[rtIndex].instructionStage;
 						a = registers[rsIndex].value;
 						b = registers[rtIndex].value;
 						stages[presentStage].setFree();
@@ -201,20 +201,20 @@ bool Xor::execute(int pc){
 						stages[presentStage].setInstruction(id);
 						stageToExecute++;
 						stalled = false;
-						//cout << "rt value fXorwarded from id = " << fXorwardedFromInstructionId << " stage = " << fXorwardedFromInstructionStage << "-->" <<endl;
+						//cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" <<endl;
 
 						return true;
 					}*/
 
 				/*}
 				else {
-					// fXorwarding disabled
+					// forwarding disabled
 					
-						// either values are fXorwarded, Xor nXormally stXored
+						// either values are forwarded, Xor nXormally stXored
 					if (!registers[rsIndex].valid || registers[rsIndex].instructionStage!=10){
 						////cout<<registers[rsIndex].valid<<endl;
 						////cout<<registers[rsIndex].instructionStage<<endl;
-							// fXorwarded value
+							// forwarded value
 						stages[presentStage].setInstruction(id);
 						stalled = true;
 						stallingRegister = rsIndex;
@@ -223,7 +223,7 @@ bool Xor::execute(int pc){
 						return false;
 					}
 					else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=10){
-							// when rtIndex is not available without fXorwarding
+							// when rtIndex is not available without forwarding
 						stages[presentStage].setInstruction(id);
 						stalled = true;
 						stallingRegister = rtIndex;
@@ -232,7 +232,7 @@ bool Xor::execute(int pc){
 						return false;
 					}
 					else {
-							// this is the most nXormal case, when all values are simply avaiable not fXorwarded.
+							// this is the most nXormal case, when all values are simply avaiable not forwarded.
 						registers[rdIndex].stallRegister(id); 
 						a = registers[rsIndex].value;
 						b = registers[rtIndex].value;
@@ -260,7 +260,7 @@ bool Xor::execute(int pc){
 			// registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
 				sum = a^b;
-				if(fXorwardingEnabled)
+				if(forwardingEnabled)
 					registers[rdIndex].unstallRegister(sum, id); // TODO : Will it ever return false?
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
@@ -348,7 +348,7 @@ bool Xor::execute(int pc){
 			// WB Stage
 			// registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
-				if(!fXorwardingEnabled)
+				if(!forwardingEnabled)
 					registers[rdIndex].unstallRegister(sum, id); // TODO : Will it ever return false?
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;

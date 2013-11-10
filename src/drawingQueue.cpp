@@ -228,27 +228,42 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
     	render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, stageStringMap[prStage].c_str());
     }
     if(inst.getStalled()){
+
     	render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, "STALL");
     	int lastQueueStartId = displayVector[i-1][0].getId();
-    	// if(displayVector[i-1][inst.getId() - lastQueueStartId].getStalled()){
-    	// 	//no need to draw any more arrows
-    	// }
-    	// else{
-    	// 	//draw arrow
-    	// 	int alpha = 1;
-    	// 	int lastQueueStartId = displayVector[i-alpha][0].getId();
-    	// 	// stage 3 is ID
-    	// 	while(!(displayVector[i-alpha][inst.getStallingInstructionId() - lastQueueStartId].getPresentStage() == 3)){
-    	// 		alpha++;
-    	// 		lastQueueStartId = displayVector[i-alpha][0].getId();
-    	// 	}
-    	// 	//draw arrow from rectangle alpha blocks back and inst.getId()-inst.getStallingInstructionId() up
-
-    	// 	drawArrow(alpha, inst.getId()-inst.getStallingInstructionId());
-
+    	if(displayVector[i-1][inst.getId() - lastQueueStartId].getStalled()){
+    		//no need to draw any more arrows
     	}
+    	else{
+    		if(inst.getStallingInstructionId() != -1){
+	    		//draw arrow
+	    		int alpha = 0;
+	    		int beta;
+	    		//int lastQueueStartId = displayVector[i-alpha][0].getId();
+	    		// stage 3 is ID
+	    		bool myFlag = false;
+	    		int stallInstId = inst.getStallingInstructionId();
+	    		while(alpha++){
+	    			int maxLeng = displayVector[i-alpha].size();
+	    			for(beta = 0; beta < maxLeng; beta++){
+	    				if(displayVector[i-alpha][beta].getId() == stallInstId){
+	    					myFlag = true;
+	    					break;
+	    				}
+	    				else if(displayVector[i-alpha][beta].getId() > stallInstId){
+	    					myFlag = false;
+	    					break;
+	    				}
+	    			}
+	    			if(myFlag) break;
+	    		}
+	    		//draw arrow from rectangle alpha blocks back and inst.getId()-inst.getStallingInstructionId() up
 
-	// }
+	    		drawArrow(alpha, beta+1);
+    		}
+
+		}
+	}
 	if(inst.getForwarded()){
 		//draw arrow to display forwarding
 

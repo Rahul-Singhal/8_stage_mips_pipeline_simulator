@@ -1,9 +1,9 @@
-#ifndef BEQ_H
-#define BEQ_H
+#ifndef BNE_H
+#define BNE_H
 
 #include "Instruction.h"
 
-class Beq: public Instruction{
+class Bne: public Instruction{
 private:
 	int rsIndex;
 	int rtIndex;
@@ -12,12 +12,12 @@ private:
 	int destPc;
 	int a, b;
 public:
-	Beq(int rsIndex, int rtIndex, string label, int id);
-	Beq(Beq &b);
-	Beq(const Beq &i);
+	Bne(int rsIndex, int rtIndex, string label, int id);
+	Bne(Bne &b);
+	Bne(const Bne &i);
 	bool execute(int pc);
 	void unstall(int instructionId);
-	Beq * clone();
+	Bne * clone();
 };
 
 #endif

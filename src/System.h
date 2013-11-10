@@ -15,6 +15,7 @@ using namespace std;
 
 class System{
 public:
+	static bool programOver;
 	static vector <Register> registers;
 	static vector <Stage> stages;
 	static int programCounter; // holds the index of the instruction which will be inserted 

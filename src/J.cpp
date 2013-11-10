@@ -1,13 +1,13 @@
-#include "Beq.h"
+#include "J.h"
 
-Beq::Beq(int rsIndex, int rtIndex, string label, int id){
-	this->rsIndex = rsIndex;
-	this->rtIndex = rtIndex;
+J::J(string label, int id){
+	// this->rsIndex = rsIndex;
+	// this->rtIndex = rtIndex;
 	this->destPc = labelMap[label];
 	this->id = id;
 }
 
-Beq::Beq(const Beq &i){
+J::J(const J &i){
 	this->stageToExecute = i.stageToExecute;
 	this->presentStage = i.presentStage;
 	this->stalled = i.stalled;
@@ -18,14 +18,14 @@ Beq::Beq(const Beq &i){
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
 	this->id = i.id;
-	this->rtIndex = i.rtIndex;
-	this->rsIndex = i.rsIndex;
+	// this->rtIndex = i.rtIndex;
+	// this->rsIndex = i.rsIndex;
 	this->destPc = i.destPc;
-	this->a = i.a;
-	this->b = i.b;
+	// this->a = i.a;
+	// this->b = i.b;
 }
 
-Beq::Beq(Beq &i){
+J::J(J &i){
 	this->stageToExecute = i.stageToExecute;
 	this->presentStage = i.presentStage;
 	this->stalled = i.stalled;
@@ -36,19 +36,19 @@ Beq::Beq(Beq &i){
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
 	this->id = i.id;
-	this->rtIndex = i.rtIndex;
-	this->rsIndex = i.rsIndex;
+	// this->rtIndex = gtpooniwala@gmail.com i.rtIndex;
+	// this->rsIndex = i.rsIndex;
 	this->destPc = i.destPc;
-	this->a = i.a;
-	this->b = i.b;
+	// this->a = i.a;
+	// this->b = i.b;
 }
 
-void Beq::unstall(int instructionId){
+void J::unstall(int instructionId){
  	return;
 }
 
-Beq * Beq::clone(){
-	return new Beq(*this);
+J * J::clone(){
+	return new J(*this);
 }
 
 // depending on the return value of this bool, the program manager will put the appropriate stage of this instruction
@@ -64,11 +64,11 @@ Beq * Beq::clone(){
 	and the the subsequent pipeline instructions will be flushed 
 
 	The functionality of calculating the branch predicate in ID itself is also provided
-	This is governed by a global bool variable "fastBranching"
+	This is governed by a global bool variable "fastJranching"
 */
 
-bool Beq::execute(int pc){
-	// ////cout<<"BEQ"<<endl;
+bool J::execute(int pc){
+	// ////cout<<"J"<<endl;
 	forwarded = false;
 	stalled = false;
 
@@ -90,7 +90,7 @@ bool Beq::execute(int pc){
 			else{
 				stages[presentStage].setInstruction(id);
 				stalled = true;
-				stallingInstructionId = -1;
+				stallingInstructionId = stages[stageToExecute].instructionId;
 				display = "Waiting for IF1 to be free!";
 				////cout << "if1 - wait -->" ;
 				return false;
@@ -112,7 +112,7 @@ bool Beq::execute(int pc){
 			else {
 				stages[presentStage].setInstruction(id);
 				stalled = true;
-				stallingInstructionId = -1;
+				stallingInstructionId = stages[stageToExecute].instructionId;
 				display = "Waiting for IF2 to be free!";
 				////cout << "if2 - wait -->" ;
 				return false;
@@ -130,12 +130,12 @@ bool Beq::execute(int pc){
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);
 						// either values are forwarded, or normally stored
-					if (!registers[rsIndex].isValid()){
+					/*if (!registers[rsIndex].isValid()){
 							// forwarded value
 						// stages[presentStage].setInstruction(id);
 						stalled = true;
 						stallingRegister = rsIndex;
-						stallingInstructionId = registers[rsIndex].instructionId;
+						// stallingInstructionId = registers[rsIndex].instructionId;
 						////cout << "rs register not readable -->";
 
 						return false;
@@ -145,15 +145,15 @@ bool Beq::execute(int pc){
 						// stages[presentStage].setInstruction(id);
 						stalled = true;
 						stallingRegister = rtIndex;
-						stallingInstructionId = registers[rtIndex].instructionId;    
+						// stallingInstructionId = registers[rtIndex].instructionId;    
 						////cout << "rt register not readable -->";
 
 						return false;
 					}
 					else{
-						// registers[rdIndex].stallRegister(id); 
-						a = registers[rsIndex].value;
-						b = registers[rtIndex].value;
+					*/	// registers[rdIndex].stallRegister(id); 
+						// a = registers[rsIndex].value;
+						// b = registers[rtIndex].value;
 						// stages[presentStage].setFree();
 						// presentStage = stageToExecute;
 						// stages[presentStage].setInstruction(id);
@@ -161,14 +161,14 @@ bool Beq::execute(int pc){
 						stalled = false;
 						if(fastBranching){
 							// cout<<a<<"::::::::::::::::::"<<b<<endl;
-							if(a==b){
+							if(true){
 								programCounter = destPc-1;
 							}
 						}
 						////cout << "id completed -->";
 
 						return true;
-					}
+					//}
 				// 	else if (  registers[rsIndex].instructionStage==10 && registers[rtIndex].instructionStage==10) {
 				// 			// this is the most normal case, when all values are simply avaiable not forwarded.
 				// 		/*Branch Instruction, no stalling of rdIndex as there is none*/
@@ -278,7 +278,7 @@ bool Beq::execute(int pc){
 			else {
 				// cout<<"Yes its coming here"<<endl;
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
+				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
 				////cout << "ID not free -->" ;
 				return false;
@@ -292,7 +292,7 @@ bool Beq::execute(int pc){
 			if(stages[stageToExecute].isFree()){
 				if(!fastBranching){
 					// cout<<a<<"::::::::::::::::::"<<b<<endl;
-					if(a==b)
+					if(true)
 						programCounter = destPc-1;
 				}
 				/*No rdIndex to write*/
@@ -307,7 +307,7 @@ bool Beq::execute(int pc){
 			}
 			else{
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
+				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
 				////cout << "EX stage not free -->";
 
@@ -328,7 +328,7 @@ bool Beq::execute(int pc){
 			}
 			else{
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
+				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
 				////cout << "MEM1 stage not free -->";
 
@@ -348,7 +348,7 @@ bool Beq::execute(int pc){
 			}
 			else{
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
+				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
 				////cout << "MEM2 stage not free -->";
 
@@ -368,7 +368,7 @@ bool Beq::execute(int pc){
 			}
 			else{
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
+				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
 				////cout << "MEM3 stage not free -->";
 
@@ -389,7 +389,7 @@ bool Beq::execute(int pc){
 			}
 			else{
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
+				stallingInstructionId = stages[stageToExecute].instructionId;
 				stalled = true;
 				////cout << "WB stage not free -->";
 
