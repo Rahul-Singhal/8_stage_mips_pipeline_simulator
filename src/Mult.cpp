@@ -154,6 +154,14 @@ bool Mult::execute(int pc){
         else
         {
           registers[rdIndex].stallRegister(id); 
+          if(registers[rsIndex].isForwarded()){
+            forwarded = true;
+            forwardedFromInstructionId = registers[rsIndex].lastForwarder;
+          }
+          if(registers[rtIndex].isForwarded()){
+            forwarded = true;
+            forwardedFromInstructionId = registers[rtIndex].lastForwarder;
+          }
           a = registers[rsIndex].value;
           b = registers[rtIndex].value;
             // stages[presentStage].setFree();
@@ -254,7 +262,8 @@ bool Mult::execute(int pc){
           stages[presentStage].setInstruction(id);
           stallingInstructionId = -1;
           stalled = true;
-        ////cout << "ID not free -->" ;
+          /*cout<<stages[stageToExecute].instructionId<<":"<<id<<endl;
+        cout << "ID not free -->" ;*/
           return false;
         }
       }
@@ -271,8 +280,10 @@ bool Mult::execute(int pc){
           if (presentSubStage == multSubStages){
           /*Next stage is MEM1 which is stage 7*/
           // registers[rdIndex].write(product,id,stageToExecute); // TODO : Will it ever return false?
-            if(forwardingEnabled)
+            if(forwardingEnabled){
+              registers[rdIndex].forwardIt(id);
               registers[rdIndex].unstallRegister(product, id);
+            }
             stageToExecute += 2;
           ////cout << "MULT stage done -->" ;
           }
@@ -356,7 +367,8 @@ bool Mult::execute(int pc){
       {
       // WB Stage
         if(stages[stageToExecute].isFree()){
-         if(!forwardingEnabled)
+        registers[rdIndex].unforwardIt(id);
+        if(!forwardingEnabled)
           registers[rdIndex].unstallRegister(product, id);
         stages[presentStage].setFree();
         presentStage = stageToExecute;

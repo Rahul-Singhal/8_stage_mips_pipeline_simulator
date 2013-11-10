@@ -17,6 +17,8 @@ bool Stage::isFree(){
 }
 
 void Stage::setInstruction(int instructionId){
+	/*if(number == 5)
+		cout<<instructionId<<endl;*/
 	this->instructionId = instructionId;
 }
 

@@ -2,7 +2,7 @@
 #define STAGE_H
 
 #include <list>
-
+#include <iostream>
 using namespace std;
 
 class Instruction;

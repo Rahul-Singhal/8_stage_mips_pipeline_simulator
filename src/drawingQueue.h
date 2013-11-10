@@ -18,6 +18,7 @@ private:
 	map <int, string> stageStringMap;
 	vector<vector <Instruction> > displayVector;
 	void drawArrow(int back ,int up);
+	void drawFArrow(int back ,int up);
 	void drawInstruction(Instruction inst, int i, int j);
 	void render_bitmap_string(float x, float y, float z, void *font, const char *string);
 	void drawHeader();

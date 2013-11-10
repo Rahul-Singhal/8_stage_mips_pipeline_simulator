@@ -26,6 +26,7 @@ public:
 	// Constructor, sets the initial value of register with id = id as value.
 	Register(int id, int value);
 
+	int lastForwarder;
 	list <int> forwardingInstructions;
 	void forwardIt(int instructionId);
 	void unforwardIt(int instructionId);

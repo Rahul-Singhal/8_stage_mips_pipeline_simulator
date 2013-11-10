@@ -259,7 +259,7 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	    		}
 	    		//draw arrow from rectangle alpha blocks back and inst.getId()-inst.getStallingInstructionId() up
 
-	    		drawArrow(alpha, beta+1);
+	    		// drawArrow(alpha, beta+1);
     		}
 
 		}
@@ -267,16 +267,20 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	if(inst.getForwarded()){
 		//draw arrow to display forwarding
 
-		int alpha = 1;
-		int lastQueueStartId = displayVector[i-alpha][0].getId();
-		// 
-		// while(!(displayVector[i-alpha][inst.getForwardedFromInstructionId() - lastQueueStartId].getPresentStage() == inst.getForwardedFromInstructionStage())){
-		// 	alpha++;
-		// 	lastQueueStartId = displayVector[i-alpha][0].getId();
-		// }
-
-		// //draw arrow from rectangle alpha blocks back and inst.getId()-inst.getStallingInstructionId() up
-		// drawArrow(alpha, inst.getId()-inst.getForwardedFromInstructionId());
+		//int alpha = 1;
+		//int lastQueueStartId = displayVector[i-alpha][0].getId();
+		// int forwardingId = inst.getForwardedFromInstructionId();
+		// int beta = 0;
+		// bool myFlag;
+		// int maxSize = displayVector[i].size();
+		// for(beta = 0; beta < maxSize; beta++){
+		// 	if(displayVector[i][beta].getId() == forwardingId){
+		// 		myFlag = true;
+		// 		break;
+		// 	}
+		// }		
+		//draw arrow from rectangle alpha blocks back and inst.getId()-inst.getStallingInstructionId() up
+		drawFArrow(1, inst.getId()-inst.getForwardedFromInstructionId());
 
 	}
     glPopMatrix();
@@ -323,5 +327,54 @@ void DrawingQueue::drawArrow(int back ,int up){
 		glEnd();
 	glPopMatrix();
 
+
+}
+
+void DrawingQueue::drawFArrow(int back ,int up){
+	double x1 = 0;
+	double x2 = -((instWidth+2)*back);
+	double y1 = instHeight/2;
+	double y2 = ((instHeight+20)*up)-instHeight/2;
+
+	double dx = x2-x1;
+	double dy = y2-y1;
+	double leng = sqrt(dx*dx + dy*dy);
+	dx = dx/leng;
+	dy = dy/leng;
+
+	double pX = x1 + dx*10;
+	double pY = y1 + dy*10;
+
+	glPushMatrix();
+		glTranslatef(instWidth+2,0,0);
+
+		glPushMatrix();
+			glLineWidth(3);
+			glBegin(GL_LINES);
+				glColor3f(0,0,0);
+				glVertex2f(x1,y1);
+				glVertex2f(x2,y2);
+			glEnd();
+		glPopMatrix();
+
+		glPushMatrix();
+			glLineWidth(3);
+			glBegin(GL_LINES);
+				glColor3f(0,0,0);
+				glVertex2f(x1,y1);
+				glVertex2f(pX + 4*(-dy),pY + 4*(dx));
+			glEnd();
+		glPopMatrix();
+
+		glPushMatrix();
+			glLineWidth(3);
+			glBegin(GL_LINES);
+				glColor3f(0,0,0);
+				glVertex2f(x1,y1);
+				glVertex2f(pX - 4*(-dy),pY - 4*(dx));
+			glEnd();
+		glPopMatrix();
+
+	glPopMatrix();
 
 }

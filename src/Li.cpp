@@ -151,8 +151,10 @@ bool Li::execute(int pc){
 			// registers[rtIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
 				// sum = a+b;
-				if(forwardingEnabled)
+				if(forwardingEnabled){
+					registers[rdIndex].forwardIt(id);
 					registers[rdIndex].unstallRegister(immediate, id); // TODO : Will it ever return false?
+				}
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
@@ -239,6 +241,7 @@ bool Li::execute(int pc){
 		{
 			// WB Stage
 			if(stages[stageToExecute].isFree()){
+				registers[rdIndex].unforwardIt(id);
 				if(!forwardingEnabled)
 					registers[rdIndex].unstallRegister(immediate, id);
 				stages[presentStage].setFree();

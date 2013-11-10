@@ -44,7 +44,7 @@ Beq::Beq(Beq &i){
 }
 
 void Beq::unstall(int instructionId){
- 	return;
+	return;
 }
 
 Beq * Beq::clone(){
@@ -67,63 +67,63 @@ Beq * Beq::clone(){
 	This is governed by a global bool variable "fastBranching"
 */
 
-bool Beq::execute(int pc){
+	bool Beq::execute(int pc){
 	// ////cout<<"BEQ"<<endl;
-	forwarded = false;
-	stalled = false;
+		forwarded = false;
+		stalled = false;
 
-	switch(stageToExecute){
-		case 1: 
-		{
+		switch(stageToExecute){
+			case 1: 
+			{
 			// IF 1 Stage
-			if(stages[stageToExecute].isFree()){
+				if(stages[stageToExecute].isFree()){
 				//registers[rdIndex].stallRegister(id)();
 				stages[presentStage].setFree(); /*Set stage 0 free so that next instruction come*/
-				presentStage = stageToExecute;
-				stages[presentStage].setInstruction(id);
-				stageToExecute++;
-				stalled = false;
+					presentStage = stageToExecute;
+					stages[presentStage].setInstruction(id);
+					stageToExecute++;
+					stalled = false;
 				// display = "IF1";
 				////cout << "if1 -->" ;
-				return true;
-			}
-			else{
-				stages[presentStage].setInstruction(id);
-				stalled = true;
-				stallingInstructionId = -1;
+					return true;
+				}
+				else{
+					stages[presentStage].setInstruction(id);
+					stalled = true;
+					stallingInstructionId = -1;
 				// display = "Waiting for IF1 to be free!";
 				////cout << "if1 - wait -->" ;
-				return false;
+					return false;
+				}
 			}
-		}
-		case 2:
-		{
+			case 2:
+			{
 			// IF 2 Stage
-			if(stages[stageToExecute].isFree()){
-				stages[presentStage].setFree();
-				presentStage = stageToExecute;
-				stages[presentStage].setInstruction(id);
-				stageToExecute++;
-				stalled = false;
+				if(stages[stageToExecute].isFree()){
+					stages[presentStage].setFree();
+					presentStage = stageToExecute;
+					stages[presentStage].setInstruction(id);
+					stageToExecute++;
+					stalled = false;
 				// display = "IF2";
 				////cout << "if2 -->" ;
-				return true;
-			}
-			else {
-				stages[presentStage].setInstruction(id);
-				stalled = true;
-				stallingInstructionId = -1;
+					return true;
+				}
+				else {
+					stages[presentStage].setInstruction(id);
+					stalled = true;
+					stallingInstructionId = -1;
 				// display = "Waiting for IF2 to be free!";
 				////cout << "if2 - wait -->" ;
-				return false;
+					return false;
+				}
 			}
-		}
-		case 3:
-		{
+			case 3:
+			{
 			// ID Stage
 			// Assuming no forwarding and that the registers to be read must be free as of now.
 
-			if(stages[stageToExecute].isFree()){
+				if(stages[stageToExecute].isFree()){
 					/*if (forwardingEnabled) {*/
 
 					stages[presentStage].setFree();
@@ -154,6 +154,14 @@ bool Beq::execute(int pc){
 						// registers[rdIndex].stallRegister(id); 
 						a = registers[rsIndex].value;
 						b = registers[rtIndex].value;
+						if(registers[rsIndex].isForwarded()){
+							forwarded = true;
+							forwardedFromInstructionId = registers[rsIndex].lastForwarder;
+						}
+						if(registers[rtIndex].isForwarded()){
+							forwarded = true;
+							forwardedFromInstructionId = registers[rtIndex].lastForwarder;
+						}
 						// stages[presentStage].setFree();
 						// presentStage = stageToExecute;
 						// stages[presentStage].setInstruction(id);
@@ -274,129 +282,129 @@ bool Beq::execute(int pc){
 				// 		return true;
 				// 	}
 				// }	
-			}
-			else {
+				}
+				else {
 				// cout<<"Yes its coming here"<<endl;
-				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
-				stalled = true;
+					stages[presentStage].setInstruction(id);
+					stallingInstructionId = -1;
+					stalled = true;
 				////cout << "ID not free -->" ;
-				return false;
+					return false;
+				}
 			}
-		}
-		case 4:
-		{
+			case 4:
+			{
 			// EX Stage
 			/*Branch Instruction, no stalling of rdIndex as there is none*/
 						// registers[rdIndex].stallRegister(id);
-			if(stages[stageToExecute].isFree()){
-				if(!fastBranching){
+				if(stages[stageToExecute].isFree()){
+					if(!fastBranching){
 					// cout<<a<<"::::::::::::::::::"<<b<<endl;
-					if(a==b)
-						programCounter = destPc-1;
-				}
+						if(a==b)
+							programCounter = destPc-1;
+					}
 				/*No rdIndex to write*/
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?
-				stages[presentStage].setFree();
-				presentStage = stageToExecute;
-				stages[presentStage].setInstruction(id);
+					stages[presentStage].setFree();
+					presentStage = stageToExecute;
+					stages[presentStage].setInstruction(id);
 				/*Stage to execute will be MEM1 which is stage 7*/
-          		stageToExecute+=3;
+					stageToExecute+=3;
 				////cout << "EX stage done -->" ;
-				return true;
-			}
-			else{
-				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
-				stalled = true;
+					return true;
+				}
+				else{
+					stages[presentStage].setInstruction(id);
+					stallingInstructionId = -1;
+					stalled = true;
 				////cout << "EX stage not free -->";
 
-				return false;
+					return false;
+				}
 			}
-		}
-		case 7:
-		{
+			case 7:
+			{
 			// MEM 1 Stage
 			//registers[rdIndex].stallRegister(id)();
-			if(stages[stageToExecute].isFree()){
-				stages[presentStage].setFree();
-				presentStage = stageToExecute;
-				stages[presentStage].setInstruction(id);
-				stageToExecute++;
+				if(stages[stageToExecute].isFree()){
+					stages[presentStage].setFree();
+					presentStage = stageToExecute;
+					stages[presentStage].setInstruction(id);
+					stageToExecute++;
 				////cout << "MEM1 stage done -->" ;
-				return true;
-			}
-			else{
-				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
-				stalled = true;
+					return true;
+				}
+				else{
+					stages[presentStage].setInstruction(id);
+					stallingInstructionId = -1;
+					stalled = true;
 				////cout << "MEM1 stage not free -->";
 
-				return false;
+					return false;
+				}
 			}
-		}
-		case 8:
-		{
+			case 8:
+			{
 			// MEM 2 Stage
-			if(stages[stageToExecute].isFree()){
-				stages[presentStage].setFree();
-				presentStage = stageToExecute;
-				stages[presentStage].setInstruction(id);
-				stageToExecute++;
+				if(stages[stageToExecute].isFree()){
+					stages[presentStage].setFree();
+					presentStage = stageToExecute;
+					stages[presentStage].setInstruction(id);
+					stageToExecute++;
 				////cout << "MEM2 stage done -->" ;
-				return true;
-			}
-			else{
-				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
-				stalled = true;
+					return true;
+				}
+				else{
+					stages[presentStage].setInstruction(id);
+					stallingInstructionId = -1;
+					stalled = true;
 				////cout << "MEM2 stage not free -->";
 
-				return false;
+					return false;
+				}
 			}
-		}
-		case 9:
-		{
+			case 9:
+			{
 			// MEM 3 Stage
-			if(stages[stageToExecute].isFree()){
-				stages[presentStage].setFree();
-				presentStage = stageToExecute;
-				stages[presentStage].setInstruction(id);
-				stageToExecute++;
+				if(stages[stageToExecute].isFree()){
+					stages[presentStage].setFree();
+					presentStage = stageToExecute;
+					stages[presentStage].setInstruction(id);
+					stageToExecute++;
 				////cout << "MEM3 stage done -->" ;
-				return true;
-			}
-			else{
-				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
-				stalled = true;
+					return true;
+				}
+				else{
+					stages[presentStage].setInstruction(id);
+					stallingInstructionId = -1;
+					stalled = true;
 				////cout << "MEM3 stage not free -->";
 
-				return false;
+					return false;
 
+				}
 			}
-		}
-		case 10:
-		{
+			case 10:
+			{
 			// WB Stage Simple ! Nothing to write back
-			if(stages[stageToExecute].isFree()){
-				stages[presentStage].setFree();
-				presentStage = stageToExecute;
-				stages[presentStage].setInstruction(id);
-				stageToExecute=-1;
+				if(stages[stageToExecute].isFree()){
+					stages[presentStage].setFree();
+					presentStage = stageToExecute;
+					stages[presentStage].setInstruction(id);
+					stageToExecute=-1;
 				////cout << "WB stage done -->" ;
-				return true;
-			}
-			else{
-				stages[presentStage].setInstruction(id);
-				stallingInstructionId = -1;
-				stalled = true;
+					return true;
+				}
+				else{
+					stages[presentStage].setInstruction(id);
+					stallingInstructionId = -1;
+					stalled = true;
 				////cout << "WB stage not free -->";
 
-				return false;
+					return false;
 
+				}
 			}
 		}
+		return false;
 	}
-	return false;
-}
