@@ -153,21 +153,23 @@ vector <Instruction> Program::execute(){
 		it++;
 	}
 	cout<<endl;*/
-	if(stages[0].isFree()){
-		// cout<<"is ke ander aaya "<<endl;
-		programCounter++;
-		// cout<<programCounter<<" <-- pc ab ye hai"<<endl;
-		if(programCounter < code.size()){
-			instrId++;		
-			/*code[programCounter]->id = instrId;
-			code[programCounter]->presentStage = 0;
-			code[programCounter]->stageToExecute = 1;*/
-			currInstructions.push_back(code[programCounter]->clone());
-			currInstructions.back()->id = instrId;
-			currInstructions.back()->presentStage = 0;
-			currInstructions.back()->stageToExecute = 1;
-			/*(*code[programCounter])
-			currInstructions.push_back(;*/
+	if(!programOver){
+		if(stages[0].isFree()){
+			cout<<"is ke ander aaya "<<endl;
+			programCounter++;
+			// cout<<programCounter<<" <-- pc ab ye hai"<<endl;
+			if(programCounter < code.size()){
+				instrId++;		
+				/*code[programCounter]->id = instrId;
+				code[programCounter]->presentStage = 0;
+				code[programCounter]->stageToExecute = 1;*/
+				currInstructions.push_back(code[programCounter]->clone());
+				currInstructions.back()->id = instrId;
+				currInstructions.back()->presentStage = 0;
+				currInstructions.back()->stageToExecute = 1;
+				/*(*code[programCounter])
+				currInstructions.push_back(;*/
+			}
 		}
 	}
 // Setting the stages free

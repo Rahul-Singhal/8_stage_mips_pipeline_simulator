@@ -7,6 +7,8 @@ class Exit: public Instruction{
 public:
 	Exit();
 	bool execute(int pc);
+	Exit(const Exit &e);
+	Exit * clone();
 };
 
 #endif
