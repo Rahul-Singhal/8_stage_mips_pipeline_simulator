@@ -33,6 +33,11 @@
 #include "Beq.h"
 #include "Lw.h"
 #include "Li.h"
+#include "La.h"
+#include "Not.h"
+#include "Sw.h"
+#include "Lb.h"
+#include "Sb.h"
 using namespace std;
 
 class Parser : public System{

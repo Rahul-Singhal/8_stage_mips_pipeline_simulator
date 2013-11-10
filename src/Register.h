@@ -26,6 +26,11 @@ public:
 	// Constructor, sets the initial value of register with id = id as value.
 	Register(int id, int value);
 
+	list <int> forwardingInstructions;
+	void forwardIt(int instructionId);
+	void unforwardIt(int instructionId);
+	bool isForwarded();
+
 	//  Should be called at every stage of the instruction which needs to writes to that particular instruction
 	void stallRegister(int instructionId);
 	void unstallRegister(int instructionId, int value);

@@ -208,9 +208,9 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	////cout<<"YONESS"<<inst.getId()<<"YONESS"<<endl;
 	if(prStage == 0) return;
 	double * colors = stageColorMap[prStage];
-	// if(inst.getPresentStage() == 1){
-	// 	instStrings.push_back(pair<int, string> (inst.getId(), str));
-	// }
+	if(inst.getPresentStage() == 1){
+		instStrings.push_back(pair<int, string> (inst.getId(), str));
+	}
 	maxIdDrawn = maxIdDrawn > inst.getId()? maxIdDrawn:inst.getId();
 	glPushMatrix();
 	glTranslatef((instWidth+2)*i, -((instHeight+20)*inst.getId()), 0);

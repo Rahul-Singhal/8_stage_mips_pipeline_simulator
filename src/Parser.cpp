@@ -309,7 +309,7 @@ void Parser::syntaxError(){
 void Parser::makeInstruction(){
     //cout<<lineWords[0]<<endl;
     //////cout<<"hy"<<lineWords[0]<<"jl"<<endl;
-
+    char displayString[100];
 
     if(lineWords.empty()) { return;}
     ////cout<<instructionNumber<<" ";
@@ -324,12 +324,16 @@ void Parser::makeInstruction(){
                 reg3 = registerMap.find(lineWords[3])->second;
                 //Add * ins = new Add(reg1, reg2, reg3,0);
                 codeVector.push_back(new Add(reg1, reg2, reg3,0));
+                sprintf(displayString, "ADD $%d $%d $%d", reg1, reg2, reg3);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
                 if(convertToNumber(lineWords[3]) != 2147483644){
                     //make instruction object and push it into vector
                     codeVector.push_back(new Addi(reg1, reg2, convertToNumber(lineWords[3]),0));
+                    sprintf(displayString, "ADD $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                    codeVector.back()->display = displayString;
                     //cout<<"INSTRUCTION: "<<"ADDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
@@ -345,6 +349,8 @@ void Parser::makeInstruction(){
             if(convertToNumber(lineWords[3]) != 2147483644){
                 //make instruction object and push it into vector
                 codeVector.push_back(new Addi(reg1, reg2, convertToNumber(lineWords[3]),0));
+                sprintf(displayString, "ADDI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"ADDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;*/
             }
             else syntaxError();
@@ -361,6 +367,8 @@ void Parser::makeInstruction(){
                     //make instruction object and push it into vector
                 //UNCOMMENT
                 codeVector.push_back(new And(reg1, reg2, reg3,0));
+                sprintf(displayString, "AND $%d $%d $%d", reg1, reg2, reg3);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"AND "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
@@ -368,6 +376,8 @@ void Parser::makeInstruction(){
                     //make instruction object and push it into vector
                     //UNCOMMENT
                     codeVector.push_back(new Andi(reg1, reg2, convertToNumber(lineWords[3]),0));
+                    sprintf(displayString, "AND $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                    codeVector.back()->display = displayString;
                     //cout<<"INSTRUCTION: "<<"ANDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
@@ -384,6 +394,8 @@ void Parser::makeInstruction(){
             if(convertToNumber(lineWords[3]) != 2147483644){
                 // UNCOMMENT
                 codeVector.push_back(new Andi(reg1, reg2, convertToNumber(lineWords[3]),0));
+                sprintf(displayString, "ANDI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"ANDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
             else syntaxError();
@@ -400,6 +412,8 @@ void Parser::makeInstruction(){
                     //make instruction object and push it into vector
                 //UNCOMMENT
                 codeVector.push_back(new Or(reg1, reg2, reg3,0));
+                sprintf(displayString, "OR $%d $%d $%d", reg1, reg2, reg3);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"OR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
@@ -407,6 +421,8 @@ void Parser::makeInstruction(){
                 if(convertToNumber(lineWords[3]) != 2147483644){
                     //UNCOMMENT
                     codeVector.push_back(new Ori(reg1, reg2, convertToNumber(lineWords[3]),0));
+                    sprintf(displayString, "OR $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                    codeVector.back()->display = displayString;
                     //cout<<"INSTRUCTION: "<<"ORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
@@ -423,6 +439,8 @@ void Parser::makeInstruction(){
             if(convertToNumber(lineWords[3]) != 2147483644){
                 //UNCOMMENT
                 codeVector.push_back(new Ori(reg1, reg2, convertToNumber(lineWords[3]),0));
+                sprintf(displayString, "ORI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"ORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
             }
             else syntaxError();
@@ -438,6 +456,8 @@ void Parser::makeInstruction(){
                 /*reg3 = registerMap.find(lineWords[3])->second;
                     //make instruction object and push it into vector*/
                 codeVector.push_back(new Sub(reg1, reg2, reg3,0));
+                sprintf(displayString, "SUB $%d $%d $%d", reg1, reg2, reg3);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"SUB "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
@@ -463,6 +483,8 @@ void Parser::makeInstruction(){
                     //make instruction object and push it into vector
                 //UNCOMMENT
                 codeVector.push_back(new Xor(reg1, reg2, reg3,0));
+                sprintf(displayString, "XOR $%d $%d $%d", reg1, reg2, reg3);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"XOR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
@@ -470,6 +492,8 @@ void Parser::makeInstruction(){
                 if(convertToNumber(lineWords[3]) != 2147483644){
                     // UNCOMMENT
                     codeVector.push_back(new Xori(reg1, reg2, convertToNumber(lineWords[3]),0));
+                    sprintf(displayString, "XOR $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                    codeVector.back()->display = displayString;
                     //cout<<"INSTRUCTION: "<<"XORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
@@ -486,6 +510,8 @@ void Parser::makeInstruction(){
             if(convertToNumber(lineWords[3]) != 2147483644){
                 //UNCOMMENT
                 codeVector.push_back(new Xori(reg1, reg2, convertToNumber(lineWords[3]),0));
+                sprintf(displayString, "XORI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"XORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
             }
             else syntaxError();
@@ -497,7 +523,9 @@ void Parser::makeInstruction(){
             reg1 = registerMap.find(lineWords[1])->second;
                 //make instruction object and push it into vector
                 // UNCOMMENT
-                //codeVector.push_back(new La(reg1, lineWords[2],0));
+                codeVector.push_back(new La(reg1, lineWords[2],0));
+                sprintf(displayString, "LA $%d %s", reg1, lineWords[2].c_str());
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"LA "<<reg1<<" "<<lineWords[2]<<endl;
         }
         else syntaxError();
@@ -508,7 +536,9 @@ void Parser::makeInstruction(){
                 //make instruction object and push it into vector
             if(convertToNumber(lineWords[2]) != 2147483644){
                 codeVector.push_back(new Li(reg1, convertToNumber(lineWords[2]),0));
-                cout<<"INSTRUCTION: "<<"LI "<<reg1<<" "<<convertToNumber(lineWords[2])<<endl;
+                sprintf(displayString, "LI $%d %d", reg1, convertToNumber(lineWords[2]));
+                codeVector.back()->display = displayString;
+                // cout<<"INSTRUCTION: "<<"LI "<<reg1<<" "<<convertToNumber(lineWords[2])<<endl;
             }
             else syntaxError();
         }
@@ -520,7 +550,9 @@ void Parser::makeInstruction(){
             reg2 = registerMap.find(lineWords[2])->second;
                 //make instruction object and push it into vector
             //UNCOMMENT
-            //codeVector.push_back(new Not(reg1, reg2, reg3,0));
+            codeVector.push_back(new Not(reg1, reg2,0));
+            sprintf(displayString, "NOT $%d $%d", reg1, reg2);
+            codeVector.back()->display = displayString;
             //cout<<"INSTRUCTION: "<<"NOT "<<reg1<<" "<<reg2<<" "<<endl;
         }
         else syntaxError();
@@ -528,6 +560,8 @@ void Parser::makeInstruction(){
         case 12:
         //UNCOMMENT
         codeVector.push_back(new Exit());
+        sprintf(displayString, "EXIT");
+        codeVector.back()->display = displayString;
         //cout<<"INSTRUCTION: SYSCALL"<<endl;
         break;
         case 13:
@@ -537,6 +571,8 @@ void Parser::makeInstruction(){
                 //make instruction object and push it into vector
             //UNCOMMENT
             codeVector.push_back(new Addi(reg1, reg2,0,0));
+            sprintf(displayString, "MOVE $%d $%d", reg1, reg2);
+            codeVector.back()->display = displayString;
             //cout<<"INSTRUCTION: "<<"MOVE "<<reg1<<" "<<reg2<<" "<<endl;
         }
         else syntaxError();
@@ -547,6 +583,8 @@ void Parser::makeInstruction(){
             reg2 = registerMap.find(lineWords[2])->second;
                 //make instruction object and push it into vector
             codeVector.push_back(new Beq(reg1, reg2, lineWords[3],0));
+            sprintf(displayString, "BEQ $%d $%d %s", reg1, reg2, lineWords[3].c_str());
+            codeVector.back()->display = displayString;
             //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
         else syntaxError();
@@ -562,14 +600,18 @@ void Parser::makeInstruction(){
             if(lineWords[2][0] == '('){
                 //sprintf(offset, "0");
                 address = strtok(lword,"( )\t");
-                // codeVector.push_back(new Sw(reg1,address, 0,0));
+                codeVector.push_back(new Sw(reg1,address, 0,0));
+                sprintf(displayString, "SW $%d (%s)", reg1, address);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"SW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
                 offset = strtok(lword,"( ");
                 address = strtok(NULL, "( )\t");
                 if(convertToNumber(offset) != 2147483644){
-                    // codeVector.push_back(new Sw(reg1,address, convertToNumber(offset),0));
+                    codeVector.push_back(new Sw(reg1,address, convertToNumber(offset),0));
+                    sprintf(displayString, "SW $%d %d(%s)", reg1, convertToNumber(offset), address);
+                    codeVector.back()->display = displayString;
                     //cout<<"INSTRUCTION: "<<"SW "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();
@@ -591,6 +633,8 @@ void Parser::makeInstruction(){
                 //sprintf(offset, "0");
                 address = strtok(lword, "( )\t");
                 codeVector.push_back(new Lw(reg1,address,0,0));
+                sprintf(displayString, "LW $%d (%s)", reg1, address);
+                codeVector.back()->display = displayString;
                 // cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
@@ -598,6 +642,8 @@ void Parser::makeInstruction(){
                 address = strtok(NULL, "( )\t");
                 if(convertToNumber(offset) != 2147483644){
                     codeVector.push_back(new Lw(reg1,address, convertToNumber(offset),0));
+                    sprintf(displayString, "LW $%d %d(%s)", reg1, convertToNumber(offset), address);
+                    codeVector.back()->display = displayString;
                     //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();
@@ -611,9 +657,15 @@ void Parser::makeInstruction(){
         if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
             reg1 = registerMap.find(lineWords[1])->second;
             reg2 = registerMap.find(lineWords[2])->second;
+            if(registerMap.find(lineWords[3]) != registerMap.end()){
                     //make instruction object and push it into vector
-            codeVector.push_back(new Mult(reg1,reg2,0));
-            cout<<"INSTRUCTION: "<<"MULT "<<reg1<<" "<<reg2<<" "<<endl;
+                codeVector.push_back(new Mult(reg1,reg2,reg3,0));
+                sprintf(displayString, "MULT $%d $%d $%d", reg1, reg2, reg3);
+                cout<<"set the "<<displayString<<endl;
+                codeVector.back()->display = displayString;
+                //cout<<"INSTRUCTION: "<<"MULT "<<reg1<<" "<<reg2<<" "<<endl;
+            }
+            else syntaxError();
 
         }
         else syntaxError();
@@ -638,7 +690,9 @@ void Parser::makeInstruction(){
                 //sprintf(offset, "0");
                 address = strtok(lword,"( )\t");
                 //UNCOMMENT
-                // codeVector.push_back(new Lb(reg1,address, 0,0));
+                codeVector.push_back(new Lb(reg1,address, 0,0));
+                sprintf(displayString, "LB $%d (%s)", reg1, address);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"LB "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
@@ -646,7 +700,9 @@ void Parser::makeInstruction(){
                 address = strtok(NULL, "( )\t");
                 if(convertToNumber(offset) != 2147483644){
                     //UNCOMMENT
-                    // codeVector.push_back(new Lb(reg1,address,convertToNumber(offset),0));
+                    codeVector.push_back(new Lb(reg1,address,convertToNumber(offset),0));
+                    sprintf(displayString, "Lb $%d %d(%s)", reg1, convertToNumber(offset), address);
+                    codeVector.back()->display = displayString;
                     //cout<<"INSTRUCTION: "<<"LB "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();
@@ -668,7 +724,9 @@ void Parser::makeInstruction(){
                 //sprintf(offset, "0");
                 address = strtok(lword, "( )\t");
                 //UNCOMMENT
-                // codeVector.push_back(new Sb(reg1,address,0,0));
+                codeVector.push_back(new Sb(reg1,address,0,0));
+                sprintf(displayString, "SB $%d (%s)", reg1,address);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"SB "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
@@ -676,7 +734,9 @@ void Parser::makeInstruction(){
                 address = strtok(NULL, "( )\t");
                 if(convertToNumber(offset) != 2147483644){
                     // UNCOMMENT
-                    // codeVector.push_back(new Sb(reg1,address,convertToNumber(offset),0));
+                    codeVector.push_back(new Sb(reg1,address,convertToNumber(offset),0));
+                    sprintf(displayString, "SB $%d %d(%s)", reg1, convertToNumber(offset), address);
+                    codeVector.back()->display = displayString;
                     //cout<<"INSTRUCTION: "<<"SB "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();
@@ -694,12 +754,16 @@ void Parser::makeInstruction(){
                 reg3 = registerMap.find(lineWords[3])->second;
                 //Add * ins = new Add(reg1, reg2, reg3,0);
                 codeVector.push_back(new Slt(reg1, reg2, reg3,0));
-                cout<<"INSTRUCTION: "<<"SLT "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+                sprintf(displayString, "SLT $%d $%d $%d", reg1, reg2, reg3);
+                codeVector.back()->display = displayString;
+                //cout<<"INSTRUCTION: "<<"SLT "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
                 if(convertToNumber(lineWords[3]) != 2147483644){
                     //make instruction object and push it into vector
                     codeVector.push_back(new Slti(reg1, reg2, convertToNumber(lineWords[3]),0));
+                    sprintf(displayString, "SLT $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                    codeVector.back()->display = displayString;
                 }
                 else syntaxError();
             }
@@ -715,6 +779,8 @@ void Parser::makeInstruction(){
                 //make instruction object and push it into vector
 
                 codeVector.push_back(new Slti(reg1, reg2, convertToNumber(lineWords[3]),0));
+                sprintf(displayString, "SLTI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                codeVector.back()->display = displayString;
             }
             else syntaxError();
         }
@@ -728,6 +794,8 @@ void Parser::makeInstruction(){
             if(convertToNumber(lineWords[3]) != 2147483644){
                 //make instruction object and push it into vector
                 codeVector.push_back(new Sll(reg1, reg2, convertToNumber(lineWords[3]),0));
+                sprintf(displayString, "SLL $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                codeVector.back()->display = displayString;
             }
             else syntaxError();
         }
@@ -740,6 +808,8 @@ void Parser::makeInstruction(){
             if(registerMap.find(lineWords[3]) != registerMap.end()){
                 reg3 = registerMap.find(lineWords[3])->second;
                 codeVector.push_back(new Sllv(reg1, reg2, reg3,0));
+                sprintf(displayString, "SLLV $%d $%d $%d", reg1, reg2, reg3);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
@@ -754,6 +824,8 @@ void Parser::makeInstruction(){
             if(convertToNumber(lineWords[3]) != 2147483644){
                 //make instruction object and push it into vector
                 codeVector.push_back(new Sra(reg1, reg2, convertToNumber(lineWords[3]),0));
+                sprintf(displayString, "SRA $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                codeVector.back()->display = displayString;
             }
             else syntaxError();
         }
@@ -766,6 +838,8 @@ void Parser::makeInstruction(){
             if(registerMap.find(lineWords[3]) != registerMap.end()){
                 reg3 = registerMap.find(lineWords[3])->second;
                 codeVector.push_back(new Srav(reg1, reg2, reg3,0));
+                sprintf(displayString, "SRAV $%d $%d $%d", reg1, reg2, reg3);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
@@ -780,6 +854,8 @@ void Parser::makeInstruction(){
             if(convertToNumber(lineWords[3]) != 2147483644){
                 //make instruction object and push it into vector
                 codeVector.push_back(new Srl(reg1, reg2, convertToNumber(lineWords[3]),0));
+                sprintf(displayString, "SRL $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
+                codeVector.back()->display = displayString;
             }
             else syntaxError();
         }
@@ -792,6 +868,8 @@ void Parser::makeInstruction(){
             if(registerMap.find(lineWords[3]) != registerMap.end()){
                 reg3 = registerMap.find(lineWords[3])->second;
                 codeVector.push_back(new Srlv(reg1, reg2, reg3,0));
+                sprintf(displayString, "SRLV $%d $%d $%d", reg1, reg2, reg3);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
@@ -806,6 +884,8 @@ void Parser::makeInstruction(){
             if(registerMap.find(lineWords[3]) != registerMap.end()){
                 reg3 = registerMap.find(lineWords[3])->second;
                 codeVector.push_back(new Nor(reg1, reg2, reg3,0));
+                sprintf(displayString, "NOR $%d $%d $%d", reg1, reg2, reg3);
+                codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();

@@ -155,7 +155,7 @@ vector <Instruction> Program::execute(){
 	cout<<endl;*/
 	if(!programOver){
 		if(stages[0].isFree()){
-			cout<<"is ke ander aaya "<<endl;
+			// cout<<"is ke ander aaya "<<endl;
 			programCounter++;
 			// cout<<programCounter<<" <-- pc ab ye hai"<<endl;
 			if(programCounter < code.size()){

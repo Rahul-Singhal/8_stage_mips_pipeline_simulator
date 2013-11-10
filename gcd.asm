@@ -14,6 +14,5 @@ main4:
 mult $t1, $t2, $t3
 li,$t1,0
 li $t2,0
-exit
 beq $t1,$t2,main4
 mult $t1, $t2, $t3

@@ -28,6 +28,20 @@ bool Register::isValid(){
 	cout<<"validity for "<<id<<" return false"<<endl;
 	return false;
 }
+
+void Register::forwardIt(int instructionId){
+	forwardingInstructions.push_back(instructionId);
+}
+
+void Register::unforwardIt(int instructionId){
+	forwardingInstructions.remove(instructionId);
+}
+
+bool Register::isForwarded(){
+	if(forwardingInstructions.size() == 0)
+		return false;
+	return true;
+}
 /*
 bool Register::write(int value, int instructionId, int instructionStage){
 	//cout<<value<<":"<<instructionId<<":"<<instructionStage<<endl;

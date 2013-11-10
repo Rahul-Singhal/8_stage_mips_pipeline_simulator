@@ -85,7 +85,7 @@ bool Li::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
-				display = "IF1";
+				//display = "IF1";
 				////cout << "if1 -->" ;
 				return true;
 			}
@@ -93,7 +93,7 @@ bool Li::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = -1;
-				display = "Waiting for IF1 to be free!";
+				// display = "Waiting for IF1 to be free!";
 				////cout << "if1 - wait -->" ;
 				return false;
 			}
@@ -107,7 +107,7 @@ bool Li::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
-				display = "IF2";
+				// display = "IF2";
 				////cout << "if2 -->" ;
 				return true;
 			}
@@ -115,7 +115,7 @@ bool Li::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = -1;
-				display = "Waiting for IF2 to be free!";
+				// display = "Waiting for IF2 to be free!";
 				////cout << "if2 - wait -->" ;
 				return false;
 			}
@@ -133,7 +133,7 @@ bool Li::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
-				display = "ID";
+				// display = "ID";
 				////cout << "id -->" ;
 				return true;
 			}
