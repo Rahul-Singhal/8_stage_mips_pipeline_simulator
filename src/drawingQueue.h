@@ -6,6 +6,7 @@
 #include <GL/glut.h>
 #include <map>
 #include <utility>
+#include <queue>
 using namespace std;
 
 class DrawingQueue{
@@ -17,6 +18,7 @@ private:
 	map <int, double *> stageColorMap;
 	map <int, string> stageStringMap;
 	vector<vector <Instruction> > displayVector;
+	queue<pair<int, pair<int, int> > > arrowBuffer;
 	void drawArrow(int back ,int up);
 	void drawFArrow(int back ,int up);
 	void drawInstruction(Instruction inst, int i, int j);
