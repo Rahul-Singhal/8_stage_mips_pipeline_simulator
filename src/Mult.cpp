@@ -29,7 +29,7 @@ Mult::Mult(const Mult &i){
   this->product = i.product;
   this->a = i.a;
   this->b = i.b;
-  this->presentSubStage = i.presentSubStage;
+  this->presentSubStage = 0;
 }
 
 Mult::Mult(Mult &i){
@@ -49,7 +49,7 @@ Mult::Mult(Mult &i){
   this->product = i.product;
   this->a = i.a;
   this->b = i.b;
-  this->presentSubStage = i.presentSubStage;
+  this->presentSubStage = 0;
 }
 Mult* Mult::clone(){
   return new Mult (*this);
@@ -136,7 +136,7 @@ bool Mult::execute(int pc){
           stalled = true;
           stallingRegister = rsIndex;
           stallingInstructionId = registers[rsIndex].instructionId;
-            ////cout << "rs register not readable -->";
+            // cout << "rs register not readable for id = "<<id<<endl;
 
           return false;
         }
@@ -146,7 +146,7 @@ bool Mult::execute(int pc){
           stalled = true;
           stallingRegister = rtIndex;
             stallingInstructionId = registers[rtIndex].instructionId;    
-            ////cout << "rt register not readable -->";
+            // cout << "rt register not readable for id = "<<id<<endl;
 
           return false;
         }
@@ -262,8 +262,8 @@ bool Mult::execute(int pc){
           stages[presentStage].setInstruction(id);
           stallingInstructionId = -1;
           stalled = true;
-          /*cout<<stages[stageToExecute].instructionId<<":"<<id<<endl;
-        cout << "ID not free -->" ;*/
+          // cout<<stages[stageToExecute].instructionId<<":"<<id<<endl;
+          // cout << "ID not free for id = "<<id<<endl ;
           return false;
         }
       }
@@ -285,10 +285,10 @@ bool Mult::execute(int pc){
               registers[rdIndex].unstallRegister(product, id);
             }
             stageToExecute += 2;
-          ////cout << "MULT stage done -->" ;
+          cout << "MULT stage done -->" ;
           }
           else {
-          ////cout << "MULT substage = " << presentSubStage  << "-->"; 
+          cout << "MULT substage = " << presentSubStage  << "-->"; 
           }
           return true;
         }
@@ -296,7 +296,7 @@ bool Mult::execute(int pc){
           stages[presentStage].setInstruction(id);
           stallingInstructionId = -1;
           stalled = true;
-        ////cout << "MULT stage not free -->";
+        cout << "MULT stage not free -->";
 
           return false;
         }
