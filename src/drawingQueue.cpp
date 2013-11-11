@@ -354,6 +354,10 @@ void DrawingQueue::drawFArrow(int back ,int up){
 	double y1 = instHeight/2;
 	double y2 = ((instHeight+20)*up)-instHeight/2;
 
+	//correct the arrow
+	x2 += (instWidth+2);
+	x1 += (instWidth/2+1);
+
 	double dx = x2-x1;
 	double dy = y2-y1;
 	double leng = sqrt(dx*dx + dy*dy);
