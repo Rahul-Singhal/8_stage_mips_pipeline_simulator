@@ -133,7 +133,7 @@ vector<Instruction *> Parser::getVector(string fileName){
     lineNumber = 0;
     //cout<<"Now reading lines"<<endl;
     while(getline(infile,str)){
-        //cout<<"Parsing line "<<str<<endl;
+        // cout<<"Parsing line "<<str<<endl;
         lineNumber++;
         parseLine(str);
     //v.push_back(str);  
@@ -246,18 +246,30 @@ void Parser::parseLine(string str){
         dataType = curWord;
         if (dataType == ".ascii"){
             char* newascii = strtok(NULL,  "\" ");
+            string stw = "";
+            int q=0;
+            while(str[q++] != '\"');
+            while(str[q] != '\"') stw += str[q++];
             //newascii = strtok(NULL,  "\"");
             // dataMap[dataName] = mem.storeAscii(newascii);
-            memory.storeAscii(dataName, newascii);
+            memory.storeAscii(dataName, stw.c_str());
             ////cout<<dataName<<" .ascii "<<newascii<<endl<<endl;
         }
         else if (dataType == ".asciiz"){
-            char* newasciiz = strtok(NULL,  "\" ");
+                char* newasciiz = strtok(NULL,  "\t ");
+
+            string stw = "";
+            int q=0;
+            while(str[q++] != '\"');
+            while(str[q] != '\"') stw += str[q++];
+            //cout<<"ab isko dekho"<<stw<<"AA"<<endl;
+
+            //newasciiz = strtok(NULL,  "\"");
             ////cout<<"yo there "<<newasciiz<<endl;
             //newasciiz = strtok(NULL,  "\"");
             // dataMap[dataName] = memory.storeAsciiz(newasciiz);
 
-            memory.storeAsciiz(dataName,newasciiz);
+            memory.storeAsciiz(dataName,stw.c_str());
             ////cout<<dataName<<" .asciiz "<<newasciiz<<endl<<endl;
         }
         else if (dataType == ".word"){
@@ -313,7 +325,7 @@ void Parser::parseLine(string str){
 }
 
 void Parser::syntaxError(){
-    //cout<<"SYNTAX ERROR!! CHECK LINE NUMBER "<<lineNumber<<endl;
+    cout<<"SYNTAX ERROR!! CHECK LINE NUMBER "<<lineNumber<<endl;
     exit(0);
 }
 
