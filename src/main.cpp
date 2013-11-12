@@ -68,7 +68,10 @@ static void idle(void)
 }
 
 void init(){
-    p = new Program("gcd.asm");
+    cout<<"Enter the path to source code file:";
+    string filePath;
+    cin>>filePath;
+    p = new Program(filePath);
     p->init();
     /*vector <Instruction > v;
     Instruction inst1(1,1,false,1, 20, false, 10, 20, "add $t1, $t2, $t3", 0);

@@ -102,8 +102,9 @@ Parser::Parser(string fileName, vector<Instruction *> & code){
     infile.open(fileName.c_str());
     //string str1 = "la $a0, prompt1      #read the numbers, s0 contains the first number and s1 contains the second number";
     //parseLine(str1);
-
+    lineNumber = 0;
     while(getline(infile,str)){
+        lineNumber++;
         parseLine(str);
     //v.push_back(str);  
     }
@@ -124,8 +125,10 @@ vector<Instruction *> Parser::getVector(string fileName){
     infile.open(fileName.c_str());
     //string str1 = "la $a0, prompt1      #read the numbers, s0 contains the first number and s1 contains the second number";
     //parseLine(str1);
+    lineNumber = 0;
     while(getline(infile,str)){
         // cout<<"Parsing line "<<str<<endl;
+        lineNumber++;
         parseLine(str);
     //v.push_back(str);  
     }
@@ -184,7 +187,7 @@ void Parser::parseLine(string str){
         if(curLeng > 1 && curWord[curLeng-1] == ':'){
             strTemp = curWord;
             labelMap[strTemp.substr(0,strTemp.length()-1)] = instructionNumber;
-            cout<<"LABEL ADDED!! "<<strTemp<<endl;
+            // cout<<"LABEL ADDED!! "<<strTemp<<endl;
         //label detected
         //////cout<<curWord<<endl<<endl<<endl<<endl;
             lastWord = curWord;
@@ -205,7 +208,7 @@ void Parser::parseLine(string str){
                 string strTemp = lastWord;
                 strTemp += ':';
                 labelMap[strTemp] = instructionNumber;
-                cout<<"LABEL ADDED AGAIN!! "<<strTemp<<endl;
+                // cout<<"LABEL ADDED AGAIN!! "<<strTemp<<endl;
                 lineWords.pop_back();
             }
             else{
@@ -301,20 +304,21 @@ void Parser::parseLine(string str){
 }
 
 void Parser::syntaxError(){
-    cout<<"SYNTAX ERROR!!"<<endl;
+    cout<<"SYNTAX ERROR!! CHECK LINE NUMBER "<<lineNumber<<endl;
     exit(0);
 }
 
 
 void Parser::makeInstruction(){
     //cout<<lineWords[0]<<endl;
-    //////cout<<"hy"<<lineWords[0]<<"jl"<<endl;
+    // cout<<"hy"<<instructionIntMap[lineWords[0]]<<"jl"<<endl;
     char displayString[100];
 
     if(lineWords.empty()) { return;}
     ////cout<<instructionNumber<<" ";
     //////cout<<"inst "<<lineWords[0]<<" inst type "<<instructionIntMap["add"]<<endl;
     int reg1, reg2, reg3;
+    if(instructionIntMap.find(lineWords[0]) == instructionIntMap.end()) syntaxError();
     switch(instructionIntMap[lineWords[0]]){
         case 0:
         if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
@@ -551,7 +555,7 @@ void Parser::makeInstruction(){
                 //make instruction object and push it into vector
             //UNCOMMENT
             codeVector.push_back(new Not(reg1, reg2,0));
-            sprintf(displayString, "NOT $%d $%d", reg1, reg2);
+            // sprintf(displayString, "NOT $%d $%d", reg1, reg2);
             codeVector.back()->display = displayString;
             //cout<<"INSTRUCTION: "<<"NOT "<<reg1<<" "<<reg2<<" "<<endl;
         }
@@ -661,7 +665,7 @@ void Parser::makeInstruction(){
                     //make instruction object and push it into vector
                 codeVector.push_back(new Mult(reg1,reg2,reg3,0));
                 sprintf(displayString, "MULT $%d $%d $%d", reg1, reg2, reg3);
-                cout<<"set the "<<displayString<<endl;
+                // cout<<"set the "<<displayString<<endl;
                 codeVector.back()->display = displayString;
                 //cout<<"INSTRUCTION: "<<"MULT "<<reg1<<" "<<reg2<<" "<<endl;
             }
@@ -674,7 +678,9 @@ void Parser::makeInstruction(){
         case 18:
                 //make instruction object and push it into vector
         //UNCOMMENT
-        // codeVector.push_back(new J(lineWords[1],0));
+        codeVector.push_back(new J(lineWords[1],0));
+        sprintf(displayString, "J %s", lineWords[1].c_str());
+        codeVector.back()->display = displayString;
         
         //cout<<"INSTRUCTION: "<<"J "<<lineWords[1]<<endl;
         break;
@@ -701,7 +707,7 @@ void Parser::makeInstruction(){
                 if(convertToNumber(offset) != 2147483644){
                     //UNCOMMENT
                     codeVector.push_back(new Lb(reg1,address,convertToNumber(offset),0));
-                    sprintf(displayString, "Lb $%d %d(%s)", reg1, convertToNumber(offset), address);
+                    sprintf(displayString, "LB $%d %d(%s)", reg1, convertToNumber(offset), address);
                     codeVector.back()->display = displayString;
                     //cout<<"INSTRUCTION: "<<"LB "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
@@ -894,7 +900,8 @@ void Parser::makeInstruction(){
         break;
 
         default:
-        syntaxError();
+            //cout<<"IN DEFAULT"<<endl;
+            syntaxError();
         break;
     }
 

@@ -38,6 +38,7 @@
 #include "Sw.h"
 #include "Lb.h"
 #include "Sb.h"
+#include "J.h"
 using namespace std;
 
 class Parser : public System{
@@ -46,6 +47,7 @@ private:
 	vector<string> v;
 	vector<string> lineWords;
 	int instructionNumber;
+	int lineNumber;
 	//label-map in the system class
 	map<string, int> registerMap;
 	map<string, int> instructionIntMap;

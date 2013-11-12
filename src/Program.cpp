@@ -46,8 +46,8 @@ Program::Program(string filename) {
 	// cout<<"Prining the label map:"<<endl;
 	// for (map<string,int>::iterator it=labelMap.begin(); it!=labelMap.end(); ++it)
  //    cout << it->first << " => " << it->second << '\n';
-
-
+	// exit(0);
+	
 	sepInstructions.assign(11, vector<Instruction*>(0, new Instruction()));
 }
 
