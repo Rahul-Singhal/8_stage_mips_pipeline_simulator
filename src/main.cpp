@@ -9,6 +9,8 @@
 #include "Program.h"
 using namespace std;
  
+
+string filePath;
 float scrollX = 0;
 float scrollY = 0;
 Program * p;
@@ -51,6 +53,12 @@ static void key(unsigned char key, int x, int y)
     switch (key)
     {
         case 27 :
+        case 'r':
+            p = new Program(filePath);
+            p->init();
+            dq = *(new DrawingQueue());
+            glutPostRedisplay();
+            break;
         case 'q':
             exit(0);
             break;
@@ -69,7 +77,6 @@ static void idle(void)
 
 void init(){
     cout<<"Enter the path to source code file:";
-    string filePath;
     cin>>filePath;
     p = new Program(filePath);
     p->init();
@@ -210,7 +217,7 @@ void specialKey(int key, int x, int y){
             else return;
             break;
         case GLUT_KEY_DOWN:
-            if(scrollY < (dq.getMaxScrollableY()-win_height))scrollY += shift;
+            if(scrollY < (dq.getMaxScrollableY()-win_height + 200))scrollY += shift;
             else return;
             break;
     }

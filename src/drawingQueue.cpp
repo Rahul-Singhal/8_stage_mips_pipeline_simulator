@@ -6,6 +6,7 @@
 using namespace std;
 
 
+
 void DrawingQueue::render_bitmap_string(float x, float y, float z, void *font, const char *str){  
   const char *c;
   int str_len = strlen(str);
