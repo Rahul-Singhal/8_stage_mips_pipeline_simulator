@@ -23,6 +23,11 @@ Exit * Exit::clone(){
 }
 
 bool Exit::execute(int pc){
-	programOver = true;
-	return true;
+  switch(stageToExecute){
+  case 4:
+  	programOver = true;
+  	return true;
+    break;
+  }
+  stageToExecute++;
 }

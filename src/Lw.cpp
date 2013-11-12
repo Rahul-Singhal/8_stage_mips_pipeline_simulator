@@ -247,7 +247,7 @@ sStalls++;
 				}
 				else {
 					stages[presentStage].setInstruction(id);
-					// stallingInstructionId = -1;
+					stallingInstructionId = -1;
 sStalls++;
 					stalled = true;
 				//////cout << "ID not free -->" ;

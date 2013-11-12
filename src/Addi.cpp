@@ -134,7 +134,7 @@ sStalls++;
           stallingRegister = rsIndex;
           stallingInstructionId = registers[rsIndex].instructionId;
           rStalls++;
-            ////cout << "rs register not readable -->"<<endl;
+            // cout << "rs register not readable --> for addi register "<<rsIndex<<endl;
 
           return false;
         }

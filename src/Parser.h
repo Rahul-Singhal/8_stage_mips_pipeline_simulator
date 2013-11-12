@@ -64,6 +64,8 @@ private:
 	bool text;
 	bool data;
 	vector<Instruction *> codeVector;
+	map<string , int> checkMap1;
+	map<string , int> checkMap2;
 	//vector< char* > asciiTable;
 	//vector< char* > asciizTable;
 	//vector< vector<int> > wordTable;
@@ -74,6 +76,7 @@ public:
 	void printLabels();
 	void parseLine(string str);
 	void makeInstruction();
+	void recheck();
 	// parse is assumed to take an empty vector of Instructions and fill it with the correct
 	// Intructions of the correct type (sub classes) in the correct order
 	//void parse(vector <Instruction> & code);

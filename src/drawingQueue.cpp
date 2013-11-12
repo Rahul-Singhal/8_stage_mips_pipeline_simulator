@@ -231,23 +231,34 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
     if(inst.getStalled() && !inst.getForwarded()){
 
     	render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, "STALL");
-    	int lastQueueStartId = displayVector[i-1][0].getId();
-    	if(displayVector[i-1][inst.getId() - lastQueueStartId].getStalled()){
-    		//no need to draw any more arrows
-    	}
-    	else{
-    		if(inst.getStallingInstructionId() != -1){
-	    		//draw arrow
-	    		int alpha = 0;
+    	//int lastQueueStartId = displayVector[i-1][0].getId();
+		if(inst.getStallingInstructionId() != -1){
+
+			bool checkLast = false;
+			for(int q = 0 ; q<displayVector[i-1].size(); q++){
+				if(displayVector[i-1][q].id == inst.id){
+					if(displayVector[i-1][q].getStalled()){
+						checkLast = true;
+						break;
+					}
+					else{
+						checkLast = false;
+						break;
+					}
+				}
+			}
+			if(!checkLast){
+				//draw arrow
+	    		int alpha = 1;
 	    		int beta;
 	    		//int lastQueueStartId = displayVector[i-alpha][0].getId();
 	    		// stage 3 is ID
 	    		bool myFlag = false;
 	    		int stallInstId = inst.getStallingInstructionId();
-	    		while(alpha++){
+	    		while(alpha <= i){
 	    			int maxLeng = displayVector[i-alpha].size();
 	    			for(beta = 0; beta < maxLeng; beta++){
-	    				if(displayVector[i-alpha][beta].getId() == stallInstId){
+	    				if(displayVector[i-alpha][beta].getId() == stallInstId && displayVector[i-alpha][beta].getPresentStage() == 3){
 	    					myFlag = true;
 	    					break;
 	    				}
@@ -257,13 +268,15 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	    				}
 	    			}
 	    			if(myFlag) break;
+	    			alpha++;
 	    		}
 	    		//draw arrow from rectangle alpha blocks back and inst.getId()-inst.getStallingInstructionId() up
 
-	    		drawArrow(alpha, beta+1);
-    		}
-
+	    		drawArrow(alpha, -inst.getStallingInstructionId()+inst.id);
+			}
+    		
 		}
+
 	}
 	if(inst.getForwarded()){
 		//draw arrow to display forwarding

@@ -151,7 +151,7 @@ bool Sw::execute(int pc){
 						stallingRegister = rsIndex;
 						stallingInstructionId = registers[rsIndex].instructionId;
 						rStalls++;
-							//////cout << "rs register not readable -->";
+							cout << "rt register not readable --> for sw register "<<rsIndex<<endl;
 
 						return false;
 					}
@@ -162,12 +162,12 @@ bool Sw::execute(int pc){
 						stallingRegister = rtIndex;
 						stallingInstructionId = registers[rtIndex].instructionId;  
 						rStalls++;  
-						//////cout << "rt register not readable -->";
+						cout << "rt register not readable --> for sw register "<<rtIndex<<endl;
 
 						return false;
 					}
 					else{
-						registers[rtIndex].stallRegister(id); 
+						// registers[rtIndex].stallRegister(id); 
 						a = registers[rtIndex].value;
 						b = registers[rsIndex].value;
 						int lastTime;
@@ -200,12 +200,12 @@ bool Sw::execute(int pc){
 						stallingRegister = rtIndex;
 						stallingInstructionId = registers[rtIndex].instructionId;  
 						rStalls++;  
-						//////cout << "rt register not readable -->";
+						cout << "rt register not readable --> for sw register "<<rtIndex<<endl;
 
 						return false;
 					}
 					else{
-						registers[rtIndex].stallRegister(id); 
+						// registers[rtIndex].stallRegister(id); 
 						a = registers[rtIndex].value;
 						if(registers[rtIndex].isForwarded()){
 							forwarded = true;
@@ -286,7 +286,8 @@ bool Sw::execute(int pc){
 				}
 				else {
 					stages[presentStage].setInstruction(id);
-					// stallingInstructionId = -1;
+					stallingInstructionId = -1;
+					// cout<<"YE LO MAINE -1 DIYA "<<endl;
 					sStalls++;
 					stalled = true;
 				//////cout << "ID not free -->" ;

@@ -128,6 +128,10 @@ vector<Instruction *> Parser::getVector(string fileName){
     ifstream infile;
     initMaps();
     infile.open(fileName.c_str());
+    if(!infile.is_open()){
+        cout<<"ERROR OPENING FILE! EXITING."<<endl;
+        exit(0);
+    }
     //string str1 = "la $a0, prompt1      #read the numbers, s0 contains the first number and s1 contains the second number";
     //parseLine(str1);
     lineNumber = 0;
@@ -141,18 +145,35 @@ vector<Instruction *> Parser::getVector(string fileName){
 
     
     infile.close();
-    // //cout<<"The size of vector before returning is "<<codeVector.size()<<endl;
+    // cout<<"The size of vector before returning is "<<codeVector.size()<<endl;
     // exit(0);
+    recheck();
     return codeVector;
+}
+
+void Parser::recheck(){
+    map<string,int>::iterator it;
+
+    // cout<<"printing label map "<<endl;
+    // for(it = labelMap.begin(); it!= labelMap.end(); it++){
+    //     cout<<it->first<<endl;
+    // }
+    for(it = checkMap2.begin(); it!= checkMap2.end(); it++){
+        // cout<<" checking "<<it->first<<endl;
+        if(checkMap1.find(it->first) == checkMap1.end()){
+            cout<<"ERROR IN LINE NUMBER "<<it->second<<endl;
+            exit(0);
+        }
+    }
 }
 
 Parser::Parser(){}
 void Parser::printLabels(){
     //////cout<<endl<<"LABEL MAPPING"<<endl;
-    map<string,int>::iterator it;
-    for(it = labelMap.begin(); it!= labelMap.end(); it++){
-        //////cout<<it->first<<" maps to "<<it->second<<endl;
-    }
+    // map<string,int>::iterator it;
+    // for(it = labelMap.begin(); it!= labelMap.end(); it++){
+    //     // if(it->first[(it->first).length()-1] == ':')
+    // }
 }
 
 
@@ -193,7 +214,9 @@ void Parser::parseLine(string str){
     if (text){
         if(curLeng > 1 && curWord[curLeng-1] == ':'){
             strTemp = curWord;
+            // cout<<"adding label "<<strTemp.substr(0,strTemp.length()-1)<<endl;
             labelMap[strTemp.substr(0,strTemp.length()-1)] = instructionNumber;
+            checkMap1[strTemp.substr(0,strTemp.length()-1)] = instructionNumber;
             // //cout<<"LABEL ADDED!! "<<strTemp<<endl;
         //label detected
         ////////cout<<curWord<<endl<<endl<<endl<<endl;
@@ -213,8 +236,10 @@ void Parser::parseLine(string str){
             //last word was label
             ////////cout<<curWord<<endl<<endl<<endl<<endl;
                 string strTemp = lastWord;
-                strTemp += ':';
+                // strTemp += ':';
+                // cout<<"adding label "<<strTemp<<endl;
                 labelMap[strTemp] = instructionNumber;
+                checkMap1[strTemp] = instructionNumber;
                 // //cout<<"LABEL ADDED AGAIN!! "<<strTemp<<endl;
                 lineWords.pop_back();
             }
@@ -565,6 +590,7 @@ void Parser::makeInstruction(){
                 // UNCOMMENT
                 codeVector.push_back(new La(reg1, lineWords[2],0));
                 sprintf(displayString, "LA $%d %s", reg1, lineWords[2].c_str());
+                checkMap2[lineWords[2]] = lineNumber;
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
                 ////cout<<"INSTRUCTION: "<<"LA "<<reg1<<" "<<lineWords[2]<<endl;
@@ -629,6 +655,7 @@ void Parser::makeInstruction(){
                 //make instruction object and push it into vector
             codeVector.push_back(new Beq(reg1, reg2, lineWords[3],0));
             sprintf(displayString, "BEQ $%d $%d %s", reg1, reg2, lineWords[3].c_str());
+            checkMap2[lineWords[3]] = lineNumber;
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
             ////cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
@@ -674,6 +701,7 @@ void Parser::makeInstruction(){
                 else{
                     codeVector.push_back(new Sw(reg1,lineWords[2],0,0));
                     sprintf(displayString, "SW $%d %s", reg1, lineWords[2].c_str());
+                    checkMap2[lineWords[2]] = lineNumber;
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
                 }
@@ -721,6 +749,7 @@ void Parser::makeInstruction(){
                 else{
                     codeVector.push_back(new Lw(reg1,lineWords[2],0,0));
                     sprintf(displayString, "LW $%d %s", reg1, lineWords[2].c_str());
+                    checkMap2[lineWords[2]] = lineNumber;
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
                 }
@@ -754,6 +783,7 @@ void Parser::makeInstruction(){
         //UNCOMMENT
         codeVector.push_back(new J(lineWords[1],0));
         sprintf(displayString, "J %s", lineWords[1].c_str());
+        checkMap2[lineWords[1]] = lineNumber;
         codeVector.back()->display = displayString;
         codeVector.back()->address = codeVector.size()-1;
         
@@ -798,6 +828,7 @@ void Parser::makeInstruction(){
                 else{
                     codeVector.push_back(new Lb(reg1,lineWords[2],0,0));
                     sprintf(displayString, "LB $%d %s", reg1, lineWords[2].c_str());
+                    checkMap2[lineWords[2]] = lineNumber;
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
                 }
@@ -845,6 +876,7 @@ void Parser::makeInstruction(){
                 else{
                     codeVector.push_back(new Sb(reg1,lineWords[2],0,0));
                     sprintf(displayString, "SB $%d %s", reg1, lineWords[2].c_str());
+                    checkMap2[lineWords[2]] = lineNumber;
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
                 }
@@ -1013,6 +1045,7 @@ void Parser::makeInstruction(){
         case 30:
             codeVector.push_back(new Jal(lineWords[1],0));
             sprintf(displayString, "JAL %s", lineWords[1].c_str());
+            checkMap2[lineWords[1]] = lineNumber;
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
             break;
@@ -1023,6 +1056,7 @@ void Parser::makeInstruction(){
                 //make instruction object and push it into vector
             codeVector.push_back(new Blt(reg1, reg2, lineWords[3],0));
             sprintf(displayString, "BLT $%d $%d %s", reg1, reg2, lineWords[3].c_str());
+            checkMap2[lineWords[3]] = lineNumber;
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
             ////cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
@@ -1036,6 +1070,7 @@ void Parser::makeInstruction(){
                 //make instruction object and push it into vector
             codeVector.push_back(new Bgt(reg1, reg2, lineWords[3],0));
             sprintf(displayString, "BGT $%d $%d %s", reg1, reg2, lineWords[3].c_str());
+            checkMap2[lineWords[3]] = lineNumber;
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
             ////cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
@@ -1047,6 +1082,7 @@ void Parser::makeInstruction(){
         //UNCOMMENT
         codeVector.push_back(new B(lineWords[1],0));
         sprintf(displayString, "B %s", lineWords[1].c_str());
+        checkMap2[lineWords[1]] = lineNumber;
         codeVector.back()->display = displayString;
         codeVector.back()->address = codeVector.size()-1;
         ////cout<<"INSTRUCTION: "<<"B "<<lineWords[1]<<"uoooooooooooooooooooooooooooooo"<<endl;
@@ -1058,6 +1094,7 @@ void Parser::makeInstruction(){
                 //make instruction object and push it into vector
             codeVector.push_back(new Bne(reg1, reg2, lineWords[3],0));
             sprintf(displayString, "BNE $%d $%d %s", reg1, reg2, lineWords[3].c_str());
+            checkMap2[lineWords[3]] = lineNumber;
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
             ////cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;

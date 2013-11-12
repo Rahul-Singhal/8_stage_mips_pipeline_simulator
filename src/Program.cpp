@@ -37,7 +37,7 @@ Program::Program(string filename) {
 	
 	// //cout << &code << endl;
 	// //cout << "HERE1" <<endl;
-	// //cout << code.size() << endl;
+	// //codeut << code.size() << endl;
 // UNCOMMENT THIS TO USE THE PARSER
 	codeSnippet = parser.getVector(filename);
 	vector <Instruction *>::iterator it;
@@ -48,12 +48,12 @@ Program::Program(string filename) {
 		code.back()->stageToExecute = 1;
 	}
 
-	////cout<<"the size of vector is "<<code.size()<<endl;
-	//exit(0);
+	// cout<<"the size of vector is "<<code.size()<<endl;
+	// exit(0);
 	// //cout<<"Inside the Program object"<<endl;
-	// //cout<<"Prining the label map:"<<endl;
+	// cout<<"Prining the label map:"<<endl;
 	// for (map<string,int>::iterator it=labelMap.begin(); it!=labelMap.end(); ++it)
- //    //cout << it->first << " => " << it->second << '\n';
+ //    cout << it->first << " => " << it->second << '\n';
 	// exit(0);
 	
 	sepInstructions.assign(11, vector<Instruction*>(0, new Instruction()));
@@ -68,8 +68,14 @@ void Program::init(){
 	}
 	// initialising the registers once and for all
 	for(int i = 0 ; i < 32 ; i++){
-		registers[i].id = i;
-		registers[i].value = 0;
+		if(i == 29){
+			registers[i].id = i;
+			registers[i].value = 10485756;
+		}
+		else{
+			registers[i].id = i;
+			registers[i].value = 0;
+		}
 		// registers[i].valid = true;
 		// registers[i].instructionStage = 10;
 	}
@@ -77,6 +83,10 @@ void Program::init(){
 	programCounter = 0;
 	instrId = 0;
 	clockCycle = 0;
+	if(code.empty()){
+		cout<<"Nothing to simulate!"<<endl;
+		exit(0);
+	}
 	code[programCounter]->id = instrId;
 	code[programCounter]->presentStage = 0;
 	code[programCounter]->stageToExecute = 1;
@@ -176,7 +186,9 @@ vector <Instruction> Program::execute(){
 		it++;
 	}
 	//cout<<endl;*/
+
 	if(!programOver){
+
 		if(stages[0].isFree()){
 			// //cout<<"is ke ander aaya "<<endl;
 			programCounter++;
