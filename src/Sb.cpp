@@ -163,7 +163,7 @@ bool Sb::execute(int pc){
 						return false;
 					}
 					else{
-						registers[rtIndex].stallRegister(id); 
+						// registers[rtIndex].stallRegister(id); 
 						a = registers[rtIndex].value;
 						b = registers[rsIndex].value;
 						if(registers[rsIndex].isForwarded()){
@@ -197,7 +197,7 @@ bool Sb::execute(int pc){
 						return false;
 					}
 					else{
-						registers[rtIndex].stallRegister(id); 
+						// registers[rtIndex].stallRegister(id); 
 						a = registers[rtIndex].value;
 						if(registers[rtIndex].isForwarded()){
 							forwarded = true;
