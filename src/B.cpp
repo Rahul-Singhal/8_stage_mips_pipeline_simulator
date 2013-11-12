@@ -3,7 +3,9 @@
 B::B(string label, int id){
 	// this->rsIndex = rsIndex;
 	// this->rtIndex = rtIndex;
+	cout<<"construcotr of BBBBB"<<labelMap[label]<<endl;
 	this->destPc = labelMap[label];
+	this->label = label;
 	this->id = id;
 }
 
@@ -18,6 +20,8 @@ B::B(const B &i){
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
 	this->id = i.id;
+	this->label = i.label;
+	this->destPc = labelMap[i.label];
 	// this->rtIndex = i.rtIndex;
 	// this->rsIndex = i.rsIndex;
 	// this->label = i.label;
@@ -36,6 +40,8 @@ B::B(B &i){
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
 	this->id = i.id;
+	this->label = i.label;
+	this->destPc = labelMap[i.label];
 	// this->rtIndex = gtpooniwala@gmail.com i.rtIndex;
 	// this->rsIndex = i.rsIndex;
 	// this->label = i.label;
@@ -83,7 +89,7 @@ bool B::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
-				display = "IF1";
+				//display = "IF1";
 				////cout << "if1 -->" ;
 				return true;
 			}
@@ -91,7 +97,7 @@ bool B::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = stages[stageToExecute].instructionId;
-				display = "Waiting for IF1 to be free!";
+				// display = "Waiting for IF1 to be free!";
 				////cout << "if1 - wait -->" ;
 				return false;
 			}
@@ -105,7 +111,7 @@ bool B::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
-				display = "IF2";
+				//display = "IF2";
 				////cout << "if2 -->" ;
 				return true;
 			}
@@ -113,7 +119,7 @@ bool B::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = stages[stageToExecute].instructionId;
-				display = "Waiting for IF2 to be free!";
+				// display = "Waiting for IF2 to be free!";
 				////cout << "if2 - wait -->" ;
 				return false;
 			}

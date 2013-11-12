@@ -11,6 +11,7 @@ private:
 	// if the branch is taken
 	int destPc;
 	int a, b;
+	string label;
 public:
 	Bne(int rsIndex, int rtIndex, string label, int id);
 	Bne(Bne &b);

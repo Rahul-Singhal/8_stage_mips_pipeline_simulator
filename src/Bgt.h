@@ -11,6 +11,7 @@ private:
 	// if the branch is taken
 	int destPc;
 	int a, b;
+	string label;
 public:
 	Bgt(int rsIndex, int rtIndex, string label, int id);
 	Bgt(Bgt &b);

@@ -88,7 +88,7 @@ bool La::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
-				display = "IF1";
+				//display = "IF1";
 				////cout << "if1 -->" ;
 				return true;
 			}
@@ -110,7 +110,7 @@ bool La::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
-				display = "IF2";
+				//display = "IF2";
 				////cout << "if2 -->" ;
 				return true;
 			}

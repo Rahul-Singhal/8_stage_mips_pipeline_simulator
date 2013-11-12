@@ -941,8 +941,7 @@ void Parser::makeInstruction(){
         codeVector.push_back(new B(lineWords[1],0));
         sprintf(displayString, "B %s", lineWords[1].c_str());
         codeVector.back()->display = displayString;
-        
-        //cout<<"INSTRUCTION: "<<"J "<<lineWords[1]<<endl;
+        //cout<<"INSTRUCTION: "<<"B "<<lineWords[1]<<"uoooooooooooooooooooooooooooooo"<<endl;
         break;
         case 34:
         if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {

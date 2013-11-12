@@ -5,6 +5,7 @@ Bgt::Bgt(int rsIndex, int rtIndex, string label, int id){
 	this->rtIndex = rtIndex;
 	this->destPc = labelMap[label];
 	this->id = id;
+	this->label = label;
 }
 
 Bgt::Bgt(const Bgt &i){
@@ -20,9 +21,10 @@ Bgt::Bgt(const Bgt &i){
 	this->id = i.id;
 	this->rtIndex = i.rtIndex;
 	this->rsIndex = i.rsIndex;
-	this->destPc = i.destPc;
+	this->destPc = labelMap[i.label];
 	this->a = i.a;
 	this->b = i.b;
+	this->label = i.label;
 }
 
 Bgt::Bgt(Bgt &i){
@@ -38,9 +40,10 @@ Bgt::Bgt(Bgt &i){
 	this->id = i.id;
 	this->rtIndex = i.rtIndex;
 	this->rsIndex = i.rsIndex;
-	this->destPc = i.destPc;
+	this->destPc = labelMap[i.label];
 	this->a = i.a;
 	this->b = i.b;
+	this->label = i.label;
 }
 
 void Bgt::unstall(int instructionId){
@@ -83,7 +86,7 @@ bool Bgt::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
-				display = "IF1";
+				//display = "IF1";
 				////cout << "if1 -->" ;
 				return true;
 			}
@@ -105,7 +108,7 @@ bool Bgt::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
-				display = "IF2";
+				//display = "IF2";
 				////cout << "if2 -->" ;
 				return true;
 			}

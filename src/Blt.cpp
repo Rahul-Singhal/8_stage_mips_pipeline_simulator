@@ -5,6 +5,7 @@ Blt::Blt(int rsIndex, int rtIndex, string label, int id){
 	this->rtIndex = rtIndex;
 	this->destPc = labelMap[label];
 	this->id = id;
+	this->label = label;
 }
 
 Blt::Blt(const Blt &i){
@@ -20,9 +21,10 @@ Blt::Blt(const Blt &i){
 	this->id = i.id;
 	this->rtIndex = i.rtIndex;
 	this->rsIndex = i.rsIndex;
-	this->destPc = i.destPc;
+	this->destPc = labelMap[i.label];
 	this->a = i.a;
 	this->b = i.b;
+	this->label = i.label;
 }
 
 Blt::Blt(Blt &i){
@@ -38,9 +40,10 @@ Blt::Blt(Blt &i){
 	this->id = i.id;
 	this->rtIndex = i.rtIndex;
 	this->rsIndex = i.rsIndex;
-	this->destPc = i.destPc;
+	this->destPc = labelMap[i.label];
 	this->a = i.a;
 	this->b = i.b;
+	this->label = i.label;
 }
 
 void Blt::unstall(int instructionId){
@@ -83,7 +86,7 @@ bool Blt::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
-				display = "IF1";
+				//display = "IF1";
 				////cout << "if1 -->" ;
 				return true;
 			}
@@ -105,7 +108,7 @@ bool Blt::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stageToExecute++;
 				stalled = false;
-				display = "IF2";
+				//display = "IF2";
 				////cout << "if2 -->" ;
 				return true;
 			}
