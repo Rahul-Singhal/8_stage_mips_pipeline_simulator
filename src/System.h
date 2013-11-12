@@ -24,6 +24,8 @@ public:
   	static bool fastBranching;
   	static Memory memory;
   	static map<string, int> labelMap;
+  	static int rStalls;
+  	static int sStalls;
 };
 
 #endif

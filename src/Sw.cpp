@@ -104,6 +104,7 @@ bool Sw::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = -1;
+sStalls++;
 //display = "Waiting for IF1 to be free!";
 				////cout << "if1 - wait -->" ;
 				return false;
@@ -126,6 +127,7 @@ bool Sw::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = -1;
+sStalls++;
 //display = "Waiting for IF2 to be free!";
 				////cout << "if2 - wait -->" ;
 				return false;
@@ -148,6 +150,7 @@ bool Sw::execute(int pc){
 						stalled = true;
 						stallingRegister = rsIndex;
 						stallingInstructionId = registers[rsIndex].instructionId;
+						rStalls++;
 							////cout << "rs register not readable -->";
 
 						return false;
@@ -157,7 +160,8 @@ bool Sw::execute(int pc){
 						// stages[presentStage].setInstruction(id);
 						stalled = true;
 						stallingRegister = rtIndex;
-						stallingInstructionId = registers[rtIndex].instructionId;    
+						stallingInstructionId = registers[rtIndex].instructionId;  
+						rStalls++;  
 						////cout << "rt register not readable -->";
 
 						return false;
@@ -191,7 +195,8 @@ bool Sw::execute(int pc){
 						// stages[presentStage].setInstruction(id);
 						stalled = true;
 						stallingRegister = rtIndex;
-						stallingInstructionId = registers[rtIndex].instructionId;    
+						stallingInstructionId = registers[rtIndex].instructionId;  
+						rStalls++;  
 						////cout << "rt register not readable -->";
 
 						return false;
@@ -279,6 +284,7 @@ bool Sw::execute(int pc){
 				else {
 					stages[presentStage].setInstruction(id);
 					// stallingInstructionId = -1;
+sStalls++;
 					stalled = true;
 				////cout << "ID not free -->" ;
 					return false;
@@ -302,6 +308,7 @@ bool Sw::execute(int pc){
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
+sStalls++;
 					stalled = true;
 				////cout << "EX stage not free -->";
 
@@ -323,6 +330,7 @@ bool Sw::execute(int pc){
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
+sStalls++;
 					stalled = true;
 				////cout << "MEM1 stage not free -->";
 
@@ -344,6 +352,7 @@ bool Sw::execute(int pc){
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
+sStalls++;
 					stalled = true;
 				////cout << "MEM2 stage not free -->";
 
@@ -388,6 +397,7 @@ bool Sw::execute(int pc){
 					else{
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
+sStalls++;
 						stalled = true;
 				////cout << "MEM3 stage not free -->";
 
@@ -430,6 +440,7 @@ bool Sw::execute(int pc){
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
+sStalls++;
 					stalled = true;
 				////cout << "WB not free ->";
 

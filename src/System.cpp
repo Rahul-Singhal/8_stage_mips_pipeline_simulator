@@ -8,6 +8,10 @@ bool System::forwardingEnabled = true;
 
 int System::programCounter = 1;
 
+int System::rStalls = 0;
+
+int System::sStalls = 0;
+
 int System::multSubStages = 4;
 
 bool System::fastBranching = false;

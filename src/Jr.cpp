@@ -95,6 +95,7 @@ Jr * Jr::clone(){
 					stages[presentStage].setInstruction(id);
 					stalled = true;
 					stallingInstructionId = -1;
+sStalls++;
 //display = "Waiting for IF1 to be free!";
 				////cout << "if1 - wait -->" ;
 					return false;
@@ -117,6 +118,7 @@ Jr * Jr::clone(){
 					stages[presentStage].setInstruction(id);
 					stalled = true;
 					stallingInstructionId = -1;
+sStalls++;
 //display = "Waiting for IF2 to be free!";
 				////cout << "if2 - wait -->" ;
 					return false;
@@ -140,6 +142,7 @@ Jr * Jr::clone(){
 						stalled = true;
 						stallingRegister = rsIndex;
 						stallingInstructionId = registers[rsIndex].instructionId;
+						rStalls++;
 						cout << "rs register not readable -->"<<endl;
 
 						return false;
@@ -289,6 +292,7 @@ Jr * Jr::clone(){
 				// cout<<"Yes its coming here"<<endl;
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
+sStalls++;
 						stalled = true;
 				cout << "ID not free --> jr" <<endl;
 						return false;
@@ -318,6 +322,7 @@ Jr * Jr::clone(){
 					else{
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
+sStalls++;
 						stalled = true;
 				////cout << "EX stage not free -->";
 
@@ -339,6 +344,7 @@ Jr * Jr::clone(){
 					else{
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
+sStalls++;
 						stalled = true;
 				////cout << "MEM1 stage not free -->";
 
@@ -359,6 +365,7 @@ Jr * Jr::clone(){
 					else{
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
+sStalls++;
 						stalled = true;
 				////cout << "MEM2 stage not free -->";
 
@@ -379,6 +386,7 @@ Jr * Jr::clone(){
 					else{
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
+sStalls++;
 						stalled = true;
 				////cout << "MEM3 stage not free -->";
 
@@ -400,6 +408,7 @@ Jr * Jr::clone(){
 					else{
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
+sStalls++;
 						stalled = true;
 				////cout << "WB stage not free -->";
 
