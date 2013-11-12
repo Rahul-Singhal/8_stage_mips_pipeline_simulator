@@ -2,7 +2,7 @@
 using namespace std;
 
 Instruction::Instruction(){
-	////cout<<"Instruction"<<endl;
+	//////cout<<"Instruction"<<endl;
 	stageToExecute = 1;
 	presentStage = 0;
 	stalled = false;
@@ -69,12 +69,12 @@ Instruction* Instruction::clone(){
 }
 
 bool Instruction::execute(int pc){
-  ////cout<<"FUCKED"<<endl;
+  //////cout<<"FUCKED"<<endl;
   return false;
 }
 
 void Instruction::unstall(int instructionId){
-	cout<<"FUCKED AGAIN"<<endl;
+	//cout<<"FUCKED AGAIN"<<endl;
 	return;
 }
 

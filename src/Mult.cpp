@@ -67,8 +67,8 @@ void Mult::unstall(){
 // set the stage where it already is to busy. So that no other further instruction try to access the stage.
 
 bool Mult::execute(int pc){
-  // ////cout<<"MULT"<<endl;
-  // ////cout<<"MAIN CALL HUWA"<<endl;
+  // //////cout<<"MULT"<<endl;
+  // //////cout<<"MAIN CALL HUWA"<<endl;
   // Default Values:
   forwarded = false;
   stalled = false;
@@ -86,7 +86,7 @@ bool Mult::execute(int pc){
         stageToExecute++;
         stalled = false;
         ////display = "IF1";
-        ////cout << "if1 -->" ;
+        //////cout << "if1 -->" ;
         return true;
       }
       else{
@@ -95,7 +95,7 @@ bool Mult::execute(int pc){
         stallingInstructionId = -1;
 sStalls++;
 //display = "Waiting for IF1 to be free!";
-        ////cout << "if1 - wait -->" ;
+        //////cout << "if1 - wait -->" ;
         return false;
       }
     }
@@ -109,7 +109,7 @@ sStalls++;
         stageToExecute++;
         stalled = false;
         ////display = "IF2";
-        ////cout << "if2 -->" ;
+        //////cout << "if2 -->" ;
         return true;
       }
       else {
@@ -119,7 +119,7 @@ sStalls++;
 sStalls++;
         //this->stageToExecute = i.stageToExecute;
 //display = "Waiting for IF2 to be free!";
-        ////cout << "if2 - wait -->" ;
+        //////cout << "if2 - wait -->" ;
         return false;
       }
     }
@@ -140,7 +140,7 @@ sStalls++;
           stallingRegister = rsIndex;
           stallingInstructionId = registers[rsIndex].instructionId;
           rStalls++;
-            // cout << "rs register not readable for id = "<<id<<endl;
+            // //cout << "rs register not readable for id = "<<id<<endl;
 
           return false;
         }
@@ -151,7 +151,7 @@ sStalls++;
           stallingRegister = rtIndex;
             stallingInstructionId = registers[rtIndex].instructionId;  
             rStalls++;  
-            // cout << "rt register not readable for id = "<<id<<endl;
+            // //cout << "rt register not readable for id = "<<id<<endl;
 
           return false;
         }
@@ -174,7 +174,7 @@ sStalls++;
             // stages[presentStage].setInstruction(id);
           stageToExecute += 2;
           stalled = false;
-            ////cout << "id completed -->";
+            //////cout << "id completed -->";
 
           return true;
           } /*if (  registers[rsIndex].instructionStage==10 && registers[rtIndex].instructionStage==10) {
@@ -187,7 +187,7 @@ sStalls++;
             stages[presentStage].setInstruction(id);
             stageToExecute += 2;
             stalled = false;
-            ////cout << "id completed -->";
+            //////cout << "id completed -->";
 
             return true;
           }
@@ -204,7 +204,7 @@ sStalls++;
             stages[presentStage].setInstruction(id);
             stageToExecute += 2;
             stalled = false;
-            ////cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+            //////cout << "rs value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
             return true;
           }
@@ -220,7 +220,7 @@ sStalls++;
             stages[presentStage].setInstruction(id);
             stageToExecute += 2;
             stalled = false;
-            ////cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
+            //////cout << "rt value forwarded from id = " << forwardedFromInstructionId << " stage = " << forwardedFromInstructionStage << "-->" ;
 
             return true;
           }*/
@@ -236,7 +236,7 @@ sStalls++;
             stalled = true;
             stallingRegister = rsIndex;
             stallingInstructionId = registers[rsIndex].instructionId;
-            ////cout << "mult ID stalls due to rs -->";
+            //////cout << "mult ID stalls due to rs -->";
             return false;
           }
           else if (!registers[rtIndex].valid || registers[rtIndex].instructionStage!=10){
@@ -245,7 +245,7 @@ sStalls++;
             stalled = true;
             stallingRegister = rtIndex;
             stallingInstructionId = registers[rtIndex].instructionId;
-            ////cout << "ID stalls due to rt -->"; 
+            //////cout << "ID stalls due to rt -->"; 
             return false;
           }
           else {
@@ -258,7 +258,7 @@ sStalls++;
             stages[presentStage].setInstruction(id);
             stageToExecute += 2;
             stalled = false;
-            ////cout << "no stall ID -->" ;
+            //////cout << "no stall ID -->" ;
             return true;
           }
         } */
@@ -268,8 +268,8 @@ sStalls++;
           stallingInstructionId = -1;
 sStalls++;
           stalled = true;
-          // cout<<stages[stageToExecute].instructionId<<":"<<id<<endl;
-          // cout << "ID not free for id = "<<id<<endl ;
+          // //cout<<stages[stageToExecute].instructionId<<":"<<id<<endl;
+          // //cout << "ID not free for id = "<<id<<endl ;
           return false;
         }
       }
@@ -291,10 +291,10 @@ sStalls++;
               registers[rdIndex].unstallRegister(product, id);
             }
             stageToExecute += 2;
-          cout << "MULT stage done -->" ;
+          //cout << "MULT stage done -->" ;
           }
           else {
-          cout << "MULT substage = " << presentSubStage  << "-->"; 
+          //cout << "MULT substage = " << presentSubStage  << "-->"; 
           }
           return true;
         }
@@ -303,7 +303,7 @@ sStalls++;
           stallingInstructionId = -1;
 sStalls++;
           stalled = true;
-        cout << "MULT stage not free -->";
+        //cout << "MULT stage not free -->";
 
           return false;
         }
@@ -317,7 +317,7 @@ sStalls++;
           presentStage = stageToExecute;
           stages[presentStage].setInstruction(id);
           stageToExecute++;
-        ////cout << "MEM1 stage done -->" ;
+        //////cout << "MEM1 stage done -->" ;
           return true;
         }
         else{
@@ -325,7 +325,7 @@ sStalls++;
           stallingInstructionId = -1;
 sStalls++;
           stalled = true;
-        ////cout << "MEM1 stage not free -->";
+        //////cout << "MEM1 stage not free -->";
 
           return false;
         }
@@ -338,7 +338,7 @@ sStalls++;
           presentStage = stageToExecute;
           stages[presentStage].setInstruction(id);
           stageToExecute++;
-        ////cout << "MEM2 stage done -->" ;
+        //////cout << "MEM2 stage done -->" ;
           return true;
         }
         else{
@@ -346,7 +346,7 @@ sStalls++;
           stallingInstructionId = -1;
 sStalls++;
           stalled = true;
-        ////cout << "MEM2 stage not free -->";
+        //////cout << "MEM2 stage not free -->";
 
           return false;
         }
@@ -359,7 +359,7 @@ sStalls++;
           presentStage = stageToExecute;
           stages[presentStage].setInstruction(id);
           stageToExecute++;
-        ////cout << "MEM3 stage done -->" ;
+        //////cout << "MEM3 stage done -->" ;
           return true;
         }
         else{
@@ -367,7 +367,7 @@ sStalls++;
           stallingInstructionId = -1;
 sStalls++;
           stalled = true;
-        ////cout << "MEM3 stage not free -->";
+        //////cout << "MEM3 stage not free -->";
 
           return false;
 
@@ -384,17 +384,17 @@ sStalls++;
         presentStage = stageToExecute;
         stages[presentStage].setInstruction(id);
         stageToExecute=-1;
-          ////cout << "WB completed -->";
+          //////cout << "WB completed -->";
 
             // Instruction completed, so stage number is now invalid.
         return true;
         /*if (registers[rdIndex].write(product,id,stageToExecute)){
-          ////cout<<"write true aaya "<<endl;
+          //////cout<<"write true aaya "<<endl;
           stages[presentStage].setFree();
           presentStage = stageToExecute;
           stages[presentStage].setInstruction(id);
           stageToExecute=-1;
-          ////cout << "WB completed -->";
+          //////cout << "WB completed -->";
 
             // Instruction completed, so stage number is now invalid.
           return true;
@@ -404,7 +404,7 @@ sStalls++;
           stages[presentStage].setInstruction(id);
           stallingRegister = rdIndex;
           stallingInstructionId = registers[rdIndex].instructionId;
-          ////cout << "Register not writable -->";
+          //////cout << "Register not writable -->";
 
           return false;
         }*/
@@ -414,7 +414,7 @@ sStalls++;
           stallingInstructionId = -1;
 sStalls++;
           stalled = true;
-        ////cout << "WB not free ->";
+        //////cout << "WB not free ->";
 
           return false;
         }

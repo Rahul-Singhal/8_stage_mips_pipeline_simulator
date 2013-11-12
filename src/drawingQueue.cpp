@@ -91,7 +91,7 @@ void DrawingQueue::drawSideBar(float scrollX){
  
 
 DrawingQueue::DrawingQueue(){
-	// ////cout<<"IT COMES HERE"<<endl;
+	// //////cout<<"IT COMES HERE"<<endl;
 	instHeight = 20;
 	instWidth = 50;
 	maxIdDrawn = 2;
@@ -206,7 +206,7 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 	//draw the instruction corresponding to ith column and jth row in 
 	string str = inst.getDisplayString();
 	int prStage = inst.getPresentStage();
-	////cout<<"YONESS"<<inst.getId()<<"YONESS"<<endl;
+	//////cout<<"YONESS"<<inst.getId()<<"YONESS"<<endl;
 	if(prStage == 0) return;
 	double * colors = stageColorMap[prStage];
 	if(inst.getPresentStage() == 1){
@@ -285,7 +285,7 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 		// myPair.first = 1;
 		// myPair.second = inst.getId()-inst.getForwardedFromInstructionId();
 		// arrowBuffer.push(pair<int, pair<int,int> >(inst.getId(),myPair));
-		// cout<<"ARROW ADDED"<<endl;
+		// //cout<<"ARROW ADDED"<<endl;
 		// glPopMatrix();
 		// return;
 		render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, stageStringMap[prStage].c_str());
@@ -295,7 +295,7 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 
     
     // if(!arrowBuffer.empty() && arrowBuffer.front().first == inst.getId()){
-    // 	cout<<"DRAW ME!!"<<endl;
+    // 	//cout<<"DRAW ME!!"<<endl;
     // 	glPushMatrix();
     // 		drawArrow(1, arrowBuffer.front().second.second);
     // 	glPopMatrix();

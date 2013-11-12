@@ -35,9 +35,9 @@ Program::Program(string filename) {
 	code.push_back(i6);
 	code.push_back(i7);*/
 	
-	// cout << &code << endl;
-	// cout << "HERE1" <<endl;
-	// cout << code.size() << endl;
+	// //cout << &code << endl;
+	// //cout << "HERE1" <<endl;
+	// //cout << code.size() << endl;
 // UNCOMMENT THIS TO USE THE PARSER
 	codeSnippet = parser.getVector(filename);
 	vector <Instruction *>::iterator it;
@@ -48,12 +48,12 @@ Program::Program(string filename) {
 		code.back()->stageToExecute = 1;
 	}
 
-	//cout<<"the size of vector is "<<code.size()<<endl;
+	////cout<<"the size of vector is "<<code.size()<<endl;
 	//exit(0);
-	// cout<<"Inside the Program object"<<endl;
-	// cout<<"Prining the label map:"<<endl;
+	// //cout<<"Inside the Program object"<<endl;
+	// //cout<<"Prining the label map:"<<endl;
 	// for (map<string,int>::iterator it=labelMap.begin(); it!=labelMap.end(); ++it)
- //    cout << it->first << " => " << it->second << '\n';
+ //    //cout << it->first << " => " << it->second << '\n';
 	// exit(0);
 	
 	sepInstructions.assign(11, vector<Instruction*>(0, new Instruction()));
@@ -63,7 +63,7 @@ void Program::init(){
 	//Initialising
 	// setting the stages
 	for(int i = 0 ; i <= 10 ; i++){
-		// ////cout<<i<<endl;
+		// //////cout<<i<<endl;
 		stages[i].number = i;
 	}
 	// initialising the registers once and for all
@@ -89,23 +89,23 @@ void Program::reset(){
 
 vector <Instruction> Program::execute(){
 
-	// cout<<currInstructions.size()<<endl;
+	// //cout<<currInstructions.size()<<endl;
 	list<Instruction *>::iterator it;
 		//STABLE SORT
-	// cout<<"starts with ";
+	// //cout<<"starts with ";
 	for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
-		// cout<<(*it)->id<<", "<<(*it)->presentStage<<", "<<(*it)->stageToExecute<<" :: ";
+		// //cout<<(*it)->id<<", "<<(*it)->presentStage<<", "<<(*it)->stageToExecute<<" :: ";
 		sepInstructions[(*it)->stageToExecute].push_back(*it);
 	}
-	// cout<<endl;
+	// //cout<<endl;
 		// the whole logic of running one clock cycle comes here
 	prevPc = programCounter;
 	for(int i = 10 ; i >= 1 ; i--){
 		for(int j = 0 ; j < sepInstructions[i].size() ; j++){
-			// cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
+			// //cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
 			sepInstructions[i][j]->execute(programCounter);
-			// cout << "pc = " << programCounter << endl;
-			// cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
+			// //cout << "pc = " << programCounter << endl;
+			// //cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
 		}
 	}
 	vector <Instruction> returnInstructions(0, Instruction());
@@ -116,14 +116,14 @@ vector <Instruction> Program::execute(){
 	}
 	nextPc = programCounter;
 	if(nextPc != prevPc){
-		// cout<<"yahan bhi aaya pc != prevpc"<<endl;
-				// ////cout<<"Branch taken and destination other than next instruction!"<<endl;
-				// ////cout<<"Flush needed!"<<endl;
+		// //cout<<"yahan bhi aaya pc != prevpc"<<endl;
+				// //////cout<<"Branch taken and destination other than next instruction!"<<endl;
+				// //////cout<<"Flush needed!"<<endl;
 					/*setting stages free*/
 		stages[0].setFree();
 		stages[1].setFree();
 		stages[2].setFree();
-		// cout<<"yo1"<<endl;
+		// //cout<<"yo1"<<endl;
 			/*complications!
 			if predicate is calculated in EX then there is a chance
 			that some register was stalled due to the next instruction in the ID stage
@@ -138,7 +138,7 @@ vector <Instruction> Program::execute(){
 			for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
 				if((*it)->presentStage == 3){
 					if(!fastBranching){
-						cout<<"unstalling instruction id "<<(*it)->id<<endl;
+						//cout<<"unstalling instruction id "<<(*it)->id<<endl;
 						(*it)->unstall((*it)->id);
 					}
 					else
@@ -148,12 +148,12 @@ vector <Instruction> Program::execute(){
 			}
 			/*removing elements after the branch instructions from the queue*/
 			while(it != currInstructions.end()){
-				// cout<<(*it)->id<<"::::::"<<(*it)->presentStage<<endl;
+				// //cout<<(*it)->id<<"::::::"<<(*it)->presentStage<<endl;
 				currInstructions.erase(it++);
 			}
-		// cout<<"yo4"<<endl;
+		// //cout<<"yo4"<<endl;
 		}
-	// cout<<"yahan se bahar aaya pc != prevpc"<<endl;
+	// //cout<<"yahan se bahar aaya pc != prevpc"<<endl;
 		it = currInstructions.begin() ;
 		while(it != currInstructions.end()){
 			if((*it)->stageToExecute==-1)
@@ -162,17 +162,17 @@ vector <Instruction> Program::execute(){
 				it++;
 		}		
 		it = currInstructions.begin();
-	// cout<<"ends up with ";
+	// //cout<<"ends up with ";
 	/*while(it != currInstructions.end()){
-		cout<<(*it)->id<<", "<<(*it)->presentStage<<", "<<(*it)->stageToExecute<<" :: ";
+		//cout<<(*it)->id<<", "<<(*it)->presentStage<<", "<<(*it)->stageToExecute<<" :: ";
 		it++;
 	}
-	cout<<endl;*/
+	//cout<<endl;*/
 	if(!programOver){
 		if(stages[0].isFree()){
-			// cout<<"is ke ander aaya "<<endl;
+			// //cout<<"is ke ander aaya "<<endl;
 			programCounter++;
-			// cout<<programCounter<<" <-- pc ab ye hai"<<endl;
+			// //cout<<programCounter<<" <-- pc ab ye hai"<<endl;
 			if(programCounter < code.size()){
 				instrId++;		
 				/*code[programCounter]->id = instrId;
@@ -193,7 +193,7 @@ vector <Instruction> Program::execute(){
 // clearing the sorted buckets for the next cycle
 	for(int i = 1 ; i <= 9 ; i++ )
 		sepInstructions[i].clear();
-	// ////cout<<"cycle"<< endl;
+	// //////cout<<"cycle"<< endl;
 	return returnInstructions;
 }
 
@@ -201,7 +201,7 @@ vector <Instruction> Program::execute(){
 void Program::executeAll(){
 
 	while(!currInstructions.empty()){
-		// ////cout<<currInstructions.front().id<<":"<<currInstructions.front().presentStage<<":"<<currInstructions.front().stageToExecute<<endl;
+		// //////cout<<currInstructions.front().id<<":"<<currInstructions.front().presentStage<<":"<<currInstructions.front().stageToExecute<<endl;
 		list<Instruction *>::iterator it;
 		//STABLE SORT
 		for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
@@ -210,13 +210,13 @@ void Program::executeAll(){
 		// the whole logic of running one clock cycle comes here
 		for(int i = 10 ; i >= 1 ; i--){
 			for(int j = 0 ; j < sepInstructions[i].size() ; j++){
-				// ////cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
+				// //////cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
 				prevPc = programCounter;
 				sepInstructions[i][j]->execute(programCounter);
 				nextPc = programCounter;
 				if(nextPc != prevPc){
-					////cout<<"Branch taken and destination other than next instruction!"<<endl;
-					////cout<<"Flush needed!"<<endl;
+					//////cout<<"Branch taken and destination other than next instruction!"<<endl;
+					//////cout<<"Flush needed!"<<endl;
 					/*setting stages free*/
 					stages[0].setFree();
 					stages[1].setFree();
@@ -245,7 +245,7 @@ void Program::executeAll(){
 							currInstructions.erase(it++);
 					}
 				}
-				// ////cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
+				// //////cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
 			}
 		}
 		
@@ -274,6 +274,6 @@ void Program::executeAll(){
 		for(int i = 1 ; i <= 9 ; i++ )
 			sepInstructions[i].clear();
 
-		////cout<<"cycle"<< endl;
+		//////cout<<"cycle"<< endl;
 	}
 }

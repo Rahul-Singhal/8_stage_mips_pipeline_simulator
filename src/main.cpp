@@ -65,8 +65,17 @@ static void key(unsigned char key, int x, int y)
             exit(0);
             break;
         case 's':
-            // p.execute();
             dq.drawFinishedQueue(p->execute());
+            break;
+        case 'd':
+            //print the statistics
+            cout<<"\n\n********************  STATISTICS  ********************"<<endl;
+            cout<<"********************##############********************"<<endl;
+            printf("%-45s %-2s %d\n", "STALLS DUE TO UNAVAILABILITY OF REGISTERS","=", p->rStalls);
+            printf("%-45s %-2s %d\n", "STALLS DUE TO UNAVAILABILITY OF RESOURCES","=", p->sStalls);
+            printf("%-45s %-2s %d\n", "TOTAL STALLS", "=", p->rStalls + p->sStalls);
+            cout<<"********************##############********************"<<endl;
+            cout<<"******************************************************"<<endl;
             break;
     }
     glutPostRedisplay();
@@ -78,39 +87,39 @@ static void idle(void)
 }
 
 void init(){
-    cout<<"Enter the path to source code file:";
+    cout<<"Enter the path to source code file: ";
     cin>>filePath;
     p = new Program(filePath);
     int x;
-    cout<<"Enable Forwarding? Press 1 to enable and 0 to disable: ";
+    cout<<"\nEnable Forwarding? Press 1 to enable and 0 to disable: ";
     cin>>x;
     switch(x){
         case 0:
-            cout<<"Forwarding disabled."<<endl;
+            cout<<"****************  FORWARDING DISABLED  ****************"<<endl;
             p->forwardingEnabled = false;
             break;
         case 1:
-            cout<<"Forwarding enabled."<<endl;
+            cout<<"****************  FORWARDING ENABLED  ****************"<<endl;
             p->forwardingEnabled = true;
             break;
         default:
-            cout<<"Forwarding disabled by default."<<endl;
+            cout<<"**********  FORWARDING DISABLED BY DEFAULT.  **********"<<endl;
             p->forwardingEnabled = false;
             break;
     }
-    cout<<"Enable fast branching? Press 1 to enable and 0 to disable: ";
+    cout<<"\nEnable fast branching? Press 1 to enable and 0 to disable: ";
     cin>>x;
     switch(x){
         case 0:
-            cout<<"fast branching disabled."<<endl;
+            cout<<"**************  FAST BRANCHING DISABLED  **************"<<endl;
             p->fastBranching = false;
             break;
         case 1:
-            cout<<"fast branching enabled."<<endl;
+            cout<<"***************  FAST BRANCHING ENABLED  ***************"<<endl;
             p->fastBranching = true;
             break;
         default:
-            cout<<"fast branching disabled by default."<<endl;
+            cout<<"********  FAST BRANCHING DISABLED BY DEFAULT  ********"<<endl;
             p->fastBranching = false;
             break;
     }
@@ -236,6 +245,16 @@ void init(){
     v.push_back(insta16);
     dq.drawFinishedQueue(v);*/
 }
+
+void welcome(){
+    printf("\n\n###################################################################\n");
+    printf("###################################################################\n");
+    printf("%s  %s  %s\n","**********", "##########################################", "**********");
+    printf("%s  %s  %s\n","**********", "WELCOME TO 8 STAGE MIPS PIPELINE SIMULATOR", "**********");
+    printf("%s  %s  %s\n","**********", "##########################################", "**********");
+    printf("###################################################################\n");
+    printf("###################################################################\n\n");  
+}
  
 void specialKey(int key, int x, int y){
     float shift = 6;
@@ -275,6 +294,7 @@ int main(int argc, char *argv[])
     glutSpecialFunc(specialKey);
 
     glClearColor(1,1,1,0);
+    welcome();
     init();
     // dq = DrawingQueue();
     glutMainLoop();

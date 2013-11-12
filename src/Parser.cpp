@@ -115,8 +115,8 @@ Parser::Parser(string fileName, vector<Instruction *> & code){
     }
 
     code = codeVector;
-    cout << &code << endl;
-    cout << code.size() << endl;
+    //cout << &code << endl;
+    //cout << code.size() << endl;
     infile.close();
 }
 
@@ -131,9 +131,9 @@ vector<Instruction *> Parser::getVector(string fileName){
     //string str1 = "la $a0, prompt1      #read the numbers, s0 contains the first number and s1 contains the second number";
     //parseLine(str1);
     lineNumber = 0;
-    cout<<"Now reading lines"<<endl;
+    //cout<<"Now reading lines"<<endl;
     while(getline(infile,str)){
-        cout<<"Parsing line "<<str<<endl;
+        //cout<<"Parsing line "<<str<<endl;
         lineNumber++;
         parseLine(str);
     //v.push_back(str);  
@@ -141,17 +141,17 @@ vector<Instruction *> Parser::getVector(string fileName){
 
     
     infile.close();
-    // cout<<"The size of vector before returning is "<<codeVector.size()<<endl;
+    // //cout<<"The size of vector before returning is "<<codeVector.size()<<endl;
     // exit(0);
     return codeVector;
 }
 
 Parser::Parser(){}
 void Parser::printLabels(){
-    ////cout<<endl<<"LABEL MAPPING"<<endl;
+    //////cout<<endl<<"LABEL MAPPING"<<endl;
     map<string,int>::iterator it;
     for(it = labelMap.begin(); it!= labelMap.end(); it++){
-        ////cout<<it->first<<" maps to "<<it->second<<endl;
+        //////cout<<it->first<<" maps to "<<it->second<<endl;
     }
 }
 
@@ -183,7 +183,7 @@ void Parser::parseLine(string str){
             return;
         }
         else if(strcmp(curWord, ".align") == 0){
-            cout<<"align found"<<endl;
+            //cout<<"align found"<<endl;
             return;
         }
     }
@@ -194,15 +194,15 @@ void Parser::parseLine(string str){
         if(curLeng > 1 && curWord[curLeng-1] == ':'){
             strTemp = curWord;
             labelMap[strTemp.substr(0,strTemp.length()-1)] = instructionNumber;
-            // cout<<"LABEL ADDED!! "<<strTemp<<endl;
+            // //cout<<"LABEL ADDED!! "<<strTemp<<endl;
         //label detected
-        //////cout<<curWord<<endl<<endl<<endl<<endl;
+        ////////cout<<curWord<<endl<<endl<<endl<<endl;
             lastWord = curWord;
             curWord = strtok(NULL, ", \t");
         }
 
         while(curWord != NULL){
-        //////cout<<curWord<<endl;
+        ////////cout<<curWord<<endl;
             flag = true;
         //detect comments
             if(curWord[0] == '#'){
@@ -211,22 +211,22 @@ void Parser::parseLine(string str){
             }
             if(curWord[0] == ':'){
             //last word was label
-            //////cout<<curWord<<endl<<endl<<endl<<endl;
+            ////////cout<<curWord<<endl<<endl<<endl<<endl;
                 string strTemp = lastWord;
                 strTemp += ':';
                 labelMap[strTemp] = instructionNumber;
-                // cout<<"LABEL ADDED AGAIN!! "<<strTemp<<endl;
+                // //cout<<"LABEL ADDED AGAIN!! "<<strTemp<<endl;
                 lineWords.pop_back();
             }
             else{
-            //////cout<<curWord<<" ";
+            ////////cout<<curWord<<" ";
                 strTemp = curWord;
                 lineWords.push_back(strTemp);
             }
             lastWord = curWord;
             curWord = strtok(NULL, ", \t");
         }
-        if(flag) ////cout<<endl;
+        if(flag) //////cout<<endl;
 
         makeInstruction();
     }
@@ -240,7 +240,7 @@ void Parser::parseLine(string str){
             curWord = strtok(NULL, ", \t");
         }
         if (curWord == NULL) {
-            ////cout << "SYNTAX ERROR IN DATA";
+            //////cout << "SYNTAX ERROR IN DATA";
             return;
         }
         dataType = curWord;
@@ -249,16 +249,16 @@ void Parser::parseLine(string str){
             //newascii = strtok(NULL,  "\"");
             // dataMap[dataName] = mem.storeAscii(newascii);
             memory.storeAscii(dataName, newascii);
-            //cout<<dataName<<" .ascii "<<newascii<<endl<<endl;
+            ////cout<<dataName<<" .ascii "<<newascii<<endl<<endl;
         }
         else if (dataType == ".asciiz"){
             char* newasciiz = strtok(NULL,  "\" ");
-            //cout<<"yo there "<<newasciiz<<endl;
+            ////cout<<"yo there "<<newasciiz<<endl;
             //newasciiz = strtok(NULL,  "\"");
             // dataMap[dataName] = memory.storeAsciiz(newasciiz);
 
             memory.storeAsciiz(dataName,newasciiz);
-            //cout<<dataName<<" .asciiz "<<newasciiz<<endl<<endl;
+            ////cout<<dataName<<" .asciiz "<<newasciiz<<endl<<endl;
         }
         else if (dataType == ".word"){
             char* newint = strtok(NULL,  ", \t");
@@ -270,12 +270,12 @@ void Parser::parseLine(string str){
             }
             // dataMap[dataName] = mem.storeWords(intVector);
             memory.storeWords(dataName,intVector);
-            //cout<<dataName<<" .word ";
+            ////cout<<dataName<<" .word ";
             //vector<int>  checkNum= wordTable[dataMap[dataName].second];
             for (int k = 0 ; k<intVector.size(); k++){
-                //cout << intVector[k] << " " ;
+                ////cout << intVector[k] << " " ;
             } 
-            //cout << endl<<endl;
+            ////cout << endl<<endl;
         }
         else if (dataType == ".space"){
             char* newSpace = strtok(NULL,  " \t");
@@ -283,10 +283,10 @@ void Parser::parseLine(string str){
                 int spaceValue = convertToNumber(newSpace);
                 // dataMap[dataName] = mem.allocateSpace(spaceValue);
                 memory.allocateSpace(dataName,spaceValue);
-                //cout<<dataName<<" .space "<<spaceValue<<endl<<endl;
+                ////cout<<dataName<<" .space "<<spaceValue<<endl<<endl;
             }
             else{
-                //cout<<"SYNTAX ERROR IN DATA!\n";
+                ////cout<<"SYNTAX ERROR IN DATA!\n";
                 exit(0);
             }
         }
@@ -299,13 +299,13 @@ void Parser::parseLine(string str){
                     newByte = strtok(NULL, ",' \t");
                 }
                 else{
-                    //cout<<"SYNTAX ERROR IN DATA!\n";
+                    ////cout<<"SYNTAX ERROR IN DATA!\n";
                     exit(0);
                 }
             }
             // dataMap[dataName] = mem.storeBytes(byteString);
             memory.storeBytes(dataName,byteString);
-            ////cout<<dataName<<" .byte "<<byteString<<endl<<endl;
+            //////cout<<dataName<<" .byte "<<byteString<<endl<<endl;
 
         }
 
@@ -313,19 +313,19 @@ void Parser::parseLine(string str){
 }
 
 void Parser::syntaxError(){
-    cout<<"SYNTAX ERROR!! CHECK LINE NUMBER "<<lineNumber<<endl;
+    //cout<<"SYNTAX ERROR!! CHECK LINE NUMBER "<<lineNumber<<endl;
     exit(0);
 }
 
 
 void Parser::makeInstruction(){
-    //cout<<lineWords[0]<<endl;
-    // cout<<"hy"<<instructionIntMap[lineWords[0]]<<"jl"<<endl;
+    ////cout<<lineWords[0]<<endl;
+    // //cout<<"hy"<<instructionIntMap[lineWords[0]]<<"jl"<<endl;
     char displayString[100];
 
     if(lineWords.empty()) { return;}
-    ////cout<<instructionNumber<<" ";
-    //////cout<<"inst "<<lineWords[0]<<" inst type "<<instructionIntMap["add"]<<endl;
+    //////cout<<instructionNumber<<" ";
+    ////////cout<<"inst "<<lineWords[0]<<" inst type "<<instructionIntMap["add"]<<endl;
     if(lineWords[0] == "syscall") return;
 
     int reg1, reg2, reg3;
@@ -342,7 +342,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "ADD $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+                ////cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
                 if(convertToNumber(lineWords[3]) != 2147483644){
@@ -351,7 +351,7 @@ void Parser::makeInstruction(){
                     sprintf(displayString, "ADD $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
-                    //cout<<"INSTRUCTION: "<<"ADDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+                    ////cout<<"INSTRUCTION: "<<"ADDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
             }
@@ -369,7 +369,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "ADDI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"ADDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;*/
+                ////cout<<"INSTRUCTION: "<<"ADDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;*/
             }
             else syntaxError();
         }
@@ -388,7 +388,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "AND $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"AND "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+                ////cout<<"INSTRUCTION: "<<"AND "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
                 if(convertToNumber(lineWords[3]) != 2147483644){
@@ -398,7 +398,7 @@ void Parser::makeInstruction(){
                     sprintf(displayString, "AND $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
-                    //cout<<"INSTRUCTION: "<<"ANDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+                    ////cout<<"INSTRUCTION: "<<"ANDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
             }
@@ -417,7 +417,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "ANDI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"ANDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+                ////cout<<"INSTRUCTION: "<<"ANDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
             else syntaxError();
         }
@@ -436,7 +436,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "OR $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"OR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+                ////cout<<"INSTRUCTION: "<<"OR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
                     //make instruction object and push it into vector
@@ -446,7 +446,7 @@ void Parser::makeInstruction(){
                     sprintf(displayString, "OR $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
-                    //cout<<"INSTRUCTION: "<<"ORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+                    ////cout<<"INSTRUCTION: "<<"ORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
             }
@@ -465,7 +465,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "ORI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"ORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+                ////cout<<"INSTRUCTION: "<<"ORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
             }
             else syntaxError();
         }
@@ -483,14 +483,14 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "SUB $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"SUB "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+                ////cout<<"INSTRUCTION: "<<"SUB "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
                     //make instruction object and push it into vector
                 if(convertToNumber(lineWords[3]) != 2147483644){
                     //UNCOMMENT
                     // codeVector.push_back(new Subi(reg1, reg2, convertToNumber(lineWords[3]),0));
-                    //cout<<"INSTRUCTION: "<<"SUBI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+                    ////cout<<"INSTRUCTION: "<<"SUBI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
             }
@@ -511,7 +511,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "XOR $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"XOR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+                ////cout<<"INSTRUCTION: "<<"XOR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
                     //make instruction object and push it into vector
@@ -521,7 +521,7 @@ void Parser::makeInstruction(){
                     sprintf(displayString, "XOR $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
-                    //cout<<"INSTRUCTION: "<<"XORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+                    ////cout<<"INSTRUCTION: "<<"XORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
             }
@@ -540,7 +540,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "XORI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"XORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+                ////cout<<"INSTRUCTION: "<<"XORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
             }
             else syntaxError();
         }
@@ -555,7 +555,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "LA $%d %s", reg1, lineWords[2].c_str());
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"LA "<<reg1<<" "<<lineWords[2]<<endl;
+                ////cout<<"INSTRUCTION: "<<"LA "<<reg1<<" "<<lineWords[2]<<endl;
         }
         else syntaxError();
         break;
@@ -568,7 +568,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "LI $%d %d", reg1, convertToNumber(lineWords[2]));
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                // cout<<"INSTRUCTION: "<<"LI "<<reg1<<" "<<convertToNumber(lineWords[2])<<endl;
+                // //cout<<"INSTRUCTION: "<<"LI "<<reg1<<" "<<convertToNumber(lineWords[2])<<endl;
             }
             else syntaxError();
         }
@@ -584,7 +584,7 @@ void Parser::makeInstruction(){
             // sprintf(displayString, "NOT $%d $%d", reg1, reg2);
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
-            //cout<<"INSTRUCTION: "<<"NOT "<<reg1<<" "<<reg2<<" "<<endl;
+            ////cout<<"INSTRUCTION: "<<"NOT "<<reg1<<" "<<reg2<<" "<<endl;
         }
         else syntaxError();
         break;
@@ -594,7 +594,7 @@ void Parser::makeInstruction(){
         sprintf(displayString, "EXIT");
         codeVector.back()->display = displayString;
         codeVector.back()->address = codeVector.size()-1;
-        //cout<<"INSTRUCTION: SYSCALL"<<endl;
+        ////cout<<"INSTRUCTION: SYSCALL"<<endl;
         break;
         case 13:
         if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
@@ -606,7 +606,7 @@ void Parser::makeInstruction(){
             sprintf(displayString, "MOVE $%d $%d", reg1, reg2);
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
-            //cout<<"INSTRUCTION: "<<"MOVE "<<reg1<<" "<<reg2<<" "<<endl;
+            ////cout<<"INSTRUCTION: "<<"MOVE "<<reg1<<" "<<reg2<<" "<<endl;
         }
         else syntaxError();
         break;
@@ -619,7 +619,7 @@ void Parser::makeInstruction(){
             sprintf(displayString, "BEQ $%d $%d %s", reg1, reg2, lineWords[3].c_str());
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
-            //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+            ////cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
         else syntaxError();
         break;
@@ -643,7 +643,7 @@ void Parser::makeInstruction(){
                 }
                 else syntaxError();
                 
-                // cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
+                // //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
                 if(lineWords[2][0] >= '0' && lineWords[2][0] <= '9'){
@@ -655,7 +655,7 @@ void Parser::makeInstruction(){
                         sprintf(displayString, "SW $%d %d($%d)", reg1, convertToNumber(offset), reg2);
                         codeVector.back()->display = displayString;
                         codeVector.back()->address = codeVector.size()-1;
-                        //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
+                        ////cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
                     }
                     else syntaxError();
                 }
@@ -690,7 +690,7 @@ void Parser::makeInstruction(){
                 }
                 else syntaxError();
                 
-                // cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
+                // //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
                 if(lineWords[2][0] >= '0' && lineWords[2][0] <= '9'){
@@ -702,7 +702,7 @@ void Parser::makeInstruction(){
                         sprintf(displayString, "LW $%d %d($%d)", reg1, convertToNumber(offset), reg2);
                         codeVector.back()->display = displayString;
                         codeVector.back()->address = codeVector.size()-1;
-                        //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
+                        ////cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
                     }
                     else syntaxError();
                 }
@@ -726,10 +726,10 @@ void Parser::makeInstruction(){
                     //make instruction object and push it into vector
                 codeVector.push_back(new Mult(reg1,reg2,reg3,0));
                 sprintf(displayString, "MULT $%d $%d $%d", reg1, reg2, reg3);
-                // cout<<"set the "<<displayString<<endl;
+                // //cout<<"set the "<<displayString<<endl;
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"MULT "<<reg1<<" "<<reg2<<" "<<endl;
+                ////cout<<"INSTRUCTION: "<<"MULT "<<reg1<<" "<<reg2<<" "<<endl;
             }
             else syntaxError();
 
@@ -745,7 +745,7 @@ void Parser::makeInstruction(){
         codeVector.back()->display = displayString;
         codeVector.back()->address = codeVector.size()-1;
         
-        //cout<<"INSTRUCTION: "<<"J "<<lineWords[1]<<endl;
+        ////cout<<"INSTRUCTION: "<<"J "<<lineWords[1]<<endl;
         break;
 
         case 19:
@@ -767,7 +767,7 @@ void Parser::makeInstruction(){
                 }
                 else syntaxError();
                 
-                // cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
+                // //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
                 if(lineWords[2][0] >= '0' && lineWords[2][0] <= '9'){
@@ -779,7 +779,7 @@ void Parser::makeInstruction(){
                         sprintf(displayString, "LB $%d %d($%d)", reg1, convertToNumber(offset), reg2);
                         codeVector.back()->display = displayString;
                         codeVector.back()->address = codeVector.size()-1;
-                        //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
+                        ////cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
                     }
                     else syntaxError();
                 }
@@ -814,7 +814,7 @@ void Parser::makeInstruction(){
                 }
                 else syntaxError();
                 
-                // cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
+                // //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
                 if(lineWords[2][0] >= '0' && lineWords[2][0] <= '9'){
@@ -826,7 +826,7 @@ void Parser::makeInstruction(){
                         sprintf(displayString, "SB $%d %d($%d)", reg1, convertToNumber(offset), reg2);
                         codeVector.back()->display = displayString;
                         codeVector.back()->address = codeVector.size()-1;
-                        //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
+                        ////cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
                     }
                     else syntaxError();
                 }
@@ -853,7 +853,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "SLT $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"SLT "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+                ////cout<<"INSTRUCTION: "<<"SLT "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
                 if(convertToNumber(lineWords[3]) != 2147483644){
@@ -911,7 +911,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "SLLV $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+                ////cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
         }
@@ -943,7 +943,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "SRAV $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+                ////cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
         }
@@ -975,7 +975,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "SRLV $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+                ////cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
         }
@@ -992,7 +992,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "NOR $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
                 codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
+                ////cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
         }
@@ -1013,7 +1013,7 @@ void Parser::makeInstruction(){
             sprintf(displayString, "BLT $%d $%d %s", reg1, reg2, lineWords[3].c_str());
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
-            //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+            ////cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
         else syntaxError();
         break;
@@ -1026,7 +1026,7 @@ void Parser::makeInstruction(){
             sprintf(displayString, "BGT $%d $%d %s", reg1, reg2, lineWords[3].c_str());
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
-            //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+            ////cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
         else syntaxError();
         break;
@@ -1037,7 +1037,7 @@ void Parser::makeInstruction(){
         sprintf(displayString, "B %s", lineWords[1].c_str());
         codeVector.back()->display = displayString;
         codeVector.back()->address = codeVector.size()-1;
-        //cout<<"INSTRUCTION: "<<"B "<<lineWords[1]<<"uoooooooooooooooooooooooooooooo"<<endl;
+        ////cout<<"INSTRUCTION: "<<"B "<<lineWords[1]<<"uoooooooooooooooooooooooooooooo"<<endl;
         break;
         case 34:
         if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
@@ -1048,7 +1048,7 @@ void Parser::makeInstruction(){
             sprintf(displayString, "BNE $%d $%d %s", reg1, reg2, lineWords[3].c_str());
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
-            //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+            ////cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
         else syntaxError();
         break;
@@ -1064,7 +1064,7 @@ void Parser::makeInstruction(){
         break;
 
         default:
-            //cout<<"IN DEFAULT"<<endl;
+            ////cout<<"IN DEFAULT"<<endl;
             syntaxError();
         break;
     }
