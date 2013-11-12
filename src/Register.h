@@ -27,8 +27,9 @@ public:
 	Register(int id, int value);
 
 	int lastForwarder;
+	int lastForwarderTime;
 	list <int> forwardingInstructions;
-	void forwardIt(int instructionId);
+	void forwardIt(int instructionId, int time);
 	void unforwardIt(int instructionId);
 	bool isForwarded();
 

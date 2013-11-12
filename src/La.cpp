@@ -254,7 +254,7 @@ sStalls++;
 				if(stages[stageToExecute].isFree()){
 					// sum = a+b;
 					if(forwardingEnabled){
-						registers[rdIndex].forwardIt(id);
+						registers[rdIndex].forwardIt(id, clockCycle);
 						registers[rdIndex].unstallRegister(labelMap[address], id); // TODO : Will it ever return false?
 					}
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?

@@ -93,7 +93,7 @@ bool Mult::execute(int pc){
         stages[presentStage].setInstruction(id);
         stalled = true;
         stallingInstructionId = -1;
-sStalls++;
+        sStalls++;
 //display = "Waiting for IF1 to be free!";
         //////cout << "if1 - wait -->" ;
         return false;
@@ -116,7 +116,7 @@ sStalls++;
         stages[presentStage].setInstruction(id);
         stalled = true;
         stallingInstructionId = -1;
-sStalls++;
+        sStalls++;
         //this->stageToExecute = i.stageToExecute;
 //display = "Waiting for IF2 to be free!";
         //////cout << "if2 - wait -->" ;
@@ -149,8 +149,8 @@ sStalls++;
           // stages[presentStage].setInstruction(id);
           stalled = true;
           stallingRegister = rtIndex;
-            stallingInstructionId = registers[rtIndex].instructionId;  
-            rStalls++;  
+          stallingInstructionId = registers[rtIndex].instructionId;  
+          rStalls++;  
             // //cout << "rt register not readable for id = "<<id<<endl;
 
           return false;
@@ -159,13 +159,16 @@ sStalls++;
         else
         {
           registers[rdIndex].stallRegister(id); 
+          int lastTime;
           if(registers[rsIndex].isForwarded()){
-            forwarded = true;
+            forwarded = true;           
+            lastTime = registers[rsIndex].lastForwarderTime;
             forwardedFromInstructionId = registers[rsIndex].lastForwarder;
           }
           if(registers[rtIndex].isForwarded()){
             forwarded = true;
-            forwardedFromInstructionId = registers[rtIndex].lastForwarder;
+            if(registers[rtIndex].lastForwarderTime > lastTime)
+              forwardedFromInstructionId = registers[rtIndex].lastForwarder;
           }
           a = registers[rsIndex].value;
           b = registers[rtIndex].value;
@@ -266,7 +269,7 @@ sStalls++;
         else {
           stages[presentStage].setInstruction(id);
           stallingInstructionId = -1;
-sStalls++;
+          sStalls++;
           stalled = true;
           // //cout<<stages[stageToExecute].instructionId<<":"<<id<<endl;
           // //cout << "ID not free for id = "<<id<<endl ;
@@ -287,7 +290,7 @@ sStalls++;
           /*Next stage is MEM1 which is stage 7*/
           // registers[rdIndex].write(product,id,stageToExecute); // TODO : Will it ever return false?
             if(forwardingEnabled){
-              registers[rdIndex].forwardIt(id);
+              registers[rdIndex].forwardIt(id, clockCycle);
               registers[rdIndex].unstallRegister(product, id);
             }
             stageToExecute += 2;
@@ -301,7 +304,7 @@ sStalls++;
         else{
           stages[presentStage].setInstruction(id);
           stallingInstructionId = -1;
-sStalls++;
+          sStalls++;
           stalled = true;
         //cout << "MULT stage not free -->";
 
@@ -323,7 +326,7 @@ sStalls++;
         else{
           stages[presentStage].setInstruction(id);
           stallingInstructionId = -1;
-sStalls++;
+          sStalls++;
           stalled = true;
         //////cout << "MEM1 stage not free -->";
 
@@ -344,7 +347,7 @@ sStalls++;
         else{
           stages[presentStage].setInstruction(id);
           stallingInstructionId = -1;
-sStalls++;
+          sStalls++;
           stalled = true;
         //////cout << "MEM2 stage not free -->";
 
@@ -365,7 +368,7 @@ sStalls++;
         else{
           stages[presentStage].setInstruction(id);
           stallingInstructionId = -1;
-sStalls++;
+          sStalls++;
           stalled = true;
         //////cout << "MEM3 stage not free -->";
 
@@ -377,17 +380,17 @@ sStalls++;
       {
       // WB Stage
         if(stages[stageToExecute].isFree()){
-        registers[rdIndex].unforwardIt(id);
-        if(!forwardingEnabled)
-          registers[rdIndex].unstallRegister(product, id);
-        stages[presentStage].setFree();
-        presentStage = stageToExecute;
-        stages[presentStage].setInstruction(id);
-        stageToExecute=-1;
+          registers[rdIndex].unforwardIt(id);
+          if(!forwardingEnabled)
+            registers[rdIndex].unstallRegister(product, id);
+          stages[presentStage].setFree();
+          presentStage = stageToExecute;
+          stages[presentStage].setInstruction(id);
+          stageToExecute=-1;
           //////cout << "WB completed -->";
 
             // Instruction completed, so stage number is now invalid.
-        return true;
+          return true;
         /*if (registers[rdIndex].write(product,id,stageToExecute)){
           //////cout<<"write true aaya "<<endl;
           stages[presentStage].setFree();
@@ -412,7 +415,7 @@ sStalls++;
         else{
           stages[presentStage].setInstruction(id);
           stallingInstructionId = -1;
-sStalls++;
+          sStalls++;
           stalled = true;
         //////cout << "WB not free ->";
 

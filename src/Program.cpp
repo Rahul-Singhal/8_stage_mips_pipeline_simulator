@@ -76,6 +76,7 @@ void Program::init(){
 
 	programCounter = 0;
 	instrId = 0;
+	clockCycle = 0;
 	code[programCounter]->id = instrId;
 	code[programCounter]->presentStage = 0;
 	code[programCounter]->stageToExecute = 1;
@@ -88,7 +89,7 @@ void Program::reset(){
 }
 
 vector <Instruction> Program::execute(){
-
+	clockCycle++;
 	// //cout<<currInstructions.size()<<endl;
 	list<Instruction *>::iterator it;
 		//STABLE SORT

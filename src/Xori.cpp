@@ -183,7 +183,7 @@ sStalls++;
       if(stages[stageToExecute].isFree()){
         sum = a^b;
         if(forwardingEnabled){
-          registers[rdIndex].forwardIt(id);
+          registers[rdIndex].forwardIt(id, clockCycle);
           registers[rdIndex].unstallRegister(sum, id); // TODO : Will it ever return false?
         }
         stages[presentStage].setFree();

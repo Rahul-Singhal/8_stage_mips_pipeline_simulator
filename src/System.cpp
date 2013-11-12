@@ -21,3 +21,5 @@ Memory System::memory=Memory();
 map<string, int> System::labelMap = *(new map<string , int>);
 
 bool System::programOver = false;
+
+int System::clockCycle = 0;

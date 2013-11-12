@@ -90,7 +90,7 @@ bool Or::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = -1;
-sStalls++;
+				sStalls++;
 //display = "Waiting for IF1 to be free!";
 				////cout << "if1 - wait -->"<<endl ;
 				return false;
@@ -113,7 +113,7 @@ sStalls++;
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = -1;
-sStalls++;
+				sStalls++;
 //display = "Waiting for IF2 to be free!";
 				////cout << "if2 - wait -->" <<endl;
 				return false;
@@ -156,13 +156,16 @@ sStalls++;
 					registers[rdIndex].stallRegister(id); 
 					a = registers[rsIndex].value;
 					b = registers[rtIndex].value;
+					int lastTime;
 					if(registers[rsIndex].isForwarded()){
-						forwarded = true;
+						forwarded = true;						
+						lastTime = registers[rsIndex].lastForwarderTime;
 						forwardedFromInstructionId = registers[rsIndex].lastForwarder;
 					}
 					if(registers[rtIndex].isForwarded()){
 						forwarded = true;
-						forwardedFromInstructionId = registers[rtIndex].lastForwarder;
+						if(registers[rtIndex].lastForwarderTime > lastTime)
+							forwardedFromInstructionId = registers[rtIndex].lastForwarder;
 					}
 						// stages[presentStage].setFree();
 						// presentStage = stageToExecute;
@@ -263,7 +266,7 @@ sStalls++;
 				else {
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
-sStalls++;
+					sStalls++;
 					stalled = true;
 				////cout << "ID not free -->"<<endl ;
 					return false;
@@ -275,8 +278,8 @@ sStalls++;
 			// registers[rdIndex].stallRegister(id);
 				if(stages[stageToExecute].isFree()){
 					sum = a|b;
-				if(forwardingEnabled){
-					registers[rdIndex].forwardIt(id);
+					if(forwardingEnabled){
+						registers[rdIndex].forwardIt(id, clockCycle);
 					registers[rdIndex].unstallRegister(sum, id); // TODO : Will it ever return false?
 				}
 				stages[presentStage].setFree();
@@ -290,7 +293,7 @@ sStalls++;
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = -1;
-sStalls++;
+				sStalls++;
 				stalled = true;
 				////cout << "EX stage not free -->"<<endl;
 
@@ -312,7 +315,7 @@ sStalls++;
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = -1;
-sStalls++;
+				sStalls++;
 				stalled = true;
 				////cout << "MEM1 stage not free -->"<<endl;
 
@@ -334,7 +337,7 @@ sStalls++;
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = -1;
-sStalls++;
+				sStalls++;
 				stalled = true;
 				////cout << "MEM2 stage not free -->"<<endl;
 
@@ -356,7 +359,7 @@ sStalls++;
 			else{
 				stages[presentStage].setInstruction(id);
 				stallingInstructionId = -1;
-sStalls++;
+				sStalls++;
 				stalled = true;
 				////cout << "MEM3 stage not free -->"<<endl;
 
@@ -402,7 +405,7 @@ sStalls++;
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
-sStalls++;
+					sStalls++;
 					stalled = true;
 				////cout << "WB not free ->"<<endl;
 

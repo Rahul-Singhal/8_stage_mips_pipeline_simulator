@@ -95,7 +95,7 @@ Jr * Jr::clone(){
 					stages[presentStage].setInstruction(id);
 					stalled = true;
 					stallingInstructionId = -1;
-sStalls++;
+					sStalls++;
 //display = "Waiting for IF1 to be free!";
 				//////cout << "if1 - wait -->" ;
 					return false;
@@ -118,7 +118,7 @@ sStalls++;
 					stages[presentStage].setInstruction(id);
 					stalled = true;
 					stallingInstructionId = -1;
-sStalls++;
+					sStalls++;
 //display = "Waiting for IF2 to be free!";
 				//////cout << "if2 - wait -->" ;
 					return false;
@@ -167,11 +167,12 @@ sStalls++;
 							stageToExecute++;
 							stalled = false;
 							destPc = registers[rsIndex].value;
+							int lastTime;
 							if(registers[rsIndex].isForwarded()){
-								forwarded = true;
+								forwarded = true;						
+								lastTime = registers[rsIndex].lastForwarderTime;
 								forwardedFromInstructionId = registers[rsIndex].lastForwarder;
 							}
-
 							if(fastBranching){
 							// //cout<<a<<"::::::::::::::::::"<<b<<endl;
 								if(true){
@@ -292,7 +293,7 @@ sStalls++;
 				// //cout<<"Yes its coming here"<<endl;
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
-sStalls++;
+						sStalls++;
 						stalled = true;
 				//cout << "ID not free --> jr" <<endl;
 						return false;
@@ -322,7 +323,7 @@ sStalls++;
 					else{
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
-sStalls++;
+						sStalls++;
 						stalled = true;
 				//////cout << "EX stage not free -->";
 
@@ -344,7 +345,7 @@ sStalls++;
 					else{
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
-sStalls++;
+						sStalls++;
 						stalled = true;
 				//////cout << "MEM1 stage not free -->";
 
@@ -365,7 +366,7 @@ sStalls++;
 					else{
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
-sStalls++;
+						sStalls++;
 						stalled = true;
 				//////cout << "MEM2 stage not free -->";
 
@@ -386,7 +387,7 @@ sStalls++;
 					else{
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
-sStalls++;
+						sStalls++;
 						stalled = true;
 				//////cout << "MEM3 stage not free -->";
 
@@ -408,7 +409,7 @@ sStalls++;
 					else{
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
-sStalls++;
+						sStalls++;
 						stalled = true;
 				//////cout << "WB stage not free -->";
 

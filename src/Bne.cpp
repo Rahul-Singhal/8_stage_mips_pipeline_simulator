@@ -163,13 +163,16 @@ sStalls++;
 						// registers[rdIndex].stallRegister(id); 
 						a = registers[rsIndex].value;
 						b = registers[rtIndex].value;
+						int lastTime;
 						if(registers[rsIndex].isForwarded()){
-							forwarded = true;
+							forwarded = true;						
+							lastTime = registers[rsIndex].lastForwarderTime;
 							forwardedFromInstructionId = registers[rsIndex].lastForwarder;
 						}
 						if(registers[rtIndex].isForwarded()){
 							forwarded = true;
-							forwardedFromInstructionId = registers[rtIndex].lastForwarder;
+							if(registers[rtIndex].lastForwarderTime > lastTime)
+								forwardedFromInstructionId = registers[rtIndex].lastForwarder;
 						}
 
 						// stages[presentStage].setFree();

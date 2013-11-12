@@ -152,8 +152,10 @@ sStalls++;
         else {
           registers[rdIndex].stallRegister(id); 
           a = registers[rsIndex].value;
+          int lastTime;
           if(registers[rsIndex].isForwarded()){
-            forwarded = true;
+            forwarded = true;           
+            lastTime = registers[rsIndex].lastForwarderTime;
             forwardedFromInstructionId = registers[rsIndex].lastForwarder;
           }
           b = immediate;
@@ -183,7 +185,7 @@ sStalls++;
       if(stages[stageToExecute].isFree()){
         sum = a&b;
         if(forwardingEnabled){
-          registers[rdIndex].forwardIt(id);
+          registers[rdIndex].forwardIt(id, clockCycle);
           registers[rdIndex].unstallRegister(sum, id); // TODO : Will it ever return false?
         }
         stages[presentStage].setFree();

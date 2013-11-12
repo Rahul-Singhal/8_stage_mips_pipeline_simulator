@@ -159,8 +159,10 @@ sStalls++;
 					else{
 						registers[rtIndex].stallRegister(id); 
 						a = registers[rsIndex].value;
+						int lastTime;
 						if(registers[rsIndex].isForwarded()){
-							forwarded = true;
+							forwarded = true;						
+							lastTime = registers[rsIndex].lastForwarderTime;
 							forwardedFromInstructionId = registers[rsIndex].lastForwarder;
 						}
 						b = signExtImm;
@@ -328,7 +330,7 @@ sStalls++;
 			// registers[rtIndex].stallRegister(id);
 				if(stages[stageToExecute].isFree()){
 					if(forwardingEnabled){
-						registers[rtIndex].forwardIt(id);
+						registers[rtIndex].forwardIt(id, clockCycle);
 						registers[rtIndex].unstallRegister(memory.loadWord(sum), id);
 					}
 					stages[presentStage].setFree();

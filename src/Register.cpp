@@ -30,7 +30,8 @@ bool Register::isValid(){
 	return false;
 }
 
-void Register::forwardIt(int instructionId){
+void Register::forwardIt(int instructionId, int time){
+	lastForwarderTime = time;
 	lastForwarder = instructionId;
 	forwardingInstructions.push_back(instructionId);
 }
