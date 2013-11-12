@@ -7,7 +7,7 @@ Srav::Srav(int rdIndex, int rsIndex, int rtIndex, int id){
 	this->id = id;
 }
 
-// Srav* Srav::clone(){
+Srav* Srav::clone(){
 return new Srav (*this);
 }
 
@@ -18,6 +18,7 @@ Srav::Srav(const Srav &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
@@ -38,6 +39,7 @@ Srav::Srav(Srav &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;

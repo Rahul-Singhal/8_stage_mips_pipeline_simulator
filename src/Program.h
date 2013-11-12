@@ -47,6 +47,7 @@ class Program: public System{
 public:
 	Parser parser;
 	vector <Instruction *> code;
+	vector <Instruction *> codeSnippet;
 	list <Instruction *> currInstructions;
 	Program(string filename);
 	vector <Instruction> execute();

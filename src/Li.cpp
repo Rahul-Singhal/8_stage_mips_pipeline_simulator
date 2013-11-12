@@ -15,6 +15,7 @@ Li::Li(const Li &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
@@ -39,6 +40,7 @@ Li::Li(Li &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;

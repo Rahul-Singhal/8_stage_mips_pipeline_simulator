@@ -39,7 +39,15 @@ Program::Program(string filename) {
 	// cout << "HERE1" <<endl;
 	// cout << code.size() << endl;
 // UNCOMMENT THIS TO USE THE PARSER
-	code = parser.getVector(filename);
+	codeSnippet = parser.getVector(filename);
+	vector <Instruction *>::iterator it;
+	for(it = codeSnippet.begin(); it != codeSnippet.end(); it++){
+		code.push_back((*it)->clone());
+		code.back()->id = 0;
+		code.back()->presentStage = 0;
+		code.back()->stageToExecute = 1;
+	}
+
 	//cout<<"the size of vector is "<<code.size()<<endl;
 	//exit(0);
 	// cout<<"Inside the Program object"<<endl;
@@ -124,8 +132,10 @@ vector <Instruction> Program::execute(){
 			stages[3].setFree();
 			for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
 				if((*it)->presentStage == 3){
-					if(!fastBranching)
-						(*it)->unstall();
+					if(!fastBranching){
+						cout<<"unstalling instruction id "<<(*it)->id<<endl;
+						(*it)->unstall((*it)->id);
+					}
 					else
 						it++;
 					break;
@@ -137,16 +147,16 @@ vector <Instruction> Program::execute(){
 				currInstructions.erase(it++);
 			}
 		// cout<<"yo4"<<endl;
-	}
+		}
 	// cout<<"yahan se bahar aaya pc != prevpc"<<endl;
-	it = currInstructions.begin() ;
-	while(it != currInstructions.end()){
-		if((*it)->stageToExecute==-1)
-			currInstructions.erase(it++);
-		else
-			it++;
-	}		
-	it = currInstructions.begin();
+		it = currInstructions.begin() ;
+		while(it != currInstructions.end()){
+			if((*it)->stageToExecute==-1)
+				currInstructions.erase(it++);
+			else
+				it++;
+		}		
+		it = currInstructions.begin();
 	// cout<<"ends up with ";
 	/*while(it != currInstructions.end()){
 		cout<<(*it)->id<<", "<<(*it)->presentStage<<", "<<(*it)->stageToExecute<<" :: ";
@@ -221,7 +231,7 @@ void Program::executeAll(){
 						for(it = currInstructions.begin() ; it != currInstructions.end() ; it++){
 							if((*it)->id == sepInstructions[i][j]->id){
 								it++;
-								(*it)->unstall(); /*unstalling the register*/
+								(*it)->unstall((*it)->id); /*unstalling the register*/
 								break;
 							}
 						}

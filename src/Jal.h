@@ -10,6 +10,7 @@ private:
 	// I assume the following variable will hold the address to the next instruction
 	// if the branch is taken
 	int destPc;
+	string label;
 	// int a, b;
 public:
 	Jal(string label, int id);

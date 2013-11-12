@@ -74,6 +74,7 @@ void Parser::initMaps(){
     instructionIntMap["bgt"] = 32;
     instructionIntMap["b"] = 33;
     instructionIntMap["bne"] = 34;
+    instructionIntMap["jr"] = 35;
 
 
 
@@ -338,6 +339,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Add(reg1, reg2, reg3,0));
                 sprintf(displayString, "ADD $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
@@ -346,6 +348,7 @@ void Parser::makeInstruction(){
                     codeVector.push_back(new Addi(reg1, reg2, convertToNumber(lineWords[3]),0));
                     sprintf(displayString, "ADD $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                     codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
                     //cout<<"INSTRUCTION: "<<"ADDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
@@ -363,6 +366,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Addi(reg1, reg2, convertToNumber(lineWords[3]),0));
                 sprintf(displayString, "ADDI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"ADDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;*/
             }
             else syntaxError();
@@ -381,6 +385,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new And(reg1, reg2, reg3,0));
                 sprintf(displayString, "AND $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"AND "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
@@ -390,6 +395,7 @@ void Parser::makeInstruction(){
                     codeVector.push_back(new Andi(reg1, reg2, convertToNumber(lineWords[3]),0));
                     sprintf(displayString, "AND $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                     codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
                     //cout<<"INSTRUCTION: "<<"ANDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
@@ -408,6 +414,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Andi(reg1, reg2, convertToNumber(lineWords[3]),0));
                 sprintf(displayString, "ANDI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"ANDI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
             else syntaxError();
@@ -426,6 +433,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Or(reg1, reg2, reg3,0));
                 sprintf(displayString, "OR $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"OR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
@@ -435,6 +443,7 @@ void Parser::makeInstruction(){
                     codeVector.push_back(new Ori(reg1, reg2, convertToNumber(lineWords[3]),0));
                     sprintf(displayString, "OR $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                     codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
                     //cout<<"INSTRUCTION: "<<"ORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
@@ -453,6 +462,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Ori(reg1, reg2, convertToNumber(lineWords[3]),0));
                 sprintf(displayString, "ORI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"ORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
             }
             else syntaxError();
@@ -470,6 +480,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Sub(reg1, reg2, reg3,0));
                 sprintf(displayString, "SUB $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"SUB "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
@@ -497,6 +508,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Xor(reg1, reg2, reg3,0));
                 sprintf(displayString, "XOR $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"XOR "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
@@ -506,6 +518,7 @@ void Parser::makeInstruction(){
                     codeVector.push_back(new Xori(reg1, reg2, convertToNumber(lineWords[3]),0));
                     sprintf(displayString, "XOR $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                     codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
                     //cout<<"INSTRUCTION: "<<"XORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
                 }
                 else syntaxError();
@@ -524,6 +537,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Xori(reg1, reg2, convertToNumber(lineWords[3]),0));
                 sprintf(displayString, "XORI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"XORI "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
             }
             else syntaxError();
@@ -538,6 +552,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new La(reg1, lineWords[2],0));
                 sprintf(displayString, "LA $%d %s", reg1, lineWords[2].c_str());
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"LA "<<reg1<<" "<<lineWords[2]<<endl;
         }
         else syntaxError();
@@ -550,6 +565,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Li(reg1, convertToNumber(lineWords[2]),0));
                 sprintf(displayString, "LI $%d %d", reg1, convertToNumber(lineWords[2]));
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 // cout<<"INSTRUCTION: "<<"LI "<<reg1<<" "<<convertToNumber(lineWords[2])<<endl;
             }
             else syntaxError();
@@ -565,6 +581,7 @@ void Parser::makeInstruction(){
             codeVector.push_back(new Not(reg1, reg2,0));
             // sprintf(displayString, "NOT $%d $%d", reg1, reg2);
             codeVector.back()->display = displayString;
+            codeVector.back()->address = codeVector.size()-1;
             //cout<<"INSTRUCTION: "<<"NOT "<<reg1<<" "<<reg2<<" "<<endl;
         }
         else syntaxError();
@@ -574,6 +591,7 @@ void Parser::makeInstruction(){
         codeVector.push_back(new Exit());
         sprintf(displayString, "EXIT");
         codeVector.back()->display = displayString;
+        codeVector.back()->address = codeVector.size()-1;
         //cout<<"INSTRUCTION: SYSCALL"<<endl;
         break;
         case 13:
@@ -585,6 +603,7 @@ void Parser::makeInstruction(){
             codeVector.push_back(new Addi(reg1, reg2,0,0));
             sprintf(displayString, "MOVE $%d $%d", reg1, reg2);
             codeVector.back()->display = displayString;
+            codeVector.back()->address = codeVector.size()-1;
             //cout<<"INSTRUCTION: "<<"MOVE "<<reg1<<" "<<reg2<<" "<<endl;
         }
         else syntaxError();
@@ -597,6 +616,7 @@ void Parser::makeInstruction(){
             codeVector.push_back(new Beq(reg1, reg2, lineWords[3],0));
             sprintf(displayString, "BEQ $%d $%d %s", reg1, reg2, lineWords[3].c_str());
             codeVector.back()->display = displayString;
+            codeVector.back()->address = codeVector.size()-1;
             //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
         else syntaxError();
@@ -615,6 +635,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Sw(reg1,address, 0,0));
                 sprintf(displayString, "SW $%d (%s)", reg1, address);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"SW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
@@ -624,6 +645,7 @@ void Parser::makeInstruction(){
                     codeVector.push_back(new Sw(reg1,address, convertToNumber(offset),0));
                     sprintf(displayString, "SW $%d %d(%s)", reg1, convertToNumber(offset), address);
                     codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
                     //cout<<"INSTRUCTION: "<<"SW "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();
@@ -647,6 +669,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Lw(reg1,address,0,0));
                 sprintf(displayString, "LW $%d (%s)", reg1, address);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 // cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
@@ -656,6 +679,7 @@ void Parser::makeInstruction(){
                     codeVector.push_back(new Lw(reg1,address, convertToNumber(offset),0));
                     sprintf(displayString, "LW $%d %d(%s)", reg1, convertToNumber(offset), address);
                     codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
                     //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();
@@ -675,6 +699,7 @@ void Parser::makeInstruction(){
                 sprintf(displayString, "MULT $%d $%d $%d", reg1, reg2, reg3);
                 // cout<<"set the "<<displayString<<endl;
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"MULT "<<reg1<<" "<<reg2<<" "<<endl;
             }
             else syntaxError();
@@ -689,6 +714,7 @@ void Parser::makeInstruction(){
         codeVector.push_back(new J(lineWords[1],0));
         sprintf(displayString, "J %s", lineWords[1].c_str());
         codeVector.back()->display = displayString;
+        codeVector.back()->address = codeVector.size()-1;
         
         //cout<<"INSTRUCTION: "<<"J "<<lineWords[1]<<endl;
         break;
@@ -707,6 +733,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Lb(reg1,address, 0,0));
                 sprintf(displayString, "LB $%d (%s)", reg1, address);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"LB "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
@@ -717,6 +744,7 @@ void Parser::makeInstruction(){
                     codeVector.push_back(new Lb(reg1,address,convertToNumber(offset),0));
                     sprintf(displayString, "LB $%d %d(%s)", reg1, convertToNumber(offset), address);
                     codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
                     //cout<<"INSTRUCTION: "<<"LB "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();
@@ -741,6 +769,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Sb(reg1,address,0,0));
                 sprintf(displayString, "SB $%d (%s)", reg1,address);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"SB "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
@@ -751,6 +780,7 @@ void Parser::makeInstruction(){
                     codeVector.push_back(new Sb(reg1,address,convertToNumber(offset),0));
                     sprintf(displayString, "SB $%d %d(%s)", reg1, convertToNumber(offset), address);
                     codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
                     //cout<<"INSTRUCTION: "<<"SB "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();
@@ -770,6 +800,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Slt(reg1, reg2, reg3,0));
                 sprintf(displayString, "SLT $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"SLT "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else{
@@ -778,6 +809,7 @@ void Parser::makeInstruction(){
                     codeVector.push_back(new Slti(reg1, reg2, convertToNumber(lineWords[3]),0));
                     sprintf(displayString, "SLT $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                     codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
                 }
                 else syntaxError();
             }
@@ -795,6 +827,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Slti(reg1, reg2, convertToNumber(lineWords[3]),0));
                 sprintf(displayString, "SLTI $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
             }
             else syntaxError();
         }
@@ -810,6 +843,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Sll(reg1, reg2, convertToNumber(lineWords[3]),0));
                 sprintf(displayString, "SLL $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
             }
             else syntaxError();
         }
@@ -824,6 +858,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Sllv(reg1, reg2, reg3,0));
                 sprintf(displayString, "SLLV $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
@@ -840,6 +875,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Sra(reg1, reg2, convertToNumber(lineWords[3]),0));
                 sprintf(displayString, "SRA $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
             }
             else syntaxError();
         }
@@ -854,6 +890,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Srav(reg1, reg2, reg3,0));
                 sprintf(displayString, "SRAV $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
@@ -870,6 +907,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Srl(reg1, reg2, convertToNumber(lineWords[3]),0));
                 sprintf(displayString, "SRL $%d $%d %d", reg1, reg2, convertToNumber(lineWords[3]));
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
             }
             else syntaxError();
         }
@@ -884,6 +922,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Srlv(reg1, reg2, reg3,0));
                 sprintf(displayString, "SRLV $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
@@ -900,6 +939,7 @@ void Parser::makeInstruction(){
                 codeVector.push_back(new Nor(reg1, reg2, reg3,0));
                 sprintf(displayString, "NOR $%d $%d $%d", reg1, reg2, reg3);
                 codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
                 //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
@@ -907,9 +947,10 @@ void Parser::makeInstruction(){
         else syntaxError();
         break;
         case 30:
-            codeVector.push_back(new Jal(lineWords[0],0));
-            sprintf(displayString, "JAL %s", lineWords[0].c_str());
+            codeVector.push_back(new Jal(lineWords[1],0));
+            sprintf(displayString, "JAL %s", lineWords[1].c_str());
             codeVector.back()->display = displayString;
+            codeVector.back()->address = codeVector.size()-1;
             break;
         case 31:
         if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
@@ -919,6 +960,7 @@ void Parser::makeInstruction(){
             codeVector.push_back(new Blt(reg1, reg2, lineWords[3],0));
             sprintf(displayString, "BLT $%d $%d %s", reg1, reg2, lineWords[3].c_str());
             codeVector.back()->display = displayString;
+            codeVector.back()->address = codeVector.size()-1;
             //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
         else syntaxError();
@@ -931,6 +973,7 @@ void Parser::makeInstruction(){
             codeVector.push_back(new Bgt(reg1, reg2, lineWords[3],0));
             sprintf(displayString, "BGT $%d $%d %s", reg1, reg2, lineWords[3].c_str());
             codeVector.back()->display = displayString;
+            codeVector.back()->address = codeVector.size()-1;
             //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
         else syntaxError();
@@ -941,6 +984,7 @@ void Parser::makeInstruction(){
         codeVector.push_back(new B(lineWords[1],0));
         sprintf(displayString, "B %s", lineWords[1].c_str());
         codeVector.back()->display = displayString;
+        codeVector.back()->address = codeVector.size()-1;
         //cout<<"INSTRUCTION: "<<"B "<<lineWords[1]<<"uoooooooooooooooooooooooooooooo"<<endl;
         break;
         case 34:
@@ -951,7 +995,18 @@ void Parser::makeInstruction(){
             codeVector.push_back(new Bne(reg1, reg2, lineWords[3],0));
             sprintf(displayString, "BNE $%d $%d %s", reg1, reg2, lineWords[3].c_str());
             codeVector.back()->display = displayString;
+            codeVector.back()->address = codeVector.size()-1;
             //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+        }
+        else syntaxError();
+        break;
+        case 35:
+        if(registerMap.find(lineWords[1]) != registerMap.end()){
+            reg1 = registerMap.find(lineWords[1])->second;
+            codeVector.push_back(new Jr(reg1,0));
+            sprintf(displayString, "JR $%d", reg1);
+            codeVector.back()->display = displayString;
+            codeVector.back()->address = codeVector.size()-1;
         }
         else syntaxError();
         break;

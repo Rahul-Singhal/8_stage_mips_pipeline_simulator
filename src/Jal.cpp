@@ -5,6 +5,7 @@ Jal::Jal(string label, int id){
 	// this->rtIndex = rtIndex;
 	this->destPc = labelMap[label];
 	this->id = id;
+	this->label = label;
 }
 
 Jal::Jal(const Jal &i){
@@ -14,13 +15,16 @@ Jal::Jal(const Jal &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
 	this->id = i.id;
 	// this->rtIndex = i.rtIndex;
 	// this->rsIndex = i.rsIndex;
-	this->destPc = i.destPc;
+	this->label = i.label;
+	this->destPc = labelMap[i.label];
+
 	// this->a = i.a;
 	// this->b = i.b;
 }
@@ -32,18 +36,21 @@ Jal::Jal(Jal &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
 	this->id = i.id;
 	// this->rtIndex = gtpooniwala@gmail.com i.rtIndex;
 	// this->rsIndex = i.rsIndex;
-	this->destPc = i.destPc;
+	this->label = i.label;
+	this->destPc = labelMap[i.label];
 	// this->a = i.a;
 	// this->b = i.b;
 }
 
 void Jal::unstall(int instructionId){
+	cout<<"Instruction mein bhi unstall call huwa"<<endl;
 	registers[31].unstall(instructionId);
  	return;
 }
@@ -69,7 +76,9 @@ Jal * Jal::clone(){
 */
 
 bool Jal::execute(int pc){
-	int prevPc = programCounter;
+	// cout<<"jal ki id ye hai= "<<id<<endl;
+	// int prevPc = programCounter;
+	// cout<<"prevpc ye set huwa hai "<<prevPc<<endl;
 	// ////cout<<"Jal"<<endl;
 	forwarded = false;
 	stalled = false;
@@ -294,7 +303,7 @@ bool Jal::execute(int pc){
 						// registers[rdIndex].stallRegister(id);
 			if(stages[stageToExecute].isFree()){
 				if(forwardingEnabled)
-					registers[31].unstallRegister(prevPc+1, id); // TODO : Will it ever return false?
+					registers[31].unstallRegister(address+1, id); // TODO : Will it ever return false?
 				if(!fastBranching){
 					// cout<<a<<"::::::::::::::::::"<<b<<endl;
 					if(true)
@@ -386,7 +395,7 @@ bool Jal::execute(int pc){
 			// WB Stage Simple ! Nothing to write back
 			if(stages[stageToExecute].isFree()){
 				if(!forwardingEnabled)
-					registers[31].unstallRegister(prevPc+1, id); // TODO : Will it ever return false?
+					registers[31].unstallRegister(address+1, id); // TODO : Will it ever return false?
 				stages[presentStage].setFree();
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);

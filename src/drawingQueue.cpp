@@ -10,8 +10,8 @@ void DrawingQueue::render_bitmap_string(float x, float y, float z, void *font, c
   const char *c;
   int str_len = strlen(str);
   int str_pel_width;
-  for (unsigned int i = 0; i < str_len; i++)
-  str_pel_width += glutBitmapWidth (GLUT_BITMAP_HELVETICA_12, str[i]);
+  for (unsigned int i = 0; i < str_len && i<20; i++)
+  str_pel_width += glutBitmapWidth (GLUT_BITMAP_HELVETICA_10, str[i]);
   glRasterPos3f(x-(str_pel_width/2) , y,z);
   for (c=str; *c != '\0'; c++) 
     {

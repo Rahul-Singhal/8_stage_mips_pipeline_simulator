@@ -14,11 +14,11 @@ void Register::stallRegister(int instructionId){
 }
 
 void Register::unstallRegister(int value, int instructionId){
-	//cout<<"remove "<<instructionId<<"  from "<<id<<endl;
-	//cout<<"size before "<<blockingInstructions.size()<<endl;
+	cout<<"remove "<<instructionId<<"  from "<<id<<"after writing value = "<<value<<endl;
+	cout<<"size before "<<blockingInstructions.size()<<endl;
 	blockingInstructions.remove(instructionId);
 	this->value = value;
-	//cout<<"size after "<<blockingInstructions.size()<<endl;
+	cout<<"size after "<<blockingInstructions.size()<<endl;
 }
 
 bool Register::isValid(){
@@ -70,10 +70,9 @@ bool Register::write(int value, int instructionId, int instructionStage){
 }
 */
 void Register::unstall(int instructionId){
-	// instructionId = 10;
-	// //cout<<instructionId<<" unstalls "<<id<<". size= "<<blockingInstructions.size()<<endl;
-	// //cout<<blockingInstructions.front()<<":"<<blockingInstructions.back()<<endl;
+	// cout<<instructionId<<" unstalls "<<id<<". size= "<<blockingInstructions.size()<<endl;
+	// cout<<blockingInstructions.front()<<":"<<blockingInstructions.back()<<endl;
 	blockingInstructions.remove(instructionId);
-	// //cout<<"size= "<<blockingInstructions.size()<<endl;
+	// cout<<"size= "<<blockingInstructions.size()<<endl;
 
 }

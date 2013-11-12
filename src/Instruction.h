@@ -18,7 +18,7 @@ public:
 	Instruction(int s2ex, int ps, bool stall, int stallInstId, int stallReg, bool forw, int forwfromInstId, int forwStage, string disp, int i);
 	void init();
 	virtual bool execute(int pc);
-	virtual void unstall();
+	virtual void unstall(int instructionId);
 	virtual Instruction * clone();
 	// eigth stage
 	int stageToExecute;

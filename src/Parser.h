@@ -44,6 +44,7 @@
 #include "Bgt.h"
 #include "B.h"
 #include "Bne.h"
+#include "Jr.h"
 using namespace std;
 
 class Parser : public System{

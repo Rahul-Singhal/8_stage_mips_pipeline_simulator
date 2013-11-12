@@ -15,6 +15,7 @@ Bgt::Bgt(const Bgt &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
@@ -34,6 +35,7 @@ Bgt::Bgt(Bgt &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;

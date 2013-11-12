@@ -18,6 +18,7 @@ Nor::Nor(const Nor &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
@@ -38,6 +39,7 @@ Nor::Nor(Nor &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;

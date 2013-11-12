@@ -14,10 +14,12 @@ Jr::Jr(const Jr &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
 	this->id = i.id;
+	this->address = i.address;
 	// this->rtIndex = i.rtIndex;
 	this->rsIndex = i.rsIndex;
 	// this->destPc = i.destPc;
@@ -32,10 +34,12 @@ Jr::Jr(Jr &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
 	this->id = i.id;
+	this->address = i.address;
 	// this->rtIndex = gtpooniwala@gmail.com i.rtIndex;
 	this->rsIndex = i.rsIndex;
 	// this->destPc = i.destPc;
@@ -136,7 +140,7 @@ Jr * Jr::clone(){
 						stalled = true;
 						stallingRegister = rsIndex;
 						stallingInstructionId = registers[rsIndex].instructionId;
-						////cout << "rs register not readable -->";
+						cout << "rs register not readable -->"<<endl;
 
 						return false;
 					}/*
@@ -171,7 +175,7 @@ Jr * Jr::clone(){
 									programCounter = destPc-1;
 								}
 							}
-						////cout << "id completed -->";
+						cout << "id completed -- jr>"<<endl;
 
 							return true;
 						}
@@ -286,7 +290,7 @@ Jr * Jr::clone(){
 						stages[presentStage].setInstruction(id);
 						stallingInstructionId = -1;
 						stalled = true;
-				////cout << "ID not free -->" ;
+				cout << "ID not free --> jr" <<endl;
 						return false;
 					}
 				}

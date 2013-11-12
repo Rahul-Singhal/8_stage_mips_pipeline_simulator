@@ -22,6 +22,7 @@ Instruction::Instruction(const Instruction &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
@@ -35,6 +36,7 @@ Instruction::Instruction(Instruction &i){
 	this->stallingInstructionId = i.stallingInstructionId;
 	this->stallingRegister = i.stallingRegister;
 	this->forwarded =i.forwarded;
+	this->address=i.address;
 	this->forwardedFromInstructionId = i.forwardedFromInstructionId;
 	this->forwardedFromInstructionStage = i.forwardedFromInstructionStage;
 	this->display = i.display;
@@ -71,8 +73,8 @@ bool Instruction::execute(int pc){
   return false;
 }
 
-void Instruction::unstall(){
-	////cout<<"FUCKED AGAIN"<<endl;
+void Instruction::unstall(int instructionId){
+	cout<<"FUCKED AGAIN"<<endl;
 	return;
 }
 
