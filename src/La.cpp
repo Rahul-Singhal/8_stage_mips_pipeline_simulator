@@ -95,7 +95,7 @@ bool La::execute(int pc){
 			else{
 				stages[presentStage].setInstruction(id);
 				stalled = true;
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				display = "Waiting for IF1 to be free!";
 				////cout << "if1 - wait -->" ;
 				return false;
@@ -117,7 +117,7 @@ bool La::execute(int pc){
 			else {
 				stages[presentStage].setInstruction(id);
 				stalled = true;
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				display = "Waiting for IF2 to be free!";
 				////cout << "if2 - wait -->" ;
 				return false;
@@ -248,8 +248,10 @@ bool La::execute(int pc){
 			// registers[rtIndex].stallRegister(id);
 				if(stages[stageToExecute].isFree()){
 					// sum = a+b;
-					if(forwardingEnabled)
+					if(forwardingEnabled){
+						registers[rdIndex].forwardIt(id);
 						registers[rdIndex].unstallRegister(labelMap[address], id); // TODO : Will it ever return false?
+					}
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?
 					stages[presentStage].setFree();
 					presentStage = stageToExecute;
@@ -261,7 +263,7 @@ bool La::execute(int pc){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionId;
+					stallingInstructionId = -1;
 					stalled = true;
 				////cout << "EX stage not free -->";
 
@@ -282,7 +284,7 @@ bool La::execute(int pc){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionId;
+					stallingInstructionId = -1;
 					stalled = true;
 				////cout << "MEM1 stage not free -->";
 
@@ -303,7 +305,7 @@ bool La::execute(int pc){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionId;
+					stallingInstructionId = -1;
 					stalled = true;
 				////cout << "MEM2 stage not free -->";
 
@@ -323,7 +325,7 @@ bool La::execute(int pc){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionId;
+					stallingInstructionId = -1;
 					stalled = true;
 				////cout << "MEM2 stage not free -->";
 
@@ -334,6 +336,7 @@ bool La::execute(int pc){
 			{
 			// WB Stage
 				if(stages[stageToExecute].isFree()){
+					registers[rdIndex].unforwardIt(id);
 					if(!forwardingEnabled)
 						registers[rdIndex].unstallRegister(labelMap[address], id);
 					stages[presentStage].setFree();
@@ -366,7 +369,7 @@ bool La::execute(int pc){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionId;
+					stallingInstructionId = -1;
 					stalled = true;
 				////cout << "WB not free ->";
 

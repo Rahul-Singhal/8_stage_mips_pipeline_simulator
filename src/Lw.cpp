@@ -102,7 +102,7 @@ bool Lw::execute(int pc){
 			else{
 				stages[presentStage].setInstruction(id);
 				stalled = true;
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				display = "Waiting for IF1 to be free!";
 				////cout << "if1 - wait -->" ;
 				return false;
@@ -124,7 +124,7 @@ bool Lw::execute(int pc){
 			else {
 				stages[presentStage].setInstruction(id);
 				stalled = true;
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				display = "Waiting for IF2 to be free!";
 				////cout << "if2 - wait -->" ;
 				return false;
@@ -146,7 +146,7 @@ bool Lw::execute(int pc){
 						// stages[presentStage].setInstruction(id);
 						stalled = true;
 						stallingRegister = rsIndex;
-						// stallingInstructionId = registers[rsIndex].instructionId;
+						stallingInstructionId = registers[rsIndex].instructionId;
 							////cout << "rs register not readable -->";
 
 						return false;
@@ -154,6 +154,10 @@ bool Lw::execute(int pc){
 					else{
 						registers[rtIndex].stallRegister(id); 
 						a = registers[rsIndex].value;
+						if(registers[rsIndex].isForwarded()){
+							forwarded = true;
+							forwardedFromInstructionId = registers[rsIndex].lastForwarder;
+						}
 						b = signExtImm;
 						// stages[presentStage].setFree();
 						// presentStage = stageToExecute;
@@ -236,7 +240,7 @@ bool Lw::execute(int pc){
 				}
 				else {
 					stages[presentStage].setInstruction(id);
-					// stallingInstructionId = stages[stageToExecute].instructionId;
+					// stallingInstructionId = -1;
 					stalled = true;
 				////cout << "ID not free -->" ;
 					return false;
@@ -259,7 +263,7 @@ bool Lw::execute(int pc){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionId;
+					stallingInstructionId = -1;
 					stalled = true;
 				////cout << "EX stage not free -->";
 
@@ -280,7 +284,7 @@ bool Lw::execute(int pc){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionId;
+					stallingInstructionId = -1;
 					stalled = true;
 				////cout << "MEM1 stage not free -->";
 
@@ -301,7 +305,7 @@ bool Lw::execute(int pc){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionId;
+					stallingInstructionId = -1;
 					stalled = true;
 				////cout << "MEM2 stage not free -->";
 
@@ -314,8 +318,10 @@ bool Lw::execute(int pc){
 			/*If register is not writable, i am stalling the register*/
 			// registers[rtIndex].stallRegister(id);
 				if(stages[stageToExecute].isFree()){
-					if(forwardingEnabled)
+					if(forwardingEnabled){
+						registers[rtIndex].forwardIt(id);
 						registers[rtIndex].unstallRegister(memory.loadWord(sum), id);
+					}
 					stages[presentStage].setFree();
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);
@@ -346,7 +352,7 @@ bool Lw::execute(int pc){
 					}
 					else{
 						stages[presentStage].setInstruction(id);
-						stallingInstructionId = stages[stageToExecute].instructionId;
+						stallingInstructionId = -1;
 						stalled = true;
 				////cout << "MEM3 stage not free -->";
 
@@ -358,6 +364,7 @@ bool Lw::execute(int pc){
 				{
 			// WB Stage
 					if(stages[stageToExecute].isFree()){
+						registers[rtIndex].unforwardIt(id);
 						if(!forwardingEnabled)
 							registers[rtIndex].unstallRegister(memory.loadWord(sum), id);
 						stages[presentStage].setFree();
@@ -390,7 +397,7 @@ bool Lw::execute(int pc){
 				}
 				else{
 					stages[presentStage].setInstruction(id);
-					stallingInstructionId = stages[stageToExecute].instructionId;
+					stallingInstructionId = -1;
 					stalled = true;
 				////cout << "WB not free ->";
 

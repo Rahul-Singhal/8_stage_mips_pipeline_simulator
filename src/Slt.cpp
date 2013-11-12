@@ -87,7 +87,7 @@ bool Slt::execute(int pc){
       else{
         stages[presentStage].setInstruction(id);
         stalled = true;
-        stallingInstructionId = stages[stageToExecute].instructionId;
+        stallingInstructionId = -1;
         display = "Waiting for IF1 to be free!";
         //cout << "if1 - wait -->"<<endl ;
         return false;
@@ -109,7 +109,7 @@ bool Slt::execute(int pc){
       else {
         stages[presentStage].setInstruction(id);
         stalled = true;
-        stallingInstructionId = stages[stageToExecute].instructionId;
+        stallingInstructionId = -1;
         display = "Waiting for IF2 to be free!";
         //cout << "if2 - wait -->" <<endl;
         return false;
@@ -130,7 +130,7 @@ bool Slt::execute(int pc){
             // stages[presentStage].setInstruction(id);
           stalled = true;
           stallingRegister = rsIndex;
-            // stallingInstructionId = registers[rsIndex].instructionId;
+          stallingInstructionId = registers[rsIndex].instructionId;
             //cout << "rs register not readable -->"<<endl;
 
           return false;
@@ -140,7 +140,7 @@ bool Slt::execute(int pc){
             // stages[presentStage].setInstruction(id);
           stalled = true;
           stallingRegister = rtIndex;
-            // stallingInstructionId = registers[rtIndex].instructionId;    
+          stallingInstructionId = registers[rtIndex].instructionId;    
             //cout << "rt register not readable -->"<<endl;
 
           return false;
@@ -150,6 +150,14 @@ bool Slt::execute(int pc){
           registers[rdIndex].stallRegister(id); 
           a = registers[rsIndex].value;
           b = registers[rtIndex].value;
+          if(registers[rsIndex].isForwarded()){
+            forwarded = true;
+            forwardedFromInstructionId = registers[rsIndex].lastForwarder;
+          }
+          if(registers[rtIndex].isForwarded()){
+            forwarded = true;
+            forwardedFromInstructionId = registers[rtIndex].lastForwarder;
+          }
             // stages[presentStage].setFree();
             // presentStage = stageToExecute;
             // stages[presentStage].setInstruction(id);
@@ -162,7 +170,7 @@ bool Slt::execute(int pc){
       }
       else {
         stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
+        stallingInstructionId = -1;
         stalled = true;
         //cout << "ID not free -->"<<endl ;
         return false;
@@ -175,8 +183,10 @@ bool Slt::execute(int pc){
       if(stages[stageToExecute].isFree()){
         if (a<b) sum = 1;
         else sum = 0;
-        if(forwardingEnabled)
+        if(forwardingEnabled){
+          registers[rdIndex].forwardIt(id);
           registers[rdIndex].unstallRegister(sum, id); // TODO : Will it ever return false?
+        }
         stages[presentStage].setFree();
         presentStage = stageToExecute;
         stages[presentStage].setInstruction(id);
@@ -187,7 +197,7 @@ bool Slt::execute(int pc){
       }
       else{
         stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
+        stallingInstructionId = -1;
         stalled = true;
         //cout << "EX stage not free -->"<<endl;
 
@@ -208,7 +218,7 @@ bool Slt::execute(int pc){
       }
       else{
         stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
+        stallingInstructionId = -1;
         stalled = true;
         //cout << "MEM1 stage not free -->"<<endl;
 
@@ -229,7 +239,7 @@ bool Slt::execute(int pc){
       }
       else{
         stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
+        stallingInstructionId = -1;
         stalled = true;
         //cout << "MEM2 stage not free -->"<<endl;
 
@@ -250,7 +260,7 @@ bool Slt::execute(int pc){
       }
       else{
         stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
+        stallingInstructionId = -1;
         stalled = true;
         //cout << "MEM3 stage not free -->"<<endl;
 
@@ -263,6 +273,7 @@ bool Slt::execute(int pc){
       // WB Stage
       // registers[rdIndex].stallRegister(id);
       if(stages[stageToExecute].isFree()){
+        registers[rdIndex].unforwardIt(id);
         if(!forwardingEnabled)
           registers[rdIndex].unstallRegister(sum, id); // TODO : Will it ever return false?
         stages[presentStage].setFree();
@@ -277,7 +288,7 @@ bool Slt::execute(int pc){
       }
       else{
         stages[presentStage].setInstruction(id);
-        stallingInstructionId = stages[stageToExecute].instructionId;
+        stallingInstructionId = -1;
         stalled = true;
         //cout << "WB not free ->"<<endl;
 

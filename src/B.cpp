@@ -96,7 +96,7 @@ bool B::execute(int pc){
 			else{
 				stages[presentStage].setInstruction(id);
 				stalled = true;
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				// display = "Waiting for IF1 to be free!";
 				////cout << "if1 - wait -->" ;
 				return false;
@@ -118,7 +118,7 @@ bool B::execute(int pc){
 			else {
 				stages[presentStage].setInstruction(id);
 				stalled = true;
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				// display = "Waiting for IF2 to be free!";
 				////cout << "if2 - wait -->" ;
 				return false;
@@ -284,7 +284,7 @@ bool B::execute(int pc){
 			else {
 				// cout<<"Yes its coming here"<<endl;
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				stalled = true;
 				////cout << "ID not free -->" ;
 				return false;
@@ -313,7 +313,7 @@ bool B::execute(int pc){
 			}
 			else{
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				stalled = true;
 				////cout << "EX stage not free -->";
 
@@ -334,7 +334,7 @@ bool B::execute(int pc){
 			}
 			else{
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				stalled = true;
 				////cout << "MEM1 stage not free -->";
 
@@ -354,7 +354,7 @@ bool B::execute(int pc){
 			}
 			else{
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				stalled = true;
 				////cout << "MEM2 stage not free -->";
 
@@ -374,7 +374,7 @@ bool B::execute(int pc){
 			}
 			else{
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				stalled = true;
 				////cout << "MEM3 stage not free -->";
 
@@ -395,7 +395,7 @@ bool B::execute(int pc){
 			}
 			else{
 				stages[presentStage].setInstruction(id);
-				stallingInstructionId = stages[stageToExecute].instructionId;
+				stallingInstructionId = -1;
 				stalled = true;
 				////cout << "WB stage not free -->";
 
