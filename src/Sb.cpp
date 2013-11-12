@@ -450,4 +450,5 @@ bool Sb::execute(int pc){
 				}
 			}
 		}
+		return false;
 	}

@@ -98,7 +98,7 @@ bool La::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = -1;
-sStalls++;
+				sStalls++;
 //display = "Waiting for IF1 to be free!";
 				//////cout << "if1 - wait -->" ;
 				return false;
@@ -121,7 +121,7 @@ sStalls++;
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = -1;
-sStalls++;
+				sStalls++;
 //display = "Waiting for IF2 to be free!";
 				//////cout << "if2 - wait -->" ;
 				return false;
@@ -241,7 +241,7 @@ sStalls++;
 				else {
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
-sStalls++;
+					sStalls++;
 					stalled = true;
 					// //cout << "ID not free --> la"<<endl	 ;
 					return false;
@@ -269,7 +269,7 @@ sStalls++;
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
-sStalls++;
+					sStalls++;
 					stalled = true;
 				//////cout << "EX stage not free -->";
 
@@ -291,7 +291,7 @@ sStalls++;
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
-sStalls++;
+					sStalls++;
 					stalled = true;
 				//////cout << "MEM1 stage not free -->";
 
@@ -313,7 +313,7 @@ sStalls++;
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
-sStalls++;
+					sStalls++;
 					stalled = true;
 				//////cout << "MEM2 stage not free -->";
 
@@ -334,7 +334,7 @@ sStalls++;
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
-sStalls++;
+					sStalls++;
 					stalled = true;
 				//////cout << "MEM2 stage not free -->";
 
@@ -379,7 +379,7 @@ sStalls++;
 				else{
 					stages[presentStage].setInstruction(id);
 					stallingInstructionId = -1;
-sStalls++;
+					sStalls++;
 					stalled = true;
 				//////cout << "WB not free ->";
 
@@ -387,4 +387,5 @@ sStalls++;
 				}
 			}
 		}
+		return false;
 	}
