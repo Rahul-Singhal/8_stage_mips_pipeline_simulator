@@ -183,6 +183,7 @@ Beq * Beq::clone(){
 							// //cout<<a<<"::::::::::::::::::"<<b<<endl;
 							if(a==b){
 								programCounter = destPc-1;
+								branchChanged = true;
 							}
 						}
 						//////cout << "id completed -->";
@@ -313,8 +314,10 @@ Beq * Beq::clone(){
 				if(stages[stageToExecute].isFree()){
 					if(!fastBranching){
 					// //cout<<a<<"::::::::::::::::::"<<b<<endl;
-						if(a==b)
+						if(a==b){
 							programCounter = destPc-1;
+							branchChanged = true;
+						}
 					}
 				/*No rdIndex to write*/
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?

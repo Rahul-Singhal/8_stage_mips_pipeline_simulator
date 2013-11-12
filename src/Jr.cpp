@@ -177,6 +177,7 @@ Jr * Jr::clone(){
 							// //cout<<a<<"::::::::::::::::::"<<b<<endl;
 								if(true){
 									programCounter = destPc-1;
+									branchChanged = true;
 								}
 							}
 						//cout << "id completed -- jr>"<<endl;
@@ -307,8 +308,10 @@ Jr * Jr::clone(){
 					if(stages[stageToExecute].isFree()){
 						if(!fastBranching){
 					// //cout<<a<<"::::::::::::::::::"<<b<<endl;
-							if(true)
+							if(true){
 								programCounter = destPc-1;
+								branchChanged = true;
+							}
 						}
 				/*No rdIndex to write*/
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?

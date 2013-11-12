@@ -173,6 +173,7 @@ sStalls++;
 							// //cout<<a<<"::::::::::::::::::"<<b<<endl;
 							if(true){
 								programCounter = destPc-1;
+								branchChanged = true;
 							}
 						}
 						//////cout << "id completed -->";
@@ -303,8 +304,10 @@ sStalls++;
 			if(stages[stageToExecute].isFree()){
 				if(!fastBranching){
 					// //cout<<a<<"::::::::::::::::::"<<b<<endl;
-					if(true)
+					if(true){
+						branchChanged = true;
 						programCounter = destPc-1;
+					}
 				}
 				/*No rdIndex to write*/
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?

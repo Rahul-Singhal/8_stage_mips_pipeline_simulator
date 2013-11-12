@@ -23,3 +23,5 @@ map<string, int> System::labelMap = *(new map<string , int>);
 bool System::programOver = false;
 
 int System::clockCycle = 0;
+
+bool System::branchChanged = false;

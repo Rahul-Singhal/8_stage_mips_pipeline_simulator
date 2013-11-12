@@ -27,6 +27,7 @@ public:
   	static int rStalls;
   	static int sStalls;
   	static int clockCycle;
+  	static bool branchChanged;
 };
 
 #endif

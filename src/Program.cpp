@@ -90,6 +90,7 @@ void Program::reset(){
 
 vector <Instruction> Program::execute(){
 	clockCycle++;
+	flush = false;
 	// //cout<<currInstructions.size()<<endl;
 	list<Instruction *>::iterator it;
 		//STABLE SORT
@@ -104,7 +105,13 @@ vector <Instruction> Program::execute(){
 	for(int i = 10 ; i >= 1 ; i--){
 		for(int j = 0 ; j < sepInstructions[i].size() ; j++){
 			// //cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<"--->";
+			branchChanged = false;
 			sepInstructions[i][j]->execute(programCounter);
+			if(branchChanged){
+				/*It means that some branch chenge instruction has been executed*/
+				if(programCounter!=sepInstructions[i][j]->address)
+					flush=true;
+			}
 			// //cout << "pc = " << programCounter << endl;
 			// //cout<<sepInstructions[i][j]->id<<":"<<sepInstructions[i][j]->presentStage<<":"<<sepInstructions[i][j]->stageToExecute<<endl;
 		}
@@ -116,7 +123,7 @@ vector <Instruction> Program::execute(){
 		it++;
 	}
 	nextPc = programCounter;
-	if(nextPc != prevPc){
+	if(flush){
 		// //cout<<"yahan bhi aaya pc != prevpc"<<endl;
 				// //////cout<<"Branch taken and destination other than next instruction!"<<endl;
 				// //////cout<<"Flush needed!"<<endl;
