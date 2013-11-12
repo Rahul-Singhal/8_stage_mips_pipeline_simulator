@@ -26,6 +26,7 @@ public:
   	static map<string, int> labelMap;
   	static int rStalls;
   	static int sStalls;
+  	static bool branchChanged;
 };
 
 #endif

@@ -60,6 +60,7 @@ private:
 	vector <vector <Instruction *> > sepInstructions;
 	int prevPc;
 	int nextPc;
+	bool flush;
 };
 
 #endif

@@ -177,6 +177,7 @@ sStalls++;
 							// //cout<<a<<"::::::::::::::::::"<<b<<endl;
 							if(true){
 								programCounter = destPc-1;
+								branchChanged = true;
 							}
 						}
 						//////cout << "id completed -->";
@@ -309,8 +310,10 @@ sStalls++;
 					registers[31].unstallRegister(address+1, id); // TODO : Will it ever return false?
 				if(!fastBranching){
 					// //cout<<a<<"::::::::::::::::::"<<b<<endl;
-					if(true)
+					if(true){
 						programCounter = destPc-1;
+						branchChanged = true;
+					}
 				}
 				/*No rdIndex to write*/
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?
