@@ -326,6 +326,8 @@ void Parser::makeInstruction(){
     if(lineWords.empty()) { return;}
     ////cout<<instructionNumber<<" ";
     //////cout<<"inst "<<lineWords[0]<<" inst type "<<instructionIntMap["add"]<<endl;
+    if(lineWords[0] == "syscall") return;
+
     int reg1, reg2, reg3;
     if(instructionIntMap.find(lineWords[0]) == instructionIntMap.end()) syntaxError();
     switch(instructionIntMap[lineWords[0]]){
@@ -629,29 +631,42 @@ void Parser::makeInstruction(){
             strcpy(lword, lineWords[2].c_str());
             char * offset;
             char * address;
-            if(lineWords[2][0] == '('){
+            if(lineWords[2][0] == '(') {
                 //sprintf(offset, "0");
-                address = strtok(lword,"( )\t");
-                codeVector.push_back(new Sw(reg1,address, 0,0));
-                sprintf(displayString, "SW $%d (%s)", reg1, address);
-                codeVector.back()->display = displayString;
-                codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"SW "<<reg1<<" "<<0<<" "<<address<<endl;
-            }
-            else{
-                offset = strtok(lword,"( ");
-                address = strtok(NULL, "( )\t");
-                if(convertToNumber(offset) != 2147483644){
-                    codeVector.push_back(new Sw(reg1,address, convertToNumber(offset),0));
-                    sprintf(displayString, "SW $%d %d(%s)", reg1, convertToNumber(offset), address);
+                address = strtok(lword, "( )\t");
+                if(registerMap.find(address) != registerMap.end()) {
+                    reg2 = registerMap.find(address)->second;
+                    codeVector.push_back(new Sw(reg1,reg2,0,0));
+                    sprintf(displayString, "SW $%d ($%d)", reg1, reg2);
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
-                    //cout<<"INSTRUCTION: "<<"SW "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();
+                
+                // cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
-                //make instruction object and push it into vector
-            
+            else{
+                if(lineWords[2][0] >= '0' && lineWords[2][0] <= '9'){
+                    offset = strtok(lword, "( ");
+                    address = strtok(NULL, "( )\t");
+                    if(convertToNumber(offset) != 2147483644 && registerMap.find(address) != registerMap.end()){
+                        reg2 = registerMap.find(address)->second;
+                        codeVector.push_back(new Sw(reg1,reg2, convertToNumber(offset),0));
+                        sprintf(displayString, "SW $%d %d($%d)", reg1, convertToNumber(offset), reg2);
+                        codeVector.back()->display = displayString;
+                        codeVector.back()->address = codeVector.size()-1;
+                        //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
+                    }
+                    else syntaxError();
+                }
+                else{
+                    codeVector.push_back(new Sw(reg1,lineWords[2],0,0));
+                    sprintf(displayString, "SW $%d %s", reg1, lineWords[2].c_str());
+                    codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
+                }
+                
+            }
         }
         else syntaxError();
         break;
@@ -663,28 +678,42 @@ void Parser::makeInstruction(){
             strcpy(lword, lineWords[2].c_str());
             char * offset;
             char * address;
-            if(lineWords[2][0] == '('){
+            if(lineWords[2][0] == '(') {
                 //sprintf(offset, "0");
                 address = strtok(lword, "( )\t");
-                codeVector.push_back(new Lw(reg1,address,0,0));
-                sprintf(displayString, "LW $%d (%s)", reg1, address);
-                codeVector.back()->display = displayString;
-                codeVector.back()->address = codeVector.size()-1;
+                if(registerMap.find(address) != registerMap.end()) {
+                    reg2 = registerMap.find(address)->second;
+                    codeVector.push_back(new Lw(reg1,reg2,0,0));
+                    sprintf(displayString, "LW $%d ($%d)", reg1, reg2);
+                    codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
+                }
+                else syntaxError();
+                
                 // cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
             else{
-                offset = strtok(lword, "( ");
-                address = strtok(NULL, "( )\t");
-                if(convertToNumber(offset) != 2147483644){
-                    codeVector.push_back(new Lw(reg1,address, convertToNumber(offset),0));
-                    sprintf(displayString, "LW $%d %d(%s)", reg1, convertToNumber(offset), address);
+                if(lineWords[2][0] >= '0' && lineWords[2][0] <= '9'){
+                    offset = strtok(lword, "( ");
+                    address = strtok(NULL, "( )\t");
+                    if(convertToNumber(offset) != 2147483644 && registerMap.find(address) != registerMap.end()){
+                        reg2 = registerMap.find(address)->second;
+                        codeVector.push_back(new Lw(reg1,reg2, convertToNumber(offset),0));
+                        sprintf(displayString, "LW $%d %d($%d)", reg1, convertToNumber(offset), reg2);
+                        codeVector.back()->display = displayString;
+                        codeVector.back()->address = codeVector.size()-1;
+                        //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
+                    }
+                    else syntaxError();
+                }
+                else{
+                    codeVector.push_back(new Lw(reg1,lineWords[2],0,0));
+                    sprintf(displayString, "LW $%d %s", reg1, lineWords[2].c_str());
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
-                    //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
-                else syntaxError();
+                
             }
-                //make instruction object and push it into vector
         }
         else syntaxError();
         break;
@@ -726,31 +755,42 @@ void Parser::makeInstruction(){
             strcpy(lword, lineWords[2].c_str());
             char * offset;
             char * address;
-            if(lineWords[2][0] == '('){
+            if(lineWords[2][0] == '(') {
                 //sprintf(offset, "0");
-                address = strtok(lword,"( )\t");
-                //UNCOMMENT
-                codeVector.push_back(new Lb(reg1,address, 0,0));
-                sprintf(displayString, "LB $%d (%s)", reg1, address);
-                codeVector.back()->display = displayString;
-                codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"LB "<<reg1<<" "<<0<<" "<<address<<endl;
-            }
-            else{
-                offset = strtok(lword,"( ");
-                address = strtok(NULL, "( )\t");
-                if(convertToNumber(offset) != 2147483644){
-                    //UNCOMMENT
-                    codeVector.push_back(new Lb(reg1,address,convertToNumber(offset),0));
-                    sprintf(displayString, "LB $%d %d(%s)", reg1, convertToNumber(offset), address);
+                address = strtok(lword, "( )\t");
+                if(registerMap.find(address) != registerMap.end()) {
+                    reg2 = registerMap.find(address)->second;
+                    codeVector.push_back(new Lb(reg1,reg2,0,0));
+                    sprintf(displayString, "LB $%d ($%d)", reg1, reg2);
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
-                    //cout<<"INSTRUCTION: "<<"LB "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();
+                
+                // cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
-                //make instruction object and push it into vector
-            
+            else{
+                if(lineWords[2][0] >= '0' && lineWords[2][0] <= '9'){
+                    offset = strtok(lword, "( ");
+                    address = strtok(NULL, "( )\t");
+                    if(convertToNumber(offset) != 2147483644 && registerMap.find(address) != registerMap.end()){
+                        reg2 = registerMap.find(address)->second;
+                        codeVector.push_back(new Lb(reg1,reg2, convertToNumber(offset),0));
+                        sprintf(displayString, "LB $%d %d($%d)", reg1, convertToNumber(offset), reg2);
+                        codeVector.back()->display = displayString;
+                        codeVector.back()->address = codeVector.size()-1;
+                        //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
+                    }
+                    else syntaxError();
+                }
+                else{
+                    codeVector.push_back(new Lb(reg1,lineWords[2],0,0));
+                    sprintf(displayString, "LB $%d %s", reg1, lineWords[2].c_str());
+                    codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
+                }
+                
+            }
         }
         else syntaxError();
         break;
@@ -762,30 +802,42 @@ void Parser::makeInstruction(){
             strcpy(lword, lineWords[2].c_str());
             char * offset;
             char * address;
-            if(lineWords[2][0] == '('){
+            if(lineWords[2][0] == '(') {
                 //sprintf(offset, "0");
                 address = strtok(lword, "( )\t");
-                //UNCOMMENT
-                codeVector.push_back(new Sb(reg1,address,0,0));
-                sprintf(displayString, "SB $%d (%s)", reg1,address);
-                codeVector.back()->display = displayString;
-                codeVector.back()->address = codeVector.size()-1;
-                //cout<<"INSTRUCTION: "<<"SB "<<reg1<<" "<<0<<" "<<address<<endl;
-            }
-            else{
-                offset = strtok(lword, "( ");
-                address = strtok(NULL, "( )\t");
-                if(convertToNumber(offset) != 2147483644){
-                    // UNCOMMENT
-                    codeVector.push_back(new Sb(reg1,address,convertToNumber(offset),0));
-                    sprintf(displayString, "SB $%d %d(%s)", reg1, convertToNumber(offset), address);
+                if(registerMap.find(address) != registerMap.end()) {
+                    reg2 = registerMap.find(address)->second;
+                    codeVector.push_back(new Sb(reg1,reg2,0,0));
+                    sprintf(displayString, "SB $%d ($%d)", reg1, reg2);
                     codeVector.back()->display = displayString;
                     codeVector.back()->address = codeVector.size()-1;
-                    //cout<<"INSTRUCTION: "<<"SB "<<reg1<<" "<<offset<<" "<<address<<endl;
                 }
                 else syntaxError();
+                
+                // cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<0<<" "<<address<<endl;
             }
-                //make instruction object and push it into vector
+            else{
+                if(lineWords[2][0] >= '0' && lineWords[2][0] <= '9'){
+                    offset = strtok(lword, "( ");
+                    address = strtok(NULL, "( )\t");
+                    if(convertToNumber(offset) != 2147483644 && registerMap.find(address) != registerMap.end()){
+                        reg2 = registerMap.find(address)->second;
+                        codeVector.push_back(new Sb(reg1,reg2, convertToNumber(offset),0));
+                        sprintf(displayString, "SB $%d %d($%d)", reg1, convertToNumber(offset), reg2);
+                        codeVector.back()->display = displayString;
+                        codeVector.back()->address = codeVector.size()-1;
+                        //cout<<"INSTRUCTION: "<<"LW "<<reg1<<" "<<offset<<" "<<address<<endl;
+                    }
+                    else syntaxError();
+                }
+                else{
+                    codeVector.push_back(new Sb(reg1,lineWords[2],0,0));
+                    sprintf(displayString, "SB $%d %s", reg1, lineWords[2].c_str());
+                    codeVector.back()->display = displayString;
+                    codeVector.back()->address = codeVector.size()-1;
+                }
+                
+            }
         }
         else syntaxError();
         break;

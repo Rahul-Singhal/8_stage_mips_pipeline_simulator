@@ -8,18 +8,17 @@ str:  .ascii  "Hello, world"
 str1:  .asciiz  "Hello, world"
 num:  .byte  'a', 'b'
 arr:  .space 100
- anmol: .word 1 2 3
 
 .text
+main4:
+	jal printMessage
+	jal printMessage
+	li $v0,10
+	#syscall
 
- main:
- 
- la $a0, anmol #second number
- lb $s0, 3($a0)
 
- beq $s0, $zero, main
- lw $s0, ($a0)
-
- 
- error:
- lw $s0, ($a0)
+printMessage:
+	la $a0,str1
+	li $v0,4
+	#syscall
+	jr $ra

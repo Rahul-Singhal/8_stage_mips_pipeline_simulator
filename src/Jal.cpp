@@ -102,7 +102,7 @@ bool Jal::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = -1;
-				display = "Waiting for IF1 to be free!";
+//display = "Waiting for IF1 to be free!";
 				////cout << "if1 - wait -->" ;
 				return false;
 			}
@@ -124,7 +124,7 @@ bool Jal::execute(int pc){
 				stages[presentStage].setInstruction(id);
 				stalled = true;
 				stallingInstructionId = -1;
-				display = "Waiting for IF2 to be free!";
+//display = "Waiting for IF2 to be free!";
 				////cout << "if2 - wait -->" ;
 				return false;
 			}

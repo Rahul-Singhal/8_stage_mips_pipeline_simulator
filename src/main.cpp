@@ -53,6 +53,8 @@ static void key(unsigned char key, int x, int y)
     switch (key)
     {
         case 27 :
+            exit(0);
+            break;
         case 'r':
             p = new Program(filePath);
             p->init();
@@ -79,6 +81,39 @@ void init(){
     cout<<"Enter the path to source code file:";
     cin>>filePath;
     p = new Program(filePath);
+    int x;
+    cout<<"Enable Forwarding? Press 1 to enable and 0 to disable: ";
+    cin>>x;
+    switch(x){
+        case 0:
+            cout<<"Forwarding disabled."<<endl;
+            p->forwardingEnabled = false;
+            break;
+        case 1:
+            cout<<"Forwarding enabled."<<endl;
+            p->forwardingEnabled = true;
+            break;
+        default:
+            cout<<"Forwarding disabled by default."<<endl;
+            p->forwardingEnabled = false;
+            break;
+    }
+    cout<<"Enable fast branching? Press 1 to enable and 0 to disable: ";
+    cin>>x;
+    switch(x){
+        case 0:
+            cout<<"fast branching disabled."<<endl;
+            p->fastBranching = false;
+            break;
+        case 1:
+            cout<<"fast branching enabled."<<endl;
+            p->fastBranching = true;
+            break;
+        default:
+            cout<<"fast branching disabled by default."<<endl;
+            p->fastBranching = false;
+            break;
+    }
     p->init();
     /*vector <Instruction > v;
     Instruction inst1(1,1,false,1, 20, false, 10, 20, "add $t1, $t2, $t3", 0);

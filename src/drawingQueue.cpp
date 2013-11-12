@@ -288,7 +288,7 @@ void DrawingQueue::drawInstruction(Instruction inst, int i, int j){
 		// cout<<"ARROW ADDED"<<endl;
 		// glPopMatrix();
 		// return;
-		render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, "STALL");
+		render_bitmap_string(0,-5,0, GLUT_BITMAP_HELVETICA_12, stageStringMap[prStage].c_str());
 		drawFArrow(1, inst.getId()-inst.getForwardedFromInstructionId());
 
 	}
