@@ -1,0 +1,170 @@
+.data
+	array:
+		.align 2
+		.space 100
+	spa:
+		.align 2
+		.asciiz " "
+		
+	prompt1:
+		.align 2
+		.asciiz " Enter the total count of numbers: "
+	
+	prompt2:
+		.align 2
+		.asciiz " Enter the numbers one by one: "
+	prompt3:
+		.align 2
+		.asciiz " The subset is: "	
+		
+		
+
+
+.text
+	main:
+	la $a0, prompt1
+	la $v0, 4
+	syscall
+	la $v0,5
+	syscall
+	# s3 contains the count of numbers
+	move $s3, $v0
+	la $t0, array
+	move $t1, $s3
+	la $a0, prompt2
+	la $v0, 4
+	syscall
+	b readLoop
+	
+	
+	readLoop:
+	la $v0,5
+	syscall
+	sw $v0,($t0)
+	addi $t1, $t1, -1
+	beq $t1,0, doneReading
+	addi $t0, $t0, 4
+	b readLoop
+	
+	
+	doneReading:
+	# initialize the min gcd s4 with 10000
+	li $s4, 1000
+	#t1 contains the start address of the subLoop, initialize it with the start of the array
+	la $t1, array
+	#t2 shall keep count of the subloops parsed so far
+	move $t2, $s3
+	addi $t2, $t2, -1
+	
+	gcdOuterLoop:
+	lw $s0,($t1)
+	#t3 shall keep counter of the start address of the inner loop, initialize it
+	move $t3, $t1
+	#t4 shall keep count of the elements in the inner loop
+	move $t4,$t2
+	b gcdInnerLoop
+	
+	gcdInnerLoop:
+	lw $s1, ($t3)
+	b gcd 
+	
+	
+	
+	gcd:
+	#Convention: s0 contains the small value
+	
+	beq $s0, 0, reduceFurther # s1 contains the gcd
+	div $s1, $s0
+	mfhi $t0
+	
+	#update values
+		#set s0 to contain the remainder of two numbers
+		#set s1 to contain the smaller of the two numbers
+	move $s1, $s0
+	move $s0, $t0 
+	b gcd
+	
+	gcd1:
+	#Convention: s0 contains the small value
+	
+	beq $s0, 0, checkIfOne # s1 contains the gcd
+	div $s1, $s0
+	mfhi $t0
+	
+	#update values
+		#set s0 to contain the remainder of two numbers
+		#set s1 to contain the smaller of the two numbers
+	move $s1, $s0
+	move $s0, $t0 
+	b gcd1
+	
+	#check if the gcd can be reduced further
+	reduceFurther:
+	move $s0, $s4
+	b gcd1
+	
+	#check if the further reduced gcd is 1
+	checkIfOne:
+	bne $s1, 1, checkMinGcd
+	move $s1, $s4
+	b checkMinGcd
+	
+	checkMinGcd:
+	bgt $s1, $s4, incrementInnerLoop
+	beq $s1, 1, incrementInnerLoop
+	move $s4, $s1
+	b incrementInnerLoop
+	
+	#increment the inner loop
+	incrementInnerLoop:
+	addi $t4, $t4, -1
+	beq $t4, 0, incrementOuterLoop
+	addi $t3, $t3, 4
+	lw $s0, ($t1)
+	b gcdInnerLoop
+	
+	#increment the outer loop
+	incrementOuterLoop:
+	addi $t2, $t2, -1
+	beq $t2, 0, minGcdFound
+	addi $t1, $t1, 4
+	b gcdOuterLoop
+	
+	
+	minGcdFound:
+	#s4 contains the min GCD
+	# t0 contains the current address in the array
+	la $t0, array
+	#t1 contains the size remaining
+	move $t1, $s3
+	la $a0, prompt3
+	la $v0, 4
+	syscall
+	b printResult
+	
+	printResult:
+	lw $t2, ($t0)
+	div $t2, $s4
+	mfhi $t3
+	bne $t3, 0, incCounter
+	move $a0, $t2
+	la $v0,1
+	syscall
+	la $a0, spa
+	la $v0,4
+	syscall
+	b incCounter
+	
+	
+	incCounter:
+	addi $t1, $t1, -1
+	addi $t0, $t0,4
+	beq $t1, 0, Theexit
+	b printResult
+	
+	Theexit:
+	la $v0,10
+	syscall
+	
+	
+	

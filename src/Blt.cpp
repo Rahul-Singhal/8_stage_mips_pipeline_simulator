@@ -1,9 +1,9 @@
 #include "Blt.h"
 
-Blt::Blt(int rsIndex, int rtIndex, int destPc, int id){
+Blt::Blt(int rsIndex, int rtIndex, string label, int id){
 	this->rsIndex = rsIndex;
 	this->rtIndex = rtIndex;
-	this->destPc = destPc;
+	this->destPc = labelMap[label];
 	this->id = id;
 }
 

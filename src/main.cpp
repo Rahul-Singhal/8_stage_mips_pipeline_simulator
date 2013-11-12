@@ -203,7 +203,7 @@ void specialKey(int key, int x, int y){
             else return;
             break;
         case GLUT_KEY_RIGHT:
-            if(scrollX > -(dq.getMaxScrollableX() - win_width))scrollX -= shift;
+            if(scrollX > -(dq.getMaxScrollableX() - win_width+200))scrollX -= shift;
             break;
         case GLUT_KEY_UP:
             if(scrollY > 0) scrollY -= shift;

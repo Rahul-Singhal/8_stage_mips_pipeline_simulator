@@ -133,6 +133,11 @@ bool La::execute(int pc){
 				presentStage = stageToExecute;
 				stages[presentStage].setInstruction(id);
 				registers[rdIndex].stallRegister(id); 
+				stageToExecute++;
+				stalled = false;
+							////cout << "id completed -->";
+
+				return true;
 						// either values are forwarded, or normally stored
 /*
 				if(!label){
@@ -231,9 +236,9 @@ bool La::execute(int pc){
 				}
 				else {
 					stages[presentStage].setInstruction(id);
-					// stallingInstructionId = stages[stageToExecute].instructionId;
+					stallingInstructionId = -1;
 					stalled = true;
-				////cout << "ID not free -->" ;
+					// cout << "ID not free --> la"<<endl	 ;
 					return false;
 				}
 			}

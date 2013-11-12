@@ -12,7 +12,7 @@ private:
 	int destPc;
 	int a, b;
 public:
-	Bgt(int rsIndex, int rtIndex, int destPc, int id);
+	Bgt(int rsIndex, int rtIndex, string label, int id);
 	Bgt(Bgt &b);
 	Bgt(const Bgt &i);
 	bool execute(int pc);

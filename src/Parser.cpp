@@ -70,6 +70,10 @@ void Parser::initMaps(){
     instructionIntMap["srlv"] = 28;
     instructionIntMap["nor"] = 29;
     instructionIntMap["jal"] = 30;
+    instructionIntMap["blt"] = 31;
+    instructionIntMap["bgt"] = 32;
+    instructionIntMap["b"] = 33;
+    instructionIntMap["bne"] = 34;
 
 
 
@@ -126,8 +130,9 @@ vector<Instruction *> Parser::getVector(string fileName){
     //string str1 = "la $a0, prompt1      #read the numbers, s0 contains the first number and s1 contains the second number";
     //parseLine(str1);
     lineNumber = 0;
+    cout<<"Now reading lines"<<endl;
     while(getline(infile,str)){
-        // cout<<"Parsing line "<<str<<endl;
+        cout<<"Parsing line "<<str<<endl;
         lineNumber++;
         parseLine(str);
     //v.push_back(str);  
@@ -177,6 +182,7 @@ void Parser::parseLine(string str){
             return;
         }
         else if(strcmp(curWord, ".align") == 0){
+            cout<<"align found"<<endl;
             return;
         }
     }
@@ -238,16 +244,18 @@ void Parser::parseLine(string str){
         }
         dataType = curWord;
         if (dataType == ".ascii"){
-            char* newascii = strtok(NULL,  "\"");
-            newascii = strtok(NULL,  "\"");
+            char* newascii = strtok(NULL,  "\" ");
+            //newascii = strtok(NULL,  "\"");
             // dataMap[dataName] = mem.storeAscii(newascii);
             memory.storeAscii(dataName, newascii);
             //cout<<dataName<<" .ascii "<<newascii<<endl<<endl;
         }
         else if (dataType == ".asciiz"){
-            char* newasciiz = strtok(NULL,  "\"");
-            newasciiz = strtok(NULL,  "\"");
+            char* newasciiz = strtok(NULL,  "\" ");
+            //cout<<"yo there "<<newasciiz<<endl;
+            //newasciiz = strtok(NULL,  "\"");
             // dataMap[dataName] = memory.storeAsciiz(newasciiz);
+
             memory.storeAsciiz(dataName,newasciiz);
             //cout<<dataName<<" .asciiz "<<newasciiz<<endl<<endl;
         }
@@ -895,6 +903,56 @@ void Parser::makeInstruction(){
                 //cout<<"INSTRUCTION: "<<"ADD "<<reg1<<" "<<reg2<<" "<<reg3<<endl;
             }
             else syntaxError();
+        }
+        else syntaxError();
+        break;
+        case 30:
+            codeVector.push_back(new Jal(lineWords[0],0));
+            sprintf(displayString, "JAL %s", lineWords[0].c_str());
+            codeVector.back()->display = displayString;
+            break;
+        case 31:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
+                //make instruction object and push it into vector
+            codeVector.push_back(new Blt(reg1, reg2, lineWords[3],0));
+            sprintf(displayString, "BLT $%d $%d %s", reg1, reg2, lineWords[3].c_str());
+            codeVector.back()->display = displayString;
+            //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+        }
+        else syntaxError();
+        break;
+        case 32:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
+                //make instruction object and push it into vector
+            codeVector.push_back(new Bgt(reg1, reg2, lineWords[3],0));
+            sprintf(displayString, "BGT $%d $%d %s", reg1, reg2, lineWords[3].c_str());
+            codeVector.back()->display = displayString;
+            //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
+        }
+        else syntaxError();
+        break;
+        case 33:
+                //make instruction object and push it into vector
+        //UNCOMMENT
+        codeVector.push_back(new B(lineWords[1],0));
+        sprintf(displayString, "B %s", lineWords[1].c_str());
+        codeVector.back()->display = displayString;
+        
+        //cout<<"INSTRUCTION: "<<"J "<<lineWords[1]<<endl;
+        break;
+        case 34:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()) {
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
+                //make instruction object and push it into vector
+            codeVector.push_back(new Bne(reg1, reg2, lineWords[3],0));
+            sprintf(displayString, "BNE $%d $%d %s", reg1, reg2, lineWords[3].c_str());
+            codeVector.back()->display = displayString;
+            //cout<<"INSTRUCTION: "<<"BEQ "<<reg1<<" "<<reg2<<" "<<lineWords[3]<<endl;
         }
         else syntaxError();
         break;

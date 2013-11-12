@@ -1,9 +1,9 @@
 #include "Bgt.h"
 
-Bgt::Bgt(int rsIndex, int rtIndex, int destPc, int id){
+Bgt::Bgt(int rsIndex, int rtIndex, string label, int id){
 	this->rsIndex = rsIndex;
 	this->rtIndex = rtIndex;
-	this->destPc = destPc;
+	this->destPc = labelMap[label];
 	this->id = id;
 }
 

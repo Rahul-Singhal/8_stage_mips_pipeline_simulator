@@ -12,7 +12,7 @@ private:
 	int destPc;
 	int a, b;
 public:
-	Blt(int rsIndex, int rtIndex, int destPc, int id);
+	Blt(int rsIndex, int rtIndex, string label, int id);
 	Blt(Blt &b);
 	Blt(const Blt &i);
 	bool execute(int pc);

@@ -39,6 +39,11 @@
 #include "Lb.h"
 #include "Sb.h"
 #include "J.h"
+#include "Jal.h"
+#include "Blt.h"
+#include "Bgt.h"
+#include "B.h"
+#include "Bne.h"
 using namespace std;
 
 class Parser : public System{
