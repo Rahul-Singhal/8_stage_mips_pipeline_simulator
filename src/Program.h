@@ -53,6 +53,7 @@ public:
 	vector <Instruction> execute();
 	void executeAll();
 	void init();
+	void reset();
 private:
 	void runOneClockCycle(); // enough said
 	int instrId;

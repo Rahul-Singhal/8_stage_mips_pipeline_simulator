@@ -82,6 +82,11 @@ void Program::init(){
 	currInstructions.push_back(code[programCounter]);
 }
 
+void Program::reset(){
+	code.clear();
+	this->init();
+}
+
 vector <Instruction> Program::execute(){
 
 	// cout<<currInstructions.size()<<endl;
