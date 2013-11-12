@@ -2,14 +2,14 @@
 using namespace std;
 
 Memory::Memory(){
-  store.assign(1024, 'a');
+  store.assign(10485760,(char)0);
   freePointer = 0;
 }
 
 void Memory::storeWord(int address, int word){
   ////cout<<"STORING THE WORD "<<word<<endl;
   // //////cout << strlen(store) << endl;
-  if (address+4 < store.size()){
+  if ( address> 0 && address+4 < store.size()){
     store[address+3] = word & 0xFF;
     store[address+2] = word & 0xFF00;
     store[address+1] = word & 0xFF0000;
@@ -17,14 +17,15 @@ void Memory::storeWord(int address, int word){
     // //////cout << (int)store[address+3] << endl;
   }
   else {
-    store.resize(store.size()*2);
-    storeWord(address, word);
+    // store.resize(store.size()*2);
+    // storeWord(address, word);
+    printf("Memory out of bounds exception! %d\n",address);
+    exit(0);
   }
 }
 
-
 int Memory::loadWord(int address){
-  if (address+4 <= store.size()){
+  if (address> 0 && address+4 <= store.size()){
     int Int32 = 0;
     Int32 = (Int32 << 8) + store[address];
     Int32 = (Int32 << 8) + store[address+1];
@@ -34,28 +35,35 @@ int Memory::loadWord(int address){
   }
   else {
     //////cout << "word Out of Memory Bounds!" << endl; 
-    return 0;    
+    //return 0;    
+    printf("Memory out of bounds exception! %d\n",address);
+    exit(0);
   }
 }
 
 void Memory::storeByte(int address, char byte){
   ////cout<<"STORING THE BYTE "<<byte<<endl;
-  if (address+1 < store.size()){
+  if (address> 0 && address+1 < store.size()){
     store[address] = byte; 
   }
   else {
-    store.resize(store.size()*2);
-    storeByte(address, byte);
+    // store.resize(store.size()*2);
+    // storeByte(address, byte);
+     printf("Memory out of bounds exception! %d\n",address);
+    exit(0);
+
   }
 }
 
 char Memory::loadByte(int address){
-  if (address+1 <= store.size()){
+  if (address> 0 && address+1 <= store.size()){
     return store[address];
   }
   else {
     //////cout << "byte Out of Memory Bounds!" << endl; 
-    return (char)0;
+    //return (char)0;
+     printf("Memory out of bounds exception! %d\n",address);
+    exit(0);
   }
 }
 
