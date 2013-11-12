@@ -9,7 +9,7 @@ Memory::Memory(){
 void Memory::storeWord(int address, int word){
   ////cout<<"STORING THE WORD "<<word<<endl;
   // //////cout << strlen(store) << endl;
-  if ( address> 0 && address+4 < store.size()){
+  if ( address>= 0 && address+4 <= store.size()){
     store[address+3] = word & 0xFF;
     store[address+2] = word & 0xFF00;
     store[address+1] = word & 0xFF0000;
@@ -25,7 +25,7 @@ void Memory::storeWord(int address, int word){
 }
 
 int Memory::loadWord(int address){
-  if (address> 0 && address+4 <= store.size()){
+  if (address>= 0 && address+4 <= store.size()){
     int Int32 = 0;
     Int32 = (Int32 << 8) + store[address];
     Int32 = (Int32 << 8) + store[address+1];
@@ -43,7 +43,7 @@ int Memory::loadWord(int address){
 
 void Memory::storeByte(int address, char byte){
   ////cout<<"STORING THE BYTE "<<byte<<endl;
-  if (address> 0 && address+1 < store.size()){
+  if (address>= 0 && address+1 <= store.size()){
     store[address] = byte; 
   }
   else {
@@ -56,7 +56,7 @@ void Memory::storeByte(int address, char byte){
 }
 
 char Memory::loadByte(int address){
-  if (address> 0 && address+1 <= store.size()){
+  if (address >= 0 && address+1 <= store.size()){
     return store[address];
   }
   else {
@@ -75,7 +75,7 @@ int Memory::storeAscii(string label, string ascii){
   ////cout<<"STRING THE ASCII "<<ascii<<endl;
   int place = freePointer;
   ////cout<<"Label = "<<label<<" ascii = "<<ascii<<endl;
-  if (freePointer+strlen(ascii.c_str()) < store.size()){
+  if (freePointer+strlen(ascii.c_str()) <= store.size()){
     int i = 0 ;
     while (i<strlen(ascii.c_str())){
       store[freePointer] = ascii[i];
@@ -86,15 +86,17 @@ int Memory::storeAscii(string label, string ascii){
     return place;
   }
   else {
-    store.resize(store.size()*2);
-    place = storeAscii(label, ascii);
-    return place; 
+    // store.resize(store.size()*2);
+    // place = storeAscii(label, ascii);
+    // return place; 
+    printf("Memory out of bounds exception!\n");
+    exit(0);
   }
 }
 
 int Memory::storeAsciiz(string label, string asciiz){
   int place = freePointer;
-  if (freePointer+strlen(asciiz.c_str()) < store.size()){
+  if (freePointer+strlen(asciiz.c_str()) <= store.size()){
     int i = 0 ;
     while (i<strlen(asciiz.c_str())){
       store[freePointer] = asciiz[i];
@@ -107,16 +109,19 @@ int Memory::storeAsciiz(string label, string asciiz){
     return place;
   }
   else {
-    store.resize(store.size()*2);
-    place = storeAsciiz(label, asciiz);
-    return place;
+  //   store.resize(store.size()*2);
+  //   place = storeAsciiz(label, asciiz);
+  //   return place;
+    printf("Memory out of bounds exception!\n");
+    exit(0);
+  // 
   }
 
 }
 
 int Memory::storeBytes(string label, vector<char> v){
   int place = freePointer;
-  if (freePointer + v.size() < store.size()){
+  if (freePointer + v.size() <= store.size()){
     int i = 0 ;
     while (i < v.size()){
       storeByte(freePointer , v[i]);
@@ -127,15 +132,17 @@ int Memory::storeBytes(string label, vector<char> v){
     return place;
   }
   else {
-    store.resize(store.size()*2);
-    place = storeBytes(label, v);
-    return place;
+    // store.resize(store.size()*2);
+    // place = storeBytes(label, v);
+    // return place;
+     printf("Memory out of bounds exception!\n");
+    exit(0);
   }
 }
 
 int Memory::storeWords(string label, vector<int> v){
   int place = freePointer;
-  if (freePointer + v.size()*4 < store.size()){
+  if (freePointer + v.size()*4 <= store.size()){
     int i = 0 ;
     while (i < v.size()){
       storeWord(freePointer , v[i]);
@@ -146,29 +153,33 @@ int Memory::storeWords(string label, vector<int> v){
     return place;
   }
   else {
-    store.resize(store.size()*2);
-    place = storeWords(label, v);
-    return place;
+    // store.resize(store.size()*2);
+    // place = storeWords(label, v);
+    // return place;
+     printf("Memory out of bounds exception!\n");
+    exit(0);
   }
 }
 
 int Memory::allocateSpace(string label, int count){
   ////cout<<"ALLOCATING SPACE  "<<count<<endl;
   int place = freePointer;
-  if (freePointer + count < store.size()){
+  if (freePointer + count <= store.size()){
     freePointer += count;
     memoryMap[label] = make_pair(8, place);
     return place;
   }
   else {
-    store.resize(store.size()*2);
-    place = allocateSpace(label, count);
-    return place;
+    // store.resize(store.size()*2);
+    // place = allocateSpace(label, count);
+    // return place;
+     printf("Memory out of bounds exception!\n");
+    exit(0);
   }
 }
 
 string Memory::getString(int address){
-  if (address < store.size()){
+  if (address > 0 && address < store.size()){
     int k = address;
     while (k< store.size()-1  && store[k] != '\0'){
       k++;
@@ -177,5 +188,8 @@ string Memory::getString(int address){
     //////cout << strlen(str.c_str()) << endl;
     return str;
   }
-  else return "";
+  else{
+     printf("Memory out of bounds exception!\n");
+    exit(0);
+  }
 }
