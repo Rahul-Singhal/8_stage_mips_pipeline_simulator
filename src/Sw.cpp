@@ -451,4 +451,5 @@ bool Sw::execute(int pc){
 				}
 			}
 		}
+		return false;
 	}
