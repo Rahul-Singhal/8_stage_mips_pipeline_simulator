@@ -282,7 +282,7 @@ bool Div::execute(int pc){
       // Div Stage
       // registers[rdIndex].stallRegister(id);
         if(stages[stageToExecute].isFree()){
-          product = a*b;
+          product = a/b;
           stages[presentStage].setFree();
           presentStage = stageToExecute;
           stages[presentStage].setInstruction(id);
