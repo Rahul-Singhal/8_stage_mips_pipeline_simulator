@@ -23,4 +23,6 @@ lw $t1, 8($s1)
 
 beq $t1,$t2, main
 li $t5,6
-exit
+li $t2,7
+move $t3,$t2
+

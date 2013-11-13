@@ -8,10 +8,20 @@ str:  .ascii  "Hello, world"
 str1:  .asciiz  "Hello, world"
 num:  .byte  'a', 'b'
 arr:  .space 100
-anmol: .word 1 2 3
+ anmol: .word 1 2 3
 
 .text
 
 main:
 
-mult $t1, $t2, $t3
+li $t1, 3
+la $s1, anmol
+sw $t1, 8($s1)
+
+li $t2, 3
+lw $t1, 8($s1)
+
+beq $t1,$t2, main
+li $t5,6
+exit
+
