@@ -142,7 +142,7 @@ bool Li::execute(int pc){
 				return true;
 			}
 			else {
-				stages[presentStage].setInstruction(id);
+				stages[presentStage].setInstruction(id);	
 					stallingInstructionId = -1;
 sStalls++;
 				stalled = true;

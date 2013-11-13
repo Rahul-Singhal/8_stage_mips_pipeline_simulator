@@ -154,8 +154,8 @@ vector<Instruction *> Parser::getVector(string fileName){
 void Parser::recheck(){
     map<string,int>::iterator it;
 
-    // cout<<"printing label map "<<endl;
-    // for(it = labelMap.begin(); it!= labelMap.end(); it++){
+    // cout<<"printing checkMap1 map "<<endl;
+    // for(it = checkMap1.begin(); it!= checkMap1.end(); it++){
     //     cout<<it->first<<endl;
     // }
     for(it = checkMap2.begin(); it!= checkMap2.end(); it++){
@@ -261,6 +261,8 @@ void Parser::parseLine(string str){
         if(curLeng > 1 && curWord[curLeng-1] == ':'){
             strTemp = curWord;
             dataName = curWord;
+            //cout<<"PRINTING DATANAMSE"<<dataName<<endl;
+            if(dataName[dataName.length()-1] == ':') dataName = dataName.substr(0,dataName.length()-1);
             lastWord = curWord;
             curWord = strtok(NULL, ", \t");
         }
@@ -278,6 +280,7 @@ void Parser::parseLine(string str){
             //newascii = strtok(NULL,  "\"");
             // dataMap[dataName] = mem.storeAscii(newascii);
             memory.storeAscii(dataName, stw.c_str());
+            checkMap1[dataName]=0;
             ////cout<<dataName<<" .ascii "<<newascii<<endl<<endl;
         }
         else if (dataType == ".asciiz"){
@@ -295,6 +298,7 @@ void Parser::parseLine(string str){
             // dataMap[dataName] = memory.storeAsciiz(newasciiz);
 
             memory.storeAsciiz(dataName,stw.c_str());
+            checkMap1[dataName]=0;
             ////cout<<dataName<<" .asciiz "<<newasciiz<<endl<<endl;
         }
         else if (dataType == ".word"){
@@ -307,6 +311,8 @@ void Parser::parseLine(string str){
             }
             // dataMap[dataName] = mem.storeWords(intVector);
             memory.storeWords(dataName,intVector);
+            // cout<<"inserting "<<dataName<<endl;
+            checkMap1[dataName] = 0;
             ////cout<<dataName<<" .word ";
             //vector<int>  checkNum= wordTable[dataMap[dataName].second];
             for (int k = 0 ; k<intVector.size(); k++){
@@ -320,6 +326,7 @@ void Parser::parseLine(string str){
                 int spaceValue = convertToNumber(newSpace);
                 // dataMap[dataName] = mem.allocateSpace(spaceValue);
                 memory.allocateSpace(dataName,spaceValue);
+                checkMap1[dataName] = 0;
                 ////cout<<dataName<<" .space "<<spaceValue<<endl<<endl;
             }
             else{
@@ -342,6 +349,7 @@ void Parser::parseLine(string str){
             }
             // dataMap[dataName] = mem.storeBytes(byteString);
             memory.storeBytes(dataName,byteString);
+            checkMap1[dataName]=0;
             //////cout<<dataName<<" .byte "<<byteString<<endl<<endl;
 
         }
