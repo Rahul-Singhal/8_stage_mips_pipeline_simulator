@@ -69,12 +69,10 @@ Instruction* Instruction::clone(){
 }
 
 bool Instruction::execute(int pc){
-  //////cout<<"FUCKED"<<endl;
   return false;
 }
 
 void Instruction::unstall(int instructionId){
-	//cout<<"FUCKED AGAIN"<<endl;
 	return;
 }
 

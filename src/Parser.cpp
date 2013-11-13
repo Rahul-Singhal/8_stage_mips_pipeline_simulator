@@ -159,6 +159,12 @@ void Parser::recheck(){
     // for(it = checkMap1.begin(); it!= checkMap1.end(); it++){
     //     cout<<it->first<<endl;
     // }
+    // cout<<endl<<endl<<endl;
+    // cout<<"printing checkMap1 map "<<endl;
+    // for(it = checkMap2.begin(); it!= checkMap2.end(); it++){
+    //     cout<<it->first<<endl;
+    // }
+    // cout<<endl<<endl;
     for(it = checkMap2.begin(); it!= checkMap2.end(); it++){
         // cout<<" checking "<<it->first<<endl;
         if(checkMap1.find(it->first) == checkMap1.end()){
@@ -259,13 +265,24 @@ void Parser::parseLine(string str){
     if (data){
         string dataName;
         string dataType;
+        // cout<<"PRINTING DATANAMSE"<<curWord<<endl;
+
         if(curLeng > 1 && curWord[curLeng-1] == ':'){
             strTemp = curWord;
             dataName = curWord;
-            //cout<<"PRINTING DATANAMSE"<<dataName<<endl;
             if(dataName[dataName.length()-1] == ':') dataName = dataName.substr(0,dataName.length()-1);
             lastWord = curWord;
             curWord = strtok(NULL, ", \t");
+        }
+        else{
+            char * semi = strtok(NULL, " ");
+            if(*semi == ':'){
+                strTemp = curWord;
+                dataName = curWord;
+                // if(dataName[dataName.length()-1] == ':') dataName = dataName.substr(0,dataName.length()-1);
+                lastWord = curWord;
+                curWord = strtok(NULL, ", \t");
+            }
         }
         if (curWord == NULL) {
             //////cout << "SYNTAX ERROR IN DATA";
@@ -312,7 +329,7 @@ void Parser::parseLine(string str){
             }
             // dataMap[dataName] = mem.storeWords(intVector);
             memory.storeWords(dataName,intVector);
-            // cout<<"inserting "<<dataName<<endl;
+            // cout<<"inserting "<<dataType<<endl;
             checkMap1[dataName] = 0;
             ////cout<<dataName<<" .word ";
             //vector<int>  checkNum= wordTable[dataMap[dataName].second];
