@@ -25,6 +25,7 @@ void Memory::storeWord(int address, int word){
 }
 
 int Memory::loadWord(int address){
+  // cout<<"READING FROM ADDRESS "<<address<<endl;
   if (address>= 0 && address+4 <= store.size()){
     int Int32 = 0;
     Int32 = (Int32 << 8) + store[address];
@@ -141,6 +142,7 @@ int Memory::storeBytes(string label, vector<char> v){
 }
 
 int Memory::storeWords(string label, vector<int> v){
+  // cout<<"label "<<label<<" stored at "<<freePointer;
   int place = freePointer;
   if (freePointer + v.size()*4 <= store.size()){
     int i = 0 ;

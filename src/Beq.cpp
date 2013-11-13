@@ -313,7 +313,7 @@ Beq * Beq::clone(){
 						// registers[rdIndex].stallRegister(id);
 				if(stages[stageToExecute].isFree()){
 					if(!fastBranching){
-					// //cout<<a<<"::::::::::::::::::"<<b<<endl;
+					cout<<a<<"::::::::::::::::::"<<b<<endl;
 						if(a==b){
 							programCounter = destPc-1;
 							branchChanged = true;

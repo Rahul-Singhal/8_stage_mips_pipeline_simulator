@@ -2,6 +2,7 @@
 
 La::La(int rdIndex, string address, int id){
 	this->rdIndex = rdIndex;
+	cout<<"LA KA ADDRESS"<<address<<endl;
 	this->address = address;
 	this->id = id;
 }
@@ -255,7 +256,7 @@ bool La::execute(int pc){
 					// sum = a+b;
 					if(forwardingEnabled){
 						registers[rdIndex].forwardIt(id, clockCycle);
-						registers[rdIndex].unstallRegister(labelMap[address], id); // TODO : Will it ever return false?
+						registers[rdIndex].unstallRegister(memory.loadAddress(address), id); // TODO : Will it ever return false?
 					}
 				// registers[rdIndex].write(sum,id,stageToExecute); // TODO : Will it ever return false?
 					stages[presentStage].setFree();
@@ -347,7 +348,7 @@ bool La::execute(int pc){
 				if(stages[stageToExecute].isFree()){
 					registers[rdIndex].unforwardIt(id);
 					if(!forwardingEnabled)
-						registers[rdIndex].unstallRegister(labelMap[address], id);
+						registers[rdIndex].unstallRegister(memory.loadAddress(address), id);
 					stages[presentStage].setFree();
 					presentStage = stageToExecute;
 					stages[presentStage].setInstruction(id);
