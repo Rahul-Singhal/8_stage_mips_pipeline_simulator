@@ -9,24 +9,24 @@ Register::Register(int id, int value){
 
 void Register::stallRegister(int instructionId){
 	this->instructionId = instructionId;
-	cout<<"add "<<instructionId<<" to "<<id<<endl;
+	// cout<<"add "<<instructionId<<" to "<<id<<endl;
 	blockingInstructions.push_back(instructionId);
 }
 
 void Register::unstallRegister(int value, int instructionId){
-	cout<<"remove "<<instructionId<<"  from "<<id<<"after writing value = "<<value<<endl;
-	cout<<"size before "<<blockingInstructions.size()<<endl;
+	// cout<<"remove "<<instructionId<<"  from "<<id<<"after writing value = "<<value<<endl;
+	// cout<<"size before "<<blockingInstructions.size()<<endl;
 	blockingInstructions.remove(instructionId);
 	this->value = value;
-	cout<<"size after "<<blockingInstructions.size()<<endl;
+	// cout<<"size after "<<blockingInstructions.size()<<endl;
 }
 
 bool Register::isValid(){
 	if(blockingInstructions.size()==0){
-		cout<<"validity for "<<id<<" return true"<<endl;
+		// cout<<"validity for "<<id<<" return true"<<endl;
 		return true;
 	}
-	cout<<"validity for "<<id<<" return false"<<endl;
+	// cout<<"validity for "<<id<<" return false"<<endl;
 	return false;
 }
 

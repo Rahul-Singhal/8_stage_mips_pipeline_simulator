@@ -2,7 +2,7 @@
 
 La::La(int rdIndex, string address, int id){
 	this->rdIndex = rdIndex;
-	cout<<"LA KA ADDRESS"<<address<<endl;
+	// cout<<"LA KA ADDRESS"<<address<<endl;
 	this->address = address;
 	this->id = id;
 }

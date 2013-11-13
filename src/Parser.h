@@ -25,6 +25,7 @@
 #include "Sra.h"
 #include "Srl.h"
 #include "Srav.h"
+#include "Div.h"
 #include "Slt.h"
 #include "Sllv.h"
 #include "Srlv.h"

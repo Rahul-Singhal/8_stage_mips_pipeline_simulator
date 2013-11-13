@@ -14,13 +14,4 @@ anmol: .word 1 2 3
 
 main:
 
-li $t1, 3
-la $s1, anmol
-sw $t1, 8($s1)
-
-li $t2, 3
-lw $t1, 8($s1)
-
-beq $t1,$t2, main
-li $t5,6
-exit
+mult $t1, $t2, $t3

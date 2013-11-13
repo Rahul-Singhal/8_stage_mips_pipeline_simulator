@@ -75,6 +75,7 @@ void Parser::initMaps(){
     instructionIntMap["b"] = 33;
     instructionIntMap["bne"] = 34;
     instructionIntMap["jr"] = 35;
+    instructionIntMap["div"] = 36;
 
 
 
@@ -1116,6 +1117,25 @@ void Parser::makeInstruction(){
             sprintf(displayString, "JR $%d", reg1);
             codeVector.back()->display = displayString;
             codeVector.back()->address = codeVector.size()-1;
+        }
+        else syntaxError();
+        break;
+
+        case 36:
+        if(registerMap.find(lineWords[1]) != registerMap.end() && registerMap.find(lineWords[2]) != registerMap.end()){
+            reg1 = registerMap.find(lineWords[1])->second;
+            reg2 = registerMap.find(lineWords[2])->second;
+            if(registerMap.find(lineWords[3]) != registerMap.end()){
+                    //make instruction object and push it into vector
+                codeVector.push_back(new Div(reg1,reg2,reg3,0));
+                sprintf(displayString, "DIV $%d $%d $%d", reg1, reg2, reg3);
+                // //cout<<"set the "<<displayString<<endl;
+                codeVector.back()->display = displayString;
+                codeVector.back()->address = codeVector.size()-1;
+                ////cout<<"INSTRUCTION: "<<"MULT "<<reg1<<" "<<reg2<<" "<<endl;
+            }
+            else syntaxError();
+
         }
         else syntaxError();
         break;
